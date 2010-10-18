@@ -11,7 +11,7 @@ module Globalize
         self.translated_attribute_names = attr_names.map(&:to_sym)
         self.translation_options        = options
 
-        include InstanceMethods
+        include InstanceMethods, Accessors
         extend  ClassMethods, Migration
 
         has_many :translations, :class_name  => translation_class.name,
