@@ -6,7 +6,7 @@ Globalize3 is much more lightweight and compatible than its predecessor Globaliz
 
 h2. Requirements
 
-ActiveRecord > 3.0.0.rc
+ActiveRecord > 3.0.0
 I18n
 
 h2. Installation
@@ -14,7 +14,7 @@ h2. Installation
 To install Globalize3 with its default setup just use:
 
 <pre><code>
-$ gem install globalize3
+$ gem 'globalize3', :git => 'git://github.com/galetahub/globalize3.git'
 </code></pre>
 
 h2. Model translations
@@ -35,6 +35,12 @@ post.title # => Globalize3 rocks!
 
 I18n.locale = :he
 post.title # => גלובאלייז2 שולט!
+
+post.title_en # => Globalize3 rocks!
+post.title_he # => גלובאלייז2 שולט!
+
+post.title_en = "Globalize3 Super"
+post.title_he = "Globalize3 שולט"
 </code></pre>
 
 In order to make this work, you'll need to add the appropriate translation tables. Globalize3 comes with a handy helper method to help you do this. It's called @create_translation_table!@. Here's an example:
