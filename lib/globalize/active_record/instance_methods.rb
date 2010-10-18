@@ -24,13 +24,20 @@ module Globalize
       end
 
       def write_attribute(name, value, locale = nil)
-        super(name, value)
-        globalize.write(locale || Globalize.locale, name, value) if translated?(name)
+        locale ||= Globalize.locale
+        
+        if translates_attribute?(name, locale)        
+          globalize.write(locale, name, value)
+        else
+          super(name, value)
+        end
       end
 
       def read_attribute(name, locale = nil)
-        if self.class.translated?(name)
-          globalize.fetch(locale || Globalize.locale, name)
+        locale ||= Globalize.locale
+        
+        if translates_attribute?(name, locale)
+          globalize.fetch(locale, name)
         else
           super(name)
         end
@@ -42,6 +49,11 @@ module Globalize
       
       def translated?(name)
         self.class.translated?(name)
+      end
+      
+      def translates_attribute?(name, locale = nil)
+        locale ||= Globalize.locale
+        self.class.translated?(name) && I18n.default_locale.to_s != locale.to_s
       end
 
       def translated_attributes
