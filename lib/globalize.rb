@@ -6,6 +6,8 @@ module Globalize
   autoload :ActiveRecord, 'globalize/active_record'
   autoload :Versioning,   'globalize/versioning'
 
+  mattr_accessor :available_locales
+
   class << self
     def locale
       read_locale || I18n.locale
@@ -21,6 +23,10 @@ module Globalize
       result = yield
       set_locale(previous_locale)
       result
+    end
+
+    def available_locales
+      @@available_locales || I18n.backend.available_locales
     end
 
     def fallbacks?

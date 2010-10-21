@@ -4,7 +4,7 @@ module Globalize
       def self.included(base)
         base.class_eval do
           translated_attribute_names.each do |attr_name|  
-            I18n.available_locales.each do |locale|
+            Globalize.available_locales.each do |locale|
               define_method :"#{attr_name}_#{locale}" do
                 read_attribute(attr_name, locale)
               end
