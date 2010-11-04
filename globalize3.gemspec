@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{globalize3}
-  s.version = "0.0.9"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Sven Fuchs", "Joshua Harvey", "Clemens Kofler", "John-Paul Bader", "Igor Galeta"]
-  s.date = %q{2010-10-21}
+  s.date = %q{2010-11-04}
   s.description = %q{Rails I18n: de-facto standard library for ActiveRecord 3 model/data translation}
   s.email = %q{nobody@globalize-rails.org}
   s.extra_rdoc_files = [
@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
      "lib/globalize/active_record/instance_methods.rb",
      "lib/globalize/active_record/migration.rb",
      "lib/globalize/active_record/translation.rb",
+     "lib/globalize/railtie.rb",
      "lib/globalize/version.rb",
      "lib/globalize/versioning.rb",
      "lib/globalize/versioning/vestal_versions.rb",
