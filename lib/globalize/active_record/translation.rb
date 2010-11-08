@@ -1,6 +1,9 @@
 module Globalize
   module ActiveRecord
     class Translation < ::ActiveRecord::Base
+      
+      attr_accessible :locale
+      
       class << self
         def with_locales(*locales)
           where(:locale => locales.flatten.map(&:to_s))
