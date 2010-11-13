@@ -71,7 +71,8 @@ module Globalize
         end
 
         def move_data_to_translation_table
-          # TODO
+          connection.execute("INSERT INTO #{translations_table_name} (#{table_name.sub(/^#{table_name_prefix}/, "").singularize}_id,#{fields.keys.join(',')}) SELECT id,#{fields.keys.join(',')} FROM #{table_name}")
+          connection.execute("UPDATE #{translations_table_name} SET locale='#{I18n.default_locale}'")
         end
 
         def move_data_to_model_table
