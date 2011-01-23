@@ -1,6 +1,11 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DynamicFindersTest < Test::Unit::TestCase
+  test "respond_to? returns true for dynamic finders" do
+    assert Post.respond_to? :find_by_title
+    assert Post.respond_to? :find_first_by_title
+  end
+
   test "simple dynamic finders do work" do
     Post.create(:title => 'foo')
     Post.create(:title => 'bar')
