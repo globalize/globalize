@@ -76,7 +76,7 @@ module Globalize
           Globalize.fallbacks(locale).each do |fallback|
             translation = translations.to_a.detect { |t| t.locale == fallback }
             value  = translation && translation.send(name)
-            locale = fallback && break if value
+            locale = fallback && break unless value.blank?
           end
 
           set_metadata(value, :locale => locale, :requested_locale => requested_locale)
