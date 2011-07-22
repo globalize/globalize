@@ -2,7 +2,11 @@ module Globalize
   module ActiveRecord
     module ClassMethods
       delegate :translated_locales, :set_translations_table_name, :to => :translation_class
-
+      
+      def with_locale(locale)
+        scoped.where(:"is_locale_#{locale}" => true)
+      end
+      
       def with_locales(*locales)
         scoped.merge(translation_class.with_locales(*locales))
       end

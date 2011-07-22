@@ -5,6 +5,7 @@ require 'patches/active_record/query_method'
 module Globalize
   autoload :ActiveRecord, 'globalize/active_record'
   autoload :Versioning, 'globalize/versioning'
+  autoload :Utils, 'globalize/utils'
   
   mattr_accessor :available_locales
   
