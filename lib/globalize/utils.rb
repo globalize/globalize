@@ -128,11 +128,12 @@ module Globalize
         end
       end
       
-      # Convert string "title:string" to hash { :title => "string" }
+      # Convert string "title:string" to hash { :title => :string }
+      # Convert array ["title:string", "content:text"] to hash { :title => :string, :content => :text }
       def convert_columns(value)
         [value].flatten.inject({}) do |hash, schema|
           arr = schema.to_s.split(':')
-          hash[arr.first] = (arr.size == 1 ? "text" : arr.last)
+          hash[arr.first.to_sym] = (arr.size == 1 ? :text : arr.last.to_sym)
           hash
         end
       end
