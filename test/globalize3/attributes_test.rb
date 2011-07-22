@@ -18,6 +18,12 @@ class AttributesTest < Test::Unit::TestCase
     attributes = post.attributes.slice('id', 'blog_id', 'title', 'content')
     assert_equal({ 'id' => post.id, 'blog_id' => nil, 'title' => 'foo', 'content' => nil }, attributes)
   end
+  
+  test "write_attribute for non-translated attributes should return the value" do
+    user = User.create(:name => 'Max Mustermann', :email => 'max@mustermann.de')
+    new_email = 'm.muster@mann.de'
+    assert_equal new_email, user.write_attribute('email', new_email)
+  end
 
   test 'translated_attribute_names returns translated attribute names' do
     assert_equal [:title, :content], Post.translated_attribute_names & [:title, :content]
@@ -116,4 +122,12 @@ class AttributesTest < Test::Unit::TestCase
     end
     assert_equal 'Titel', post.title(:de)
   end
+
+  test 'modifying a translated attribute does not change the untranslated value' do
+    post = Post.create(:title => 'title')
+    before = post.untranslated_attributes['title']
+    post.title = 'changed title'
+    assert_equal post.untranslated_attributes['title'], before
+  end
+
 end

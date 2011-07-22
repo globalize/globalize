@@ -1,13 +1,17 @@
 ActiveRecord::Migration.verbose = false
 
 ActiveRecord::Schema.define do
+  create_table :translations, :force => true do |t|
+    t.string   :blah
+  end
+
   create_table :blogs, :force => true do |t|
     t.string   :description
   end
 
   create_table :posts, :force => true do |t|
     t.references :blog
-    # t.boolean    :published
+    t.boolean    :published
   end
 
   create_table :post_translations, :force => true do |t|
@@ -45,6 +49,10 @@ ActiveRecord::Schema.define do
     t.string :untranslated
   end
 
+  create_table :untranslateds, :force => true do |t|
+    t.string :name
+  end
+
   create_table :validatees, :force => true do |t|
   end
 
@@ -55,7 +63,8 @@ ActiveRecord::Schema.define do
   end
 
   create_table :users, :force => true do |t|
-    t.string :email
+    t.string   :email
+    t.datetime :created_at
   end
 
   create_table :user_translations, :force => true do |t|
@@ -64,24 +73,36 @@ ActiveRecord::Schema.define do
     t.string     :name
   end
 
-  create_table :versions do |t|
-    t.belongs_to :versioned, :polymorphic => true
-    t.belongs_to :user, :polymorphic => true
-    t.string :user_name
-    t.text :change_log
-    t.integer :number
-    t.string :tag
-    t.string :locale
-
-    t.timestamps
+  create_table :tasks, :force => true do |t|
+    t.string   :name
+    t.datetime :created_at
   end
 
-  change_table :versions do |t|
-    t.index [:versioned_id, :versioned_type]
-    t.index [:user_id, :user_type]
-    t.index :user_name
-    t.index :number
-    t.index :tag
-    t.index :created_at
+  create_table :task_translations, :force => true do |t|
+    t.references :task
+    t.string     :locale
+    t.string     :name
+  end
+
+  create_table "versions", :force => true do |t|
+    t.string   "item_type",  :null => false
+    t.integer  "item_id",    :null => false
+    t.string   "event",      :null => false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.string   "locale"
+    t.datetime "created_at"
+  end
+
+  add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
+
+  create_table 'UPPERCASE_TABLE_NAME', :force => true do |t|
+    t.string :name
+  end
+
+  create_table :UPPERCASE_TABLE_NAME_translations, :force => true do |t|
+    t.integer 'UPPERCASE_TABLE_NAME_id'
+    t.string     :locale
+    t.string     :name
   end
 end

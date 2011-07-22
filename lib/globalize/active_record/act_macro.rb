@@ -7,26 +7,37 @@ module Globalize
         options = attr_names.extract_options!
         options[:table_name] ||= "#{table_name.singularize}_translations"
 
-        class_inheritable_accessor :translated_attribute_names, :translation_options
+        class_attribute :translated_attribute_names, :translation_options, :fallbacks_for_empty_translations
         self.translated_attribute_names = attr_names.map(&:to_sym)
         self.translation_options        = options
+        self.fallbacks_for_empty_translations = options[:fallbacks_for_empty_translations]
 
         include InstanceMethods, Accessors
         extend  ClassMethods, Migration
 
         has_many :translations, :class_name  => translation_class.name,
                                 :foreign_key => class_name.foreign_key,
-                                :dependent   => :delete_all,
+                                :dependent   => :destroy,
                                 :extend      => HasManyExtensions
 
-        after_save :save_translations!
+        after_create :save_translations!
+        after_update :save_translations!
+
+        if options[:versioning]
+          ::ActiveRecord::Base.extend(Globalize::Versioning::PaperTrail)
+
+          translation_class.has_paper_trail
+          delegate :version, :versions, :to => :translation
+        end
 
         attr_names.each { |attr_name| translated_attr_accessor(attr_name) }
       end
 
       def class_name
-        class_name = table_name[table_name_prefix.length..-(table_name_suffix.length + 1)].camelize
-        pluralize_table_names ? class_name.singularize : class_name
+        @class_name ||= begin
+          class_name = table_name[table_name_prefix.length..-(table_name_suffix.length + 1)].downcase.camelize
+          pluralize_table_names ? class_name.singularize : class_name
+        end
       end
 
       def translates?

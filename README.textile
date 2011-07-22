@@ -1,6 +1,6 @@
 h1. Globalize3
 
-Globalize3 is the successor of Globalize for Rails. Globalize is targeted at ActiveRecord 3. It is compatible with and builds on the new "I18n api in Ruby on Rails":http://guides.rubyonrails.org/i18n.html and adds model translations to ActiveRecord.
+Globalize3 is the successor of Globalize for Rails. Globalize is targeted at ActiveRecord 3. It is compatible with and builds on the new "I18n API in Ruby on Rails":http://guides.rubyonrails.org/i18n.html and adds model translations to ActiveRecord.
 
 Globalize3 is much more lightweight and compatible than its predecessor Globalize for Rails was. Model translations in Globalize3 use default ActiveRecord features and do not limit any ActiveRecord functionality any more.
 
@@ -68,6 +68,31 @@ end
 
 Note that the ActiveRecord model @Post@ must already exist and have a @translates@ directive listing the translated fields.
 
+h2. Migrating existing data to and from the translated version
+
+As well as creating a translation table, you can also use @create_translation_table!@ to migrate across any
+existing data to the default locale. This can also operate in reverse to restore any translations from the default locale
+back to the model when you don't want to use a translation table anymore using @drop_translation_table!@
+
+This feature makes use of @untranslated_attributes@ which allows access to the model's attributes as they were before
+the translation was applied. Here's an example (which assumes you already have a model called @Post@ and its table exists):
+
+<pre><code>
+  class TranslatePosts < ActiveRecord::Migration
+    def self.up
+      Post.create_translation_table!({
+        :title => :string,
+        :text => :text
+      }, {
+        :migrate_data => true
+      })
+    end
+    def self.down
+      Post.drop_translation_table! :migrate_data => true
+    end
+  end
+</code></pre>
+
 h2. Versioning with Globalize3
 
 Globalize3 nicely integrates with "vestal_versions":http://github.com/laserlemon/vestal_versions:
@@ -81,6 +106,64 @@ As of writing (2010-08-05) the original vestal_versions respository has not been
 Please also note that @update_attribute@ currently hides itself from dirty tracking in ActiveRecord >= 3.0.0.beta (which is considered a "regression":http://github.com/rails/rails/commit/01629d180468049d17a8be6900e27a4f0d2b18c4#commitcomment-123199). That means that you currently need to use attribute writers or @update_attributes@ in order to track changes/versions for your models.
 
 Also, please see the tests in test/globalize3/versioning_test.rb for some current gotchas.
+
+h2. I18n fallbacks for empty translations
+
+It is possible to enable fallbacks for empty translations. It will depend on the configuration setting you have set for I18n translations in your Rails config.
+
+You can enable them by adding the next line to @config/application.rb@ (or only @config/environments/production.rb@ if you only want them in production)
+
+<pre><code>config.i18n.fallbacks = true</code></pre>
+
+By default, globalize3 will only use fallbacks when your translation model does not exist or the translation value for the item you've requested is @nil@. However it is possible to also use fallbacks for @blank@ translations by adding @:fallbacks_for_empty_translations => true@ to the @translates@ method.
+
+<pre><code>
+  class Post < ActiveRecord::Base
+    translates :title, :name
+  end
+
+  puts post.translations.inspect
+  # => [#<Post::Translation id: 1, post_id: 1, locale: "en", title: "Globalize3 rocks!", name: "Globalize3">, #<Post::Translation id: 2, post_id: 1, locale: "nl", title: '', name: nil>]
+
+  I18n.locale = :en
+  post.title # => 'Globalize3 rocks!'
+  post.name  # => 'Globalize3'
+
+  I18n.locale = :nl
+  post.title # => ''
+  post.name  # => 'Globalize3'
+</code></pre>
+<pre><code>
+  class Post < ActiveRecord::Base
+    translates :title, :name, :fallbacks_for_empty_translations => true
+  end
+
+  puts post.translations.inspect
+  # => [#<Post::Translation id: 1, post_id: 1, locale: "en", title: "Globalize3 rocks!", name: "Globalize3">, #<Post::Translation id: 2, post_id: 1, locale: "nl", title: '', name: nil>]
+
+  I18n.locale = :en
+  post.title # => 'Globalize3 rocks!'
+  post.name  # => 'Globalize3'
+
+  I18n.locale = :nl
+  post.title # => 'Globalize3 rocks!'
+  post.name  # => 'Globalize3'
+</code></pre>
+
+
+h2. Scoping objects by those with translations
+
+To only return objects that have a translation for the given locale we can use the `with_translations` scope. This will only return records that have a translations for the passed in locale.
+
+<pre><code>
+
+Post.with_translations('en') # => [#<Post::Translation id: 1, post_id: 1, locale: "en", title: "Globalize3 rocks!", name: "Globalize3">, #<Post::Translation id: 2, post_id: 1, locale: "nl", title: '', name: nil>]
+
+Post.with_translations(I18n.locale) # => [#<Post::Translation id: 1, post_id: 1, locale: "en", title: "Globalize3 rocks!", name: "Globalize3">, #<Post::Translation id: 2, post_id: 1, locale: "nl", title: '', name: nil>]
+
+Post.with_translations('de') # => []
+
+</code></pre>
 
 h2. Changes since Globalize2
 

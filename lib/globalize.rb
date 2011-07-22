@@ -4,10 +4,10 @@ require 'patches/active_record/query_method'
 
 module Globalize
   autoload :ActiveRecord, 'globalize/active_record'
-  autoload :Versioning,   'globalize/versioning'
-
+  autoload :Versioning, 'globalize/versioning'
+  
   mattr_accessor :available_locales
-
+  
   class << self
     def locale
       read_locale || I18n.locale
@@ -20,13 +20,15 @@ module Globalize
     def with_locale(locale, &block)
       previous_locale = read_locale
       set_locale(locale)
-      result = yield
+      result = yield(locale)
       set_locale(previous_locale)
       result
     end
 
-    def available_locales
-      @@available_locales || I18n.backend.available_locales
+    def with_locales(*locales, &block)
+      locales.flatten.map do |locale|
+        with_locale(locale, &block)
+      end
     end
 
     def fallbacks?
@@ -36,17 +38,21 @@ module Globalize
     def fallbacks(locale = self.locale)
       fallbacks? ? I18n.fallbacks[locale] : [locale.to_sym]
     end
+    
+    def available_locales
+      @@available_locales || I18n.backend.available_locales
+    end
 
-    protected
+  protected
 
-      def read_locale
-        Thread.current[:globalize_locale]
-      end
+    def read_locale
+      Thread.current[:globalize_locale]
+    end
 
-      def set_locale(locale)
-        Thread.current[:globalize_locale] = locale
-      end
+    def set_locale(locale)
+      Thread.current[:globalize_locale] = locale.to_sym rescue nil
+    end
   end
 end
 
-require 'globalize/railtie'
+ActiveRecord::Base.extend(Globalize::ActiveRecord::ActMacro)
