@@ -14,10 +14,12 @@ h2. Installation
 To install Globalize3 with its default setup just use:
 
 <pre><code>
-$ gem install globalize3
+  gem globalize3
 </code></pre>
 
 h2. Model translations
+
+Model translations allow you to translate your models' attribute values. E.g.
 
 h3. New schema
 
@@ -28,7 +30,6 @@ end
 </code></pre>
 
 h3. Old schema
-Model translations allow you to translate your models' attribute values. E.g.
 
 <pre><code>
 class Post < ActiveRecord::Base
