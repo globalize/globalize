@@ -3,10 +3,10 @@ require 'rails'
 require 'globalize'
 
 module Globalize
-  class Railtie < ::Rails::Railtie
+  class Engine < ::Rails::Engine
     config.before_initialize do
       ActiveSupport.on_load :active_record do
-        ::ActiveRecord::Base.send(:extend, Globalize::ActiveRecord::ActMacro)
+        ::ActiveRecord::Base.extend(Globalize::ActiveRecord::ActMacro)
       end
     end
   end

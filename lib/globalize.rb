@@ -55,4 +55,4 @@ module Globalize
   end
 end
 
-ActiveRecord::Base.extend(Globalize::ActiveRecord::ActMacro)
+require 'globalize/engine'
