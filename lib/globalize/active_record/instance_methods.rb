@@ -141,7 +141,13 @@ module Globalize
         locales.uniq!
         locales
       end
-
+      
+      def update_checkers!
+        Globalize.available_locales.each do |locale|
+          self["is_locale_#{locale}"] = !globalize.all_blank?(locale, translated_attribute_names)
+        end
+      end
+      
       def save_translations!
         globalize.save_translations!
         @translation_caches = {}

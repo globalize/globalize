@@ -1,6 +1,8 @@
 module Globalize
   module ActiveRecord
     class Translation < ::ActiveRecord::Base
+      attr_accessible :locale
+      
       class << self
         def with_locales(*locales)
           # Avoid using "IN" with SQL queries when only using one locale.

@@ -32,6 +32,7 @@ module Globalize
                                 :dependent   => :destroy,
                                 :extend      => HasManyExtensions
 
+        before_save :update_checkers!
         after_create :save_translations!
         after_update :save_translations!
 
