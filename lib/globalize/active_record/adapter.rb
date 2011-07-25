@@ -50,7 +50,7 @@ module Globalize
       end
       
       def all_blank?(locale, attrs)
-        [attrs].flatten.collect { |name| fetch_stash(locale, name).blank? }.all?
+        [attrs].flatten.collect { |name| fetch(locale, name).blank? }.all?
       end
 
     protected
