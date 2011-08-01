@@ -16,7 +16,7 @@ module Globalize
         include Globalize::ActiveRecord::Exceptions
 
         attr_reader :model, :fields
-        delegate :translated_attribute_names, :connection, :table_name,
+        delegate :translated_attribute_names, :connection, :table_name, :translated_columns_hash,
           :table_name_prefix, :translations_table_name, :columns, :to => :model
 
         def initialize(model)
@@ -103,7 +103,7 @@ module Globalize
         end
 
         def column_type(name)
-          columns.detect { |c| c.name == name.to_s }.try(:type)
+          columns.detect { |c| c.name == name.to_s }.try(:type) || translated_columns_hash[name.to_s]
         end
 
         def valid_field_name?(name)

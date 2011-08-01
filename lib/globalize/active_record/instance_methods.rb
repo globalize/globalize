@@ -113,7 +113,7 @@ module Globalize
       def translation_for(locale)
         @translation_caches ||= {}
         unless @translation_caches[locale]
-          # Enumberable#detect is better since we have the translations collection (already) loaded 
+          # Enumberable#detect is better since we have the translations collection (already) loaded
           # using either Model.includes(:translations) or Model.with_translations
           _translation = translations.detect{|t| t.locale.to_s == locale.to_s}
           _translation ||= translations.build(:locale => locale)
@@ -141,7 +141,13 @@ module Globalize
         locales.uniq!
         locales
       end
-
+      
+      def update_checkers!
+        Globalize.available_locales.each do |locale|
+          self["is_locale_#{locale}"] = !globalize.all_blank?(locale, translated_attribute_names)
+        end
+      end
+      
       def save_translations!
         globalize.save_translations!
         @translation_caches = {}

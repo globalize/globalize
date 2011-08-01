@@ -1,18 +1,30 @@
 module Globalize
   module ActiveRecord
     module ActMacro
-      def translates(*attr_names)
+      # Translated attributes
+      # Example: 
+      #   class Post < ActiveRecord::Base
+      #     translates "title:string", "content:text", :versioning => true, :table_name => "..."
+      #   end
+      #
+      def translates(*attr_columns)
         return if translates?
 
-        options = attr_names.extract_options!
+        options = attr_columns.extract_options!
         options[:table_name] ||= "#{table_name.singularize}_translations"
-
-        class_attribute :translated_attribute_names, :translation_options, :fallbacks_for_empty_translations
+        
+        attrs_hash = Utils.convert_columns(attr_columns)
+        attr_names = attrs_hash.keys
+        
+        class_attribute :translated_attribute_names, :translation_options, 
+                        :fallbacks_for_empty_translations, :translated_columns_hash
+                        
         self.translated_attribute_names = attr_names.map(&:to_sym)
         self.translation_options        = options
+        self.translated_columns_hash    = attrs_hash
         self.fallbacks_for_empty_translations = options[:fallbacks_for_empty_translations]
 
-        include InstanceMethods
+        include InstanceMethods, Accessors
         extend  ClassMethods, Migration
 
         has_many :translations, :class_name  => translation_class.name,
@@ -20,6 +32,7 @@ module Globalize
                                 :dependent   => :destroy,
                                 :extend      => HasManyExtensions
 
+        before_save :update_checkers!
         after_create :save_translations!
         after_update :save_translations!
 

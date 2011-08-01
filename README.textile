@@ -14,12 +14,22 @@ h2. Installation
 To install Globalize3 with its default setup just use:
 
 <pre><code>
-$ gem install globalize3
+  gem globalize3
 </code></pre>
 
 h2. Model translations
 
 Model translations allow you to translate your models' attribute values. E.g.
+
+h3. New schema
+
+<pre><code>
+class Post < ActiveRecord::Base
+  translates "title:string", "content:text"
+end
+</code></pre>
+
+h3. Old schema
 
 <pre><code>
 class Post < ActiveRecord::Base
@@ -38,6 +48,22 @@ post.title # => גלובאלייז2 שולט!
 </code></pre>
 
 In order to make this work, you'll need to add the appropriate translation tables. Globalize3 comes with a handy helper method to help you do this. It's called @create_translation_table!@. Here's an example:
+
+h3. New schema
+
+Synchronize translated columns with database (create/drop table or add/change/remove column)
+
+<pre><code>
+  rake db:globalize:up
+</code></pre>
+
+Drop all globalize translations tables (but be careful: non-refundable with backup)
+
+<pre><code>
+  rake db:globalize:down
+</code></pre>
+
+h3. Old schema
 
 <pre><code>
 class CreatePosts < ActiveRecord::Migration
