@@ -25,14 +25,15 @@ module Globalize
 
       def write_attribute(name, value, options = {})
         # raise 'y' if value.nil? # TODO.
+        
+        # Deprecate old use of locale
+        unless options.is_a?(Hash)
+          warn "[DEPRECATION] passing 'locale' as #{options.inspect} is deprecated. Please use {:locale => #{options.inspect}} instead."
+          options = {:locale => options}
+        end
 
-        if translated?(name)
-          # Deprecate old use of locale
-          unless options.is_a?(Hash)
-            warn "[DEPRECATION] passing 'locale' as #{options.inspect} is deprecated. Please use {:locale => #{options.inspect}} instead."
-            options = {:locale => options}
-          end
-          options = {:locale => nil}.merge(options)
+        options = {:translated => true, :locale => nil}.merge(options)
+        if translated?(name) and options[:translated]
           attribute_will_change! name.to_s
           globalize.write(options[:locale] || Globalize.locale, name, value)
         else
@@ -48,7 +49,7 @@ module Globalize
         end
 
         options = {:translated => true, :locale => nil}.merge(options)
-        if self.class.translated?(name) and options[:translated]
+        if translated?(name) and options[:translated]
           globalize.fetch(options[:locale] || Globalize.locale, name)
         else
           super(name)
@@ -109,6 +110,10 @@ module Globalize
       def translation
         translation_for(::Globalize.locale)
       end
+      
+      def default_translation
+        translation_for(::Globalize.default_locale)
+      end
 
       def translation_for(locale)
         @translation_caches ||= {}
@@ -140,6 +145,19 @@ module Globalize
         locales = globalize.stash.keys.concat(globalize.stash.keys).concat(translations.translated_locales)
         locales.uniq!
         locales
+      end
+      
+      def copy_default_translations!
+        opts = {:translated => false}
+        default = default_translation
+        translated_attribute_names.each do |name|
+          current = read_attribute(name, opts)
+          value = default.read_attribute(name)
+          if current != value # using default.changed_attributes won't work
+            changed_attributes[name] = value
+            write_attribute(name, value, opts)
+          end
+        end
       end
 
       def save_translations!

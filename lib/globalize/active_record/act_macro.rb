@@ -20,6 +20,7 @@ module Globalize
                                 :dependent   => :destroy,
                                 :extend      => HasManyExtensions
 
+        before_save  :copy_default_translations! if options[:copy]
         after_create :save_translations!
         after_update :save_translations!
 
