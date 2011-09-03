@@ -7,6 +7,14 @@ module Globalize
   autoload :Versioning,   'globalize/versioning'
 
   class << self
+    def default_locale
+      I18n.default_locale
+    end
+    
+    def default_locale?(lc)
+      (lc || locale) == default_locale
+    end
+    
     def locale
       read_locale || I18n.locale
     end
