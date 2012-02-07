@@ -17,6 +17,8 @@ module Globalize
 
       def locale
         read_attribute(:locale).to_sym
+      rescue
+        nil
       end
 
       def locale=(locale)
