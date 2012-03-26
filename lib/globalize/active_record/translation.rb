@@ -19,8 +19,7 @@ module Globalize
       end
 
       def locale
-        locale = read_attribute(:locale)
-        locale.respond_to?(:to_sym) ? locale.to_sym : locale
+        read_attribute(:locale).to_s.intern
       end
 
       def locale=(locale)
