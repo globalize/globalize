@@ -49,7 +49,7 @@ class CreatePosts < ActiveRecord::Migration
     create_table :posts do |t|
       t.timestamps
     end
-    Post.create_translation_table! :title => :string, :text => :text
+    Post.create_translation_table! title: :string, text: :text
   end
   def self.down
     drop_table :posts
@@ -68,7 +68,7 @@ class CreatePosts < ActiveRecord::Migration
     create_table :posts do |t|
       t.timestamps
     end
-    Post.create_translation_table! :title => :string, :text => :text
+    Post.create_translation_table! title: :string, text: :text
   end
   def down
     drop_table :posts
@@ -85,7 +85,7 @@ class CreatePosts < ActiveRecord::Migration
     create_table :posts do |t|
       t.timestamps
     end
-    Post.create_translation_table! :title => :string, :text => {:type => :text, :null => false, :default => 'abc'}
+    Post.create_translation_table! title: :string, text: {type: :text, null: false, default: 'abc'}
   end
   def down
     drop_table :posts
@@ -109,14 +109,14 @@ the translation was applied. Here's an example (which assumes you already have a
   class TranslatePosts < ActiveRecord::Migration
     def self.up
       Post.create_translation_table!({
-        :title => :string,
-        :text => :text
+        title: :string,
+        text: :text
       }, {
-        :migrate_data => true
+        migrate_data: true
       })
     end
     def self.down
-      Post.drop_translation_table! :migrate_data => true
+      Post.drop_translation_table! migrate_data: true
     end
   end
 </code></pre>
