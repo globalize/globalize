@@ -16,6 +16,10 @@ class ReloadingPost < Post
   after_create { reload }
 end
 
+class Book < ActiveRecord::Base
+  translates :title, :fallback_to_untranslated_attributes => true
+end
+
 class Blog < ActiveRecord::Base
   has_many :posts, :order => 'id ASC'
 end

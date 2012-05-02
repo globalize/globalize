@@ -28,6 +28,10 @@ module Globalize
             return value
           end
         end
+
+        if fallback_to_untranslated_attributes?
+          return self.record.untranslated_attributes[name.to_s]
+        end
         return nil
       end
 
@@ -95,6 +99,10 @@ module Globalize
 
       def fallbacks_for_empty_translations?
         record.fallbacks_for_empty_translations
+      end
+
+      def fallback_to_untranslated_attributes?
+        record.fallback_to_untranslated_attributes
       end
     end
   end

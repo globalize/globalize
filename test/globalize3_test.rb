@@ -162,4 +162,11 @@ class Globalize3Test < Test::Unit::TestCase
     assert_translated translated_comment, :en, :content, 'content'
     assert_translated translated_comment, :de, :content, 'Inhalt'
   end
+
+  test "a model that falls back to untranslated attributes" do
+    I18n.locale = :de
+    Book.create(:title => "Title1")
+    I18n.locale = :fr
+    assert_equal "Title1", Book.first.title
+  end
 end

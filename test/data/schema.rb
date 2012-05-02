@@ -9,6 +9,19 @@ ActiveRecord::Schema.define do
     t.string   :description
   end
 
+  create_table :books, :force => true do |t|
+    t.string   :title
+  end
+
+  create_table :book_translations, :force => true do |t|
+    t.string     :locale
+    t.references :book
+    t.string     :title
+    t.text       :content
+    t.boolean    :published
+    t.datetime   :published_at
+  end
+
   create_table :posts, :force => true do |t|
     t.references :blog
     t.boolean    :published
