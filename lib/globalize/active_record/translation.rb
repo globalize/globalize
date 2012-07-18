@@ -1,6 +1,9 @@
 module Globalize
   module ActiveRecord
     class Translation < ::ActiveRecord::Base
+
+      validates_presence_of :locale
+
       class << self
         # Sometimes ActiveRecord queries .table_exists? before the table name
         # has even been set which results in catastrophic failure.
@@ -22,7 +25,7 @@ module Globalize
       end
 
       def locale
-        read_attribute(:locale).to_sym
+        read_attribute(:locale).to_s.intern
       end
 
       def locale=(locale)
