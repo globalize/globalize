@@ -51,10 +51,7 @@ class DynamicFindersTest < Test::Unit::TestCase
   end
 
   test "dynamic finders do work with bangs" do
-    foo = Post.create!(:title => 'foo')
-    bar = Post.create!(:title => 'bar')
-
-    assert_raise ActiveRecord::RecordNotFound, do
+    assert_raise ActiveRecord::RecordNotFound do
       Post.find_by_title!('non existing')
     end
   end
