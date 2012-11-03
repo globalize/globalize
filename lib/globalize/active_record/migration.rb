@@ -57,7 +57,7 @@ module Globalize
 
         def create_translation_table
           connection.create_table(translations_table_name) do |t|
-            t.references table_name.sub(/^#{table_name_prefix}/, '').singularize
+            t.column table_name.sub(/^#{table_name_prefix}/, '').singularize + '_' + @model.primary_key, (@model.columns_hash[@model.primary_key].type)
             t.string :locale
             fields.each do |name, options|
               if options.is_a? Hash
@@ -73,7 +73,7 @@ module Globalize
         def create_translations_index
           connection.add_index(
             translations_table_name,
-            "#{table_name.sub(/^#{table_name_prefix}/, "").singularize}_id",
+            "#{table_name.sub(/^#{table_name_prefix}/, "").singularize}_" + @model.primary_key,
             :name => translation_index_name
           )
           # index for select('DISTINCT locale') call in translation.rb
@@ -143,7 +143,7 @@ module Globalize
         end
 
         def translation_index_name
-          index_name = "index_#{translations_table_name}_on_#{table_name.singularize}_id"
+          index_name = "index_#{translations_table_name}_on_#{table_name.singularize}_" + @model.primary_key
           index_name.size < connection.index_name_length ? index_name : "index_#{Digest::SHA1.hexdigest(index_name)}"
         end
 
