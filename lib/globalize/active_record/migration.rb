@@ -57,7 +57,8 @@ module Globalize
 
         def create_translation_table
           connection.create_table(translations_table_name) do |t|
-            t.column table_name.sub(/^#{table_name_prefix}/, '').singularize + '_' + @model.primary_key, (@model.columns_hash[@model.primary_key].type)
+            t.references table_name.sub(/^#{table_name_prefix}/, '').singularize
+            #t.column table_name.sub(/^#{table_name_prefix}/, '').singularize + '_' + @model.primary_key, (@model.columns_hash[@model.primary_key].type)
             t.string :locale
             fields.each do |name, options|
               if options.is_a? Hash
