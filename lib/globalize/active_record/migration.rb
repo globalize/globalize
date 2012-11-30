@@ -48,9 +48,7 @@ module Globalize
         end
 
         def remove_source_columns
-          fields.each do |attribute|
-            connection.remove_column(table_name, attribute)
-          end
+          connection.remove_columns(table_name, *fields.keys)
         end
 
         def drop_translation_table!(options = {})
