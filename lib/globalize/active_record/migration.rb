@@ -26,7 +26,8 @@ module Globalize
 
         def create_translation_table!(fields = {}, options = {})
           @fields = fields
-          complete_translated_fields
+          # If we have fields we only want to create the translation table with those fields
+          complete_translated_fields if fields.blank?
           validate_translated_fields
 
           create_translation_table
@@ -49,6 +50,8 @@ module Globalize
           clear_schema_cache!
         end
 
+        # This adds all the current translated attributes of the model
+        # It's a problem because in early migrations would add all the translated attributes
         def complete_translated_fields
           translated_attribute_names.each do |name|
             fields[name] = column_type(name) unless fields[name]
