@@ -58,6 +58,10 @@ class Migrated < ActiveRecord::Base
   translates :name
 end
 
+class TwoAttributesMigrated < ActiveRecord::Base
+  translates :name, :body
+end
+
 class MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters < ActiveRecord::Base
   translates :name
 end
