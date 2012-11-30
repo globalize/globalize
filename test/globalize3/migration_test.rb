@@ -156,6 +156,11 @@ class MigrationTest < Test::Unit::TestCase
     assert_equal 'Untranslated', untranslated.untranslated_attributes['name']
   end
 
+  # Here we test that adding translation fields we can use the migrate data and remouve source column options.
+  # * First, we get a model with no translation and create a record,
+  # * Then, we translate both fields and create translation table just for one of them migrating data
+  # * Then we add the other field to the translation table, migrate data and remove the source column
+  # * Finally we check that data has been migrated, we haven't overwritten the old migrated data and there's no source column
   test 'add_translation_fields! with option migrate_data set to true DOES migrate existing data but doesn\'t remove the old migrated data' do
 
     model = TwoAttributesUntranslated
