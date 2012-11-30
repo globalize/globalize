@@ -55,6 +55,12 @@ class MigrationTest < Test::Unit::TestCase
     assert_nil column_type(:body, TwoAttributesMigrated)
   end
 
+  test 'adding fields to translate after creating the translation table' do
+    TwoAttributesMigrated.create_translation_table!(:name => :string)
+    TwoAttributesMigrated.add_translation_fields!(:body => :text)
+    assert_migration_table({:name => :string, :body => :text}, TwoAttributesMigrated)
+  end
+
   test 'drop_translation_table! drops the translations table' do
     Migrated.create_translation_table!(:name => :string)
     assert Migrated.translation_class.table_exists?

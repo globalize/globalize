@@ -9,7 +9,7 @@ module Globalize
         @globalize_migrator ||= Migrator.new(self)
       end
 
-      delegate :create_translation_table!, :drop_translation_table!,
+      delegate :create_translation_table!, :add_translation_fields!, :drop_translation_table!,
         :translation_index_name, :translation_locale_index_name,
         :to => :globalize_migrator
 
@@ -70,6 +70,18 @@ module Globalize
               end
             end
             t.timestamps
+          end
+        end
+
+        def add_translation_fields!(fields, options = {})
+          connection.change_table(translations_table_name) do |t|
+            fields.each do |name, options|
+              if options.is_a? Hash
+                t.column name, options.delete(:type), options
+              else
+                t.column name, options
+              end
+            end
           end
         end
 
