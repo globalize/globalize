@@ -156,6 +156,31 @@ class MigrationTest < Test::Unit::TestCase
     assert_equal 'Untranslated', untranslated.untranslated_attributes['name']
   end
 
+  test 'add_translation_fields! with option migrate_data set to true DOES migrate existing data but doesn\'t remove the old migrated data' do
+
+    model = TwoAttributesUntranslated
+    model.drop_translation_table! if model.respond_to?(:drop_translation_table!)
+    model.reset_column_information
+
+    untranslated_record = model.create! :name => 'Untranslated', :body => "Untranslated body"
+
+    model.instance_eval %{ translates :name, :body }
+
+    model.create_translation_table!({:name => :string}, {:migrate_data => true})
+
+    untranslated_record.reload
+
+    # We change the unstralated value so we make sure we don't overwrite the translated one when we add new fields
+    model.update_all({:name => 'No longer translated'}, :id => untranslated_record.id)
+    untranslated_record.reload
+
+    model.add_translation_fields!({:body => :text}, {:migrate_data => true})
+    untranslated_record.reload
+
+    assert_translated untranslated_record, :en, :name, 'Untranslated'
+    assert_translated untranslated_record, :en, :body, 'Untranslated body'
+  end
+
 protected
 
   def reset_schema(*models)

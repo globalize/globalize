@@ -41,6 +41,7 @@ module Globalize
           validate_translated_fields
 
           add_translation_fields
+          clear_schema_cache!
           move_data_to_translation_table if options[:migrate_data]
           remove_source_columns if options[:remove_source_columns]
           clear_schema_cache!
@@ -111,7 +112,6 @@ module Globalize
 
         def move_data_to_translation_table
           model.find_each do |record|
-            untranslated_attributes = record.untranslated_attributes
             translation = record.translation_for(I18n.default_locale) || record.translations.build(:locale => I18n.default_locale)
             fields.each do |attribute_name, attribute_type|
               translation[attribute_name] = record.read_attribute(attribute_name, {:translated => false})
@@ -171,6 +171,7 @@ module Globalize
 
         def clear_schema_cache!
           connection.schema_cache.clear! if connection.respond_to? :schema_cache
+          model::Translation.reset_column_information
         end
 
         private
