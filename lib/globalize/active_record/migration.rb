@@ -37,6 +37,16 @@ module Globalize
           clear_schema_cache!
         end
 
+        def add_translation_fields!(fields, options = {})
+          @fields = fields
+          validate_translated_fields
+
+          add_translation_fields
+          move_data_to_translation_table if options[:migrate_data]
+          remove_source_columns if options[:remove_source_columns]
+          clear_schema_cache!
+        end
+
         def remove_source_columns
           translated_attribute_names.each do |attribute|
             connection.remove_column(table_name, attribute)
@@ -73,7 +83,7 @@ module Globalize
           end
         end
 
-        def add_translation_fields!(fields, options = {})
+        def add_translation_fields
           connection.change_table(translations_table_name) do |t|
             fields.each do |name, options|
               if options.is_a? Hash
