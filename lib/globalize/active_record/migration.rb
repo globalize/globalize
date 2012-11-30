@@ -31,8 +31,7 @@ module Globalize
           validate_translated_fields
 
           create_translation_table
-          move_data_to_translation_table if options[:migrate_data]
-          remove_source_columns if options[:remove_source_columns]
+          add_translation_fields!(fields, options)
           create_translations_index
           clear_schema_cache!
         end
@@ -48,7 +47,7 @@ module Globalize
         end
 
         def remove_source_columns
-          translated_attribute_names.each do |attribute|
+          fields.each do |attribute|
             connection.remove_column(table_name, attribute)
           end
         end
@@ -72,13 +71,6 @@ module Globalize
           connection.create_table(translations_table_name) do |t|
             t.references table_name.sub(/^#{table_name_prefix}/, '').singularize
             t.string :locale
-            fields.each do |name, options|
-              if options.is_a? Hash
-                t.column name, options.delete(:type), options
-              else
-                t.column name, options
-              end
-            end
             t.timestamps
           end
         end
@@ -120,9 +112,9 @@ module Globalize
         def move_data_to_translation_table
           model.find_each do |record|
             untranslated_attributes = record.untranslated_attributes
-            translation = record.translations.build(:locale => I18n.default_locale)
-            translated_attribute_names.each do |attribute|
-              translation[attribute] = untranslated_attributes[attribute.to_s]
+            translation = record.translation_for(I18n.default_locale) || record.translations.build(:locale => I18n.default_locale)
+            fields.each do |attribute_name, attribute_type|
+              translation[attribute_name] = record.read_attribute(attribute_name, {:translated => false})
             end
             translation.save!
           end
