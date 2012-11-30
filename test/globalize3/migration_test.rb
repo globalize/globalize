@@ -174,11 +174,12 @@ class MigrationTest < Test::Unit::TestCase
     model.update_all({:name => 'No longer translated'}, :id => untranslated_record.id)
     untranslated_record.reload
 
-    model.add_translation_fields!({:body => :text}, {:migrate_data => true})
+    model.add_translation_fields!({:body => :text}, {:migrate_data => true, :remove_source_columns => true})
     untranslated_record.reload
 
     assert_translated untranslated_record, :en, :name, 'Untranslated'
     assert_translated untranslated_record, :en, :body, 'Untranslated body'
+    assert_nil model.columns.detect { |c| c.name == "body" }
   end
 
 protected

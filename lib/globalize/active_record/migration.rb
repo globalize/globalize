@@ -172,6 +172,7 @@ module Globalize
         def clear_schema_cache!
           connection.schema_cache.clear! if connection.respond_to? :schema_cache
           model::Translation.reset_column_information
+          model.reset_column_information
         end
 
         private
