@@ -144,12 +144,12 @@ module Globalize
 
         def translation_index_name
           index_name = "index_#{translations_table_name}_on_#{table_name.singularize}_id"
-          index_name.size < connection.index_name_length ? index_name : "index_#{Digest::SHA1.hexdigest(index_name)}"
+          index_name.size < connection.index_name_length ? index_name : "index_#{Digest::SHA1.hexdigest(index_name)}"[0, 29]
         end
 
         def translation_locale_index_name
           index_name = "index_#{translations_table_name}_on_locale"
-          index_name.size < connection.index_name_length ? index_name : "index_#{Digest::SHA1.hexdigest(index_name)}"
+          index_name.size < connection.index_name_length ? index_name : "index_#{Digest::SHA1.hexdigest(index_name)}"[0, 29]
         end
 
         def clear_schema_cache!
