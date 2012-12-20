@@ -194,7 +194,7 @@ class AttributesTest < Test::Unit::TestCase
     assert saved_locales.include? :it
   end
 
-  test 'does not update original columns with content in a different locale' do
+  test 'does not update original columns with content not in the default locale' do
     task = Task.create :name => 'Title'
 
     I18n.locale = :de
@@ -203,7 +203,7 @@ class AttributesTest < Test::Unit::TestCase
     legacy_task = LegacyTask.find(task.id)
     assert_equal 'Title', legacy_task.name
   end
-  
+
   test 'updates original columns with content in the default locale' do
     task = Task.create
 
@@ -215,5 +215,33 @@ class AttributesTest < Test::Unit::TestCase
 
     legacy_task = LegacyTask.find(task.id)
     assert_equal 'New Title', legacy_task.name
+  end
+
+  test 'does not update original columns with content in a different locale' do
+    word = Word.create :locale => 'nl', :term => 'ontvrienden', :definition => 'Iemand als vriend verwijderen op een sociaal netwerk'
+    legacy_word = LegacyWord.find(word.id)
+    assert_equal 'ontvrienden', legacy_word.term
+
+    I18n.locale = :en
+    word.update_attributes :term => 'unfriend', :definition => 'To remove someone as a friend on a social network'
+
+    assert_equal 'unfriend',    word.term
+    assert_equal 'ontvrienden', word.term(:nl)
+    assert_equal 'ontvrienden', legacy_word.reload.term
+  end
+
+  test 'updates original columns with content in the same locale' do
+    word = Word.create :locale => 'nl', :term => 'ontvrienden', :definition => 'Iemand als vriend verwijderen op een sociaal netwerk'
+
+    I18n.locale = :en
+    word.update_attributes :term => 'unfriend', :definition => 'To remove someone as a friend on a social network'
+
+    I18n.locale = :nl
+    word.update_attributes :term => 'ontvriend'
+
+    legacy_word = LegacyWord.find(word.id)
+    assert_equal 'ontvriend', word.term
+    assert_equal 'unfriend',  word.term(:en)
+    assert_equal 'ontvriend', legacy_word.term
   end
 end
