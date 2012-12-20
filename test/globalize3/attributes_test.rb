@@ -194,4 +194,26 @@ class AttributesTest < Test::Unit::TestCase
     assert saved_locales.include? :it
   end
 
+  test 'does not update original columns with content in a different locale' do
+    task = Task.create :name => 'Title'
+
+    I18n.locale = :de
+    task.update_attributes :name => 'Titel'
+
+    legacy_task = LegacyTask.find(task.id)
+    assert_equal 'Title', legacy_task.name
+  end
+  
+  test 'updates original columns with content in the default locale' do
+    task = Task.create
+
+    I18n.locale = :de
+    task.update_attributes :name => 'Neues Titel'
+
+    I18n.locale = I18n.default_locale
+    task.update_attributes :name => 'New Title'
+
+    legacy_task = LegacyTask.find(task.id)
+    assert_equal 'New Title', legacy_task.name
+  end
 end

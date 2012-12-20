@@ -153,6 +153,20 @@ module Globalize
       def rollback
         translation_caches[::Globalize.locale] = translation.previous_version
       end
+    
+    private
+
+      def update(*)
+        I18n.with_locale(I18n.default_locale) do
+          super
+        end
+      end
+
+      def create(*)
+        I18n.with_locale(I18n.default_locale) do
+          super
+        end
+      end
 
     protected
 
