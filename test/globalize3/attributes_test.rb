@@ -209,12 +209,21 @@ class AttributesTest < Test::Unit::TestCase
 
     I18n.locale = :de
     task.update_attributes :name => 'Neues Titel'
-
-    I18n.locale = I18n.default_locale
+    
+    I18n.locale = :en
     task.update_attributes :name => 'New Title'
 
     legacy_task = LegacyTask.find(task.id)
     assert_equal 'New Title', legacy_task.name
+
+    I18n.locale = I18n.default_locale = :de
+    assert_equal 'Neues Titel', task.name
+    task.update_attributes :name => 'Der neueste Titel'
+    
+    assert_equal 'Der neueste Titel', legacy_task.reload.name
+    
+    I18n.locale = :en
+    assert_equal 'New Title', task.name
   end
 
   test 'does not update original columns with content in a different locale' do
@@ -226,6 +235,14 @@ class AttributesTest < Test::Unit::TestCase
     word.update_attributes :term => 'unfriend', :definition => 'To remove someone as a friend on a social network'
 
     assert_equal 'unfriend',    word.term
+    assert_equal 'ontvrienden', word.term(:nl)
+    assert_equal 'ontvrienden', legacy_word.reload.term
+    
+    I18n.locale = I18n.default_locale = :de
+    word.update_attributes :term => 'entfreunde', :definition => 'Um jemanden als Freund in einem sozialen Netzwerk zu entfernen'
+    
+    assert_equal 'entfreunde',  word.term
+    assert_equal 'unfriend',    word.term(:en)
     assert_equal 'ontvrienden', word.term(:nl)
     assert_equal 'ontvrienden', legacy_word.reload.term
   end
