@@ -192,8 +192,12 @@ module Globalize
       def with_given_locale(attributes, &block)
         attributes.symbolize_keys! if attributes.respond_to?(:symbolize_keys!)
 
-        locale = respond_to?(:locale=) ? attributes.try(:[], :locale) :
-                                         attributes.try(:delete, :locale)
+        if attributes
+          # If we can set the object's locale, don't remove it from the given
+          # attributes. If not, remove it to avoid UnknownAttributeError's.
+          locale = respond_to?(:locale=) ? attributes[:locale] :
+                                           attributes.delete(:locale)
+        end
 
         if locale
           Globalize.with_locale(locale, &block)
