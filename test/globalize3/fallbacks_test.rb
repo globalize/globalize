@@ -197,7 +197,7 @@ class TranslatedTest < Test::Unit::TestCase
     I18n.fallbacks.map :en => [ :de ]
     I18n.locale = :en
 
-    user = User.create :name => 'John'
+    user = User.create(:name => 'John', :email => 'mad@max.com')
     with_locale(:de) { user.name = nil }
     assert_translated user, :en, :name, 'John'
     assert_translated user, :de, :name, 'John'
