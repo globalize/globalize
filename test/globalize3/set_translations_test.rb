@@ -9,12 +9,12 @@ class AttributesTest < Test::Unit::TestCase
 
     post.set_translations(
       :en => { :title => 'updated title', :content => 'updated content' },
-      :de => { :title => 'geÃ¤nderter Titel', :content => 'geÃ¤nderter Inhalt' }
+      :de => { :title => 'geänderter Titel', :content => 'geänderter Inhalt' }
     )
     post.reload
 
     assert_translated post, :en, [:title, :content], ['updated title', 'updated content']
-    assert_translated post, :de, [:title, :content], ['geÃ¤nderter Titel', 'geÃ¤nderter Inhalt']
+    assert_translated post, :de, [:title, :content], ['geänderter Titel', 'geänderter Inhalt']
   end
 
   test "set_translations does not touch existing translations for other locales" do
@@ -47,12 +47,12 @@ class AttributesTest < Test::Unit::TestCase
 
     post.set_translations(
       :en => { :title => "updated title" },
-      :de => { :content => "geÃ¤nderter Inhalt" }
+      :de => { :content => "geänderter Inhalt" }
     )
     post.reload
 
     assert_translated post, :en, [:title, :content], ['updated title', 'content']
-    assert_translated post, :de, [:title, :content], ['Titel', 'geÃ¤nderter Inhalt']
+    assert_translated post, :de, [:title, :content], ['Titel', 'geänderter Inhalt']
   end
 
   test "set_translations raises an ::NoMethodError on unknown attributes" do
