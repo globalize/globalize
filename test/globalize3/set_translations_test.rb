@@ -9,12 +9,12 @@ class AttributesTest < Test::Unit::TestCase
 
     post.set_translations(
       :en => { :title => 'updated title', :content => 'updated content' },
-      :de => { :title => 'geänderter Titel', :content => 'geänderter Inhalt' }
+      :de => { :title => 'geÃ¤nderter Titel', :content => 'geÃ¤nderter Inhalt' }
     )
     post.reload
 
     assert_translated post, :en, [:title, :content], ['updated title', 'updated content']
-    assert_translated post, :de, [:title, :content], ['geänderter Titel', 'geänderter Inhalt']
+    assert_translated post, :de, [:title, :content], ['geÃ¤nderter Titel', 'geÃ¤nderter Inhalt']
   end
 
   test "set_translations does not touch existing translations for other locales" do
@@ -27,19 +27,32 @@ class AttributesTest < Test::Unit::TestCase
     assert_translated post, :en, [:title, :content], ['updated title', 'updated content']
     assert_translated post, :de, [:title, :content], ['Titel', 'Inhalt']
   end
-
+  test "set translations overrides current translations for unsaved entries" do
+    post = Post.new(:title => 'title', :content => 'content', :locale => :en)
+    post.set_translations(
+      :en => {:title => "updated title"}
+    )
+    assert_translated post, :en, [:title], ['updated title']
+  end
+  test "set translations overrides current translations for saved entries" do
+    post = Post.create(:title => 'title', :content => 'content', :locale => :en)
+    post.set_translations(
+      :en => {:title => "updated title"}
+    )
+    assert_translated post, :en, [:title], ['updated title']
+  end
   test "set_translations does not touch existing translations for other attributes" do
     post = Post.create(:title => 'title', :content => 'content', :locale => :en)
     post.update_attributes(:title => 'Titel', :content => 'Inhalt', :locale => :de)
 
     post.set_translations(
       :en => { :title => "updated title" },
-      :de => { :content => "geänderter Inhalt" }
+      :de => { :content => "geÃ¤nderter Inhalt" }
     )
     post.reload
 
     assert_translated post, :en, [:title, :content], ['updated title', 'content']
-    assert_translated post, :de, [:title, :content], ['Titel', 'geänderter Inhalt']
+    assert_translated post, :de, [:title, :content], ['Titel', 'geÃ¤nderter Inhalt']
   end
 
   test "set_translations raises an ::NoMethodError on unknown attributes" do
