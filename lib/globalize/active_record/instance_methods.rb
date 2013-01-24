@@ -105,6 +105,7 @@ module Globalize
           end
           translation.save
         end
+        globalize.reset
       end
 
       def reload(options = nil)
