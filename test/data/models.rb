@@ -99,5 +99,5 @@ class SerializedHash < ActiveRecord::Base
 end
 
 class Account < ActiveRecord::Base
-  translates :name, :notes
+  translates :notes
 end

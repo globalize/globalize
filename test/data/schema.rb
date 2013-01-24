@@ -156,14 +156,14 @@ ActiveRecord::Schema.define do
   end
 
   create_table :accounts, :force => true do |t|
-    t.string     :name,  :null => false
+    t.string     :business_name,  :null => false, :default => ""
     t.string     :notes, :null => false, :default => ""
   end
 
   create_table :account_translations, :force => true do |t|
     t.references :account
     t.string     :locale
-    t.string     :name
+    t.string     :business_name
     t.string     :notes
   end
 end
