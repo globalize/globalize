@@ -196,7 +196,7 @@ class AttributesTest < Test::Unit::TestCase
 
   test 'does not change a blank attribute to nil' do
     account = Account.new
-    assert_equal '', account.business_name # Untranslated - works OK
-    assert_equal '', account.notes # Translated - fails
+    assert_equal '', account.business_name
+    assert_equal '', account.notes
   end
 end
