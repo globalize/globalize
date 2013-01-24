@@ -153,6 +153,20 @@ module Globalize
       def rollback
         translation_caches[::Globalize.locale] = translation.previous_version
       end
+    
+    private
+
+      def update(*)
+        I18n.with_locale(read_attribute(:locale) || I18n.default_locale) do
+          super
+        end
+      end
+
+      def create(*)
+        I18n.with_locale(read_attribute(:locale) || I18n.default_locale) do
+          super
+        end
+      end
 
     protected
 
@@ -177,7 +191,15 @@ module Globalize
 
       def with_given_locale(attributes, &block)
         attributes.symbolize_keys! if attributes.respond_to?(:symbolize_keys!)
-        if locale = attributes.try(:delete, :locale)
+
+        if attributes
+          # If we can set the object's locale, don't remove it from the given
+          # attributes. If not, remove it to avoid UnknownAttributeError's.
+          locale = respond_to?(:locale=) ? attributes[:locale] :
+                                           attributes.delete(:locale)
+        end
+
+        if locale
           Globalize.with_locale(locale, &block)
         else
           yield
