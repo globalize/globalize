@@ -194,4 +194,9 @@ class AttributesTest < Test::Unit::TestCase
     assert saved_locales.include? :it
   end
 
+  test 'does not change a blank attribute to nil' do
+    account = Account.new(:name => 'globalize3')
+    account.save!
+    assert_equal account.notes, ''
+  end
 end
