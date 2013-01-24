@@ -10,6 +10,10 @@ env:
   - RAILS_3_1=true DB=sqlite3
   - RAILS_3_1=true DB=postgres
   - RAILS_3_1=true DB=mysql
+  - RAILS_3_2=true DB=sqlite3
+  - RAILS_3_2=true DB=postgres
+  - RAILS_3_2=true DB=mysql
+  
 rvm:
   - 1.9.3
   - 1.8.7
