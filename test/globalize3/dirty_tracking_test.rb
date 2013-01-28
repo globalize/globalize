@@ -81,6 +81,9 @@ class DirtyTrackingTest < Test::Unit::TestCase
     post = Post.create(:title => 'title', :content => 'content')
     assert_equal [], post.changed
     
+    post.title = 'title'
+    assert_equal [], post.changed
+    
     post.title = 'changed title'
     assert_equal({ 'title' => ['title', 'changed title'] }, post.changes)
     
