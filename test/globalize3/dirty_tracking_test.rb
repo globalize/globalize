@@ -77,4 +77,15 @@ class DirtyTrackingTest < Test::Unit::TestCase
     post.save
   end
 
+  test 'dirty tracking does not track fields with identical values' do
+    post = Post.create(:title => 'title', :content => 'content')
+    assert_equal [], post.changed
+    
+    post.title = 'title'
+    assert_equal [], post.changed
+    
+    post.content = 'content'
+    assert_equal [], post.changed
+  end
+
 end

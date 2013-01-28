@@ -44,7 +44,11 @@ module Globalize
             options = {:locale => options}
           end
           options = {:locale => Globalize.locale}.merge(options)
-          attribute_will_change! name.to_s
+          
+          # Only mark the field as changing if it actually *does* change
+          if value != globalize.fetch(options[:locale], name)
+            attribute_will_change! name.to_s
+          end
 
           globalize.write(options[:locale], name, value)
         else
