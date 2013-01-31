@@ -45,7 +45,7 @@ module Globalize
             klass = self.const_set(:Translation, Class.new(Globalize::ActiveRecord::Translation))
           end
 
-          klass.belongs_to name.underscore.gsub('/', '_')
+          klass.belongs_to name.underscore.gsub('/', '_').to_sym, :class_name => self.name
           klass
         end
       end
@@ -148,6 +148,22 @@ module Globalize
           read_attribute(name, {:locale => args.first})
         end
         alias_method :"#{name}_before_type_cast", name
+      end
+
+      def translations_accessor(name)
+        define_method(:"#{name}_translations") do
+          result = translations.each_with_object(HashWithIndifferentAccess.new) do |translation, result|
+            result[translation.locale] = translation.send(name)
+          end
+          globalize.stash.keys.each_with_object(result) do |locale, result|
+            result[locale] = globalize.fetch_stash(locale, name) if globalize.stash_contains?(locale, name)
+          end
+        end
+        define_method(:"#{name}_translations=") do |value|
+          value.each do |(locale, value)|
+            write_attribute name, value, :locale => locale
+          end
+        end
       end
 
     end

@@ -93,6 +93,19 @@ ActiveRecord::Schema.define do
     t.string     :name
   end
 
+  create_table :words, :force => true do |t|
+    t.string :term
+    t.text   :definition
+    t.string :locale
+  end
+
+  create_table :word_translations, :force => true do |t|
+    t.references :word
+    t.string     :term
+    t.text       :definition
+    t.string     :locale,    :default => 'en'
+  end
+
   create_table "versions", :force => true do |t|
     t.string   "item_type",  :null => false
     t.integer  "item_id",    :null => false
@@ -133,5 +146,37 @@ ActiveRecord::Schema.define do
     t.string     :locale
     t.string     :title
     t.string     :body
+  end
+  
+  create_table :serialized_attrs, :force => true do |t|
+    t.text       :meta
+  end
+  
+  create_table :serialized_attr_translations, :force => true do |t|
+    t.integer    :serialized_attr_id
+    t.string     :locale
+    t.text       :meta
+  end
+  
+  create_table :serialized_hashes, :force => true do |t|
+    t.text       :meta
+  end
+  
+  create_table :serialized_hash_translations, :force => true do |t|
+    t.integer    :serialized_hash_id
+    t.string     :locale
+    t.text       :meta
+  end
+
+  create_table :accounts, :force => true do |t|
+    t.string     :business_name,  :null => false, :default => ""
+    t.string     :notes, :null => false, :default => ""
+  end
+
+  create_table :account_translations, :force => true do |t|
+    t.references :account
+    t.string     :locale
+    t.string     :business_name
+    t.string     :notes
   end
 end

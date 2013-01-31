@@ -1,4 +1,4 @@
-# Globalize3
+# Globalize3 [![Build Status](https://travis-ci.org/svenfuchs/globalize3.png?branch=master)](https://travis-ci.org/svenfuchs/globalize3)
 
 Globalize3 is the successor of Globalize for Rails and is targeted at
 ActiveRecord version 3.x. It is compatible with and builds on the new
@@ -52,8 +52,9 @@ In order to make this work, you'll need to add the appropriate translation table
 Globalize3 comes with a handy helper method to help you do this.
 It's called `create_translation_table!`. Here's an example:
 
-_Note that if you're using Rails versions >= 3.1.0 then migrations that you
-generate may only have the `change` instance method._
+_Note that your migrations can use `create_translation_table!` and `drop_translation_table!`
+only inside the `up` and `down` instance methods, respectively. You cannot use `create_translation_table!`
+and `drop_translation_table!` inside the `change` instance method in Rails >= 3.1.0._
 
 ### Rails 3.0
 
@@ -74,7 +75,7 @@ end
 
 ### Rails >= 3.1.0
 
-***Do not use the change method!***
+***Do not use the `change` method, use `up` and `down`!***
 
 ```ruby
 class CreatePosts < ActiveRecord::Migration
@@ -155,6 +156,9 @@ translates :title, :content, :published, :published_at, :versioning => true
 You will also need to have already generated the versions table that paper_trail
 expects.  See the paper_trail README for more details.
 
+If you are adding globalize3 to any previously versioned models, please note
+that you will need to add a new `locale` column to your versioning table.
+
 Also, please see the tests in `test/globalize3/versioning_test.rb` for some
 current gotchas.
 
@@ -209,6 +213,29 @@ post.name  # => 'Globalize3'
 I18n.locale = :nl
 post.title # => 'Globalize3 rocks!'
 post.name  # => 'Globalize3'
+```
+
+## Fallback locales to each other
+
+It is possible to setup locales to fallback to each other.
+
+```ruby
+class Post < ActiveRecord::Base
+  translates :title, :name
+end
+
+Globalize.fallbacks = {:en => [:en, :pl], :pl => [:pl, :en]}
+
+I18n.locale = :en
+en_post = Post.create(:title => 'en_title')
+
+I18n.locale = :pl
+pl_post = Post.create(:title => 'pl_title')
+en_post.title # => 'en_title'
+
+I18n.locale = :en
+en_post.title # => 'en_title'
+pl_post.title # => 'pl_title'
 ```
 
 

@@ -19,6 +19,10 @@ module Globalize
         return nil
       end
 
+      def stash_contains?(locale, name)
+        stash.contains?(locale, name)
+      end
+
       def fetch(locale, name)
         record.globalize_fallbacks(locale).each do |fallback|
           value = stash.contains?(fallback, name) ? fetch_stash(fallback, name) : fetch_attribute(fallback, name)
@@ -28,6 +32,7 @@ module Globalize
             return value
           end
         end
+
         return nil
       end
 
@@ -36,16 +41,21 @@ module Globalize
       end
 
       def save_translations!
+        existing_translations_by_locale = {}
+        record.translations.each do |t|
+          existing_translations_by_locale[t.locale.to_s] = t
+        end
+        
         stash.each do |locale, attrs|
           if attrs.any?
-            translation = record.translations.find_or_initialize_by_locale(locale.to_s)
+            locale_str = locale.to_s
+            translation = existing_translations_by_locale[locale_str] ||
+              record.translations.find_or_initialize_by_locale(locale_str)
             attrs.each { |name, value| translation[name] = value }
             translation.save!
           end
         end
 
-        record.translations.each(&:reload)
-        record.translations.reset
         reset
       end
 
@@ -74,7 +84,7 @@ module Globalize
       end
 
       def fetch_attribute(locale, name)
-        translation = record.translation_for(locale)
+        translation = record.translation_for(locale, false)
         return translation && translation.send(name)
       end
 

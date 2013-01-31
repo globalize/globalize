@@ -61,7 +61,7 @@ class AttributesTest < Test::Unit::TestCase
     
     post.reload
     assert_equal 1, post.translations.length
-    
+
     post.save
     assert_equal 1, post.translations.length
   end
@@ -154,4 +154,117 @@ class AttributesTest < Test::Unit::TestCase
     assert_equal post.untranslated_attributes['title'], before
   end
 
+  test 'serializable attribute with default marshalling, without data' do
+    data = nil
+    model = SerializedAttr.create
+    assert_equal data, model.meta
+  end
+
+  test 'serializable attribute with default marshalling, with data' do
+    data = {:foo => "bar", :whats => "up"}
+    model = SerializedAttr.create(:meta => data)
+    assert_equal data, model.meta
+  end
+
+  if ENV['RAILS_3_0']
+    test 'serializable attribute with specified marshalling, without data, rails 3.0' do
+      data = nil
+      model = SerializedHash.new
+      assert_equal data, model.meta
+    end
+  else
+    test 'serializable attribute with specified marshalling, without data, rails 3.1+' do
+      data = {}
+      model = SerializedHash.new
+      assert_equal data, model.meta
+    end
+  end
+
+  test 'modifying a translated attribute does not remove secondary unsaved translations' do
+    post = with_locale(:en) do
+      post = Post.new(:translations_attributes => {
+        "0" => { :locale => 'en', :title => 'title' },
+        "1" => { :locale => 'it', :title => 'titolo' }
+      })
+      post.title = 'changed my mind'
+      post
+    end
+    post.save!
+    saved_locales = post.translations.map(&:locale)
+    assert saved_locales.include? :it
+  end
+
+  test 'does not update original columns with content not in the default locale' do
+    task = Task.create :name => 'Title'
+
+    I18n.locale = :de
+    task.update_attributes :name => 'Titel'
+
+    legacy_task = LegacyTask.find(task.id)
+    assert_equal 'Title', legacy_task.name
+  end
+
+  test 'updates original columns with content in the default locale' do
+    task = Task.create
+
+    I18n.locale = :de
+    task.update_attributes :name => 'Neues Titel'
+
+    I18n.locale = :en
+    task.update_attributes :name => 'New Title'
+
+    legacy_task = LegacyTask.find(task.id)
+    assert_equal 'New Title', legacy_task.name
+
+    I18n.locale = I18n.default_locale = :de
+    assert_equal 'Neues Titel', task.name
+    task.update_attributes :name => 'Der neueste Titel'
+
+    assert_equal 'Der neueste Titel', legacy_task.reload.name
+
+    I18n.locale = :en
+    assert_equal 'New Title', task.name
+  end
+
+  test 'does not update original columns with content in a different locale' do
+    word = Word.create :locale => 'nl', :term => 'ontvrienden', :definition => 'Iemand als vriend verwijderen op een sociaal netwerk'
+    legacy_word = LegacyWord.find(word.id)
+    assert_equal 'ontvrienden', legacy_word.term
+
+    I18n.locale = :en
+    word.update_attributes :term => 'unfriend', :definition => 'To remove someone as a friend on a social network'
+
+    assert_equal 'unfriend',    word.term
+    assert_equal 'ontvrienden', word.term(:nl)
+    assert_equal 'ontvrienden', legacy_word.reload.term
+
+    I18n.locale = I18n.default_locale = :de
+    word.update_attributes :term => 'entfreunde', :definition => 'Um jemanden als Freund in einem sozialen Netzwerk zu entfernen'
+
+    assert_equal 'entfreunde',  word.term
+    assert_equal 'unfriend',    word.term(:en)
+    assert_equal 'ontvrienden', word.term(:nl)
+    assert_equal 'ontvrienden', legacy_word.reload.term
+  end
+
+  test 'updates original columns with content in the same locale' do
+    word = Word.create :locale => 'nl', :term => 'ontvrienden', :definition => 'Iemand als vriend verwijderen op een sociaal netwerk'
+
+    I18n.locale = :en
+    word.update_attributes :term => 'unfriend', :definition => 'To remove someone as a friend on a social network'
+
+    I18n.locale = :nl
+    word.update_attributes :term => 'ontvriend'
+
+    legacy_word = LegacyWord.find(word.id)
+    assert_equal 'ontvriend', word.term
+    assert_equal 'unfriend',  word.term(:en)
+    assert_equal 'ontvriend', legacy_word.term
+  end
+
+  test 'does not change a blank attribute to nil' do
+    account = Account.new
+    assert_equal '', account.business_name
+    assert_equal '', account.notes
+  end
 end

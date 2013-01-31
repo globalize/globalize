@@ -6,6 +6,7 @@ class Post < ActiveRecord::Base
   translates :title, :content, :published, :published_at, :versioning => true
   validates_presence_of :title
   scope :with_some_title, :conditions => { :title => 'some_title' }
+  accepts_nested_attributes_for :translations
 end
 
 class PostTranslation < ActiveRecord::Base
@@ -77,6 +78,28 @@ class Task < ActiveRecord::Base
   end
 end
 
+class LegacyTask < ActiveRecord::Base
+  if self.respond_to?(:table_name=)
+    self.table_name = :tasks
+  else
+    set_table_name :tasks
+  end
+end
+
+
+class Word < ActiveRecord::Base
+  translates :term, :definition
+end
+
+class LegacyWord < ActiveRecord::Base
+  if self.respond_to?(:table_name=)
+    self.table_name = :words
+  else
+    set_table_name :words
+  end
+end
+
+
 class NewsItem < ActiveRecord::Base
   translates :name, :foreign_key => :news_id
   self.table_name = :news
@@ -85,4 +108,18 @@ end
 class Page < ActiveRecord::Base
   translates :title
   translates :body
+end
+
+class SerializedAttr < ActiveRecord::Base
+  serialize :meta
+  translates :meta
+end
+
+class SerializedHash < ActiveRecord::Base
+  serialize :meta, Hash
+  translates :meta
+end
+
+class Account < ActiveRecord::Base
+  translates :notes
 end
