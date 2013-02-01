@@ -123,3 +123,9 @@ end
 class Account < ActiveRecord::Base
   translates :notes
 end
+
+class Product < ActiveRecord::Base
+  attr_accessible :name
+  translates :description
+  accepts_nested_attributes_for :translations
+end
