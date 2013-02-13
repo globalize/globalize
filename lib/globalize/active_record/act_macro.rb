@@ -72,13 +72,8 @@ module Globalize
         after_update :save_translations!
 
         if options[:versioning]
-          if options[:versioning] == :vestal_versions
-            versioning_options = {}
-            versioning_options[:initial_version]      = options[:initial_version]
-            versioning_options[:notify_dependencies]  = ["#{name.underscore.gsub('/', '_')}"] if options[:notify_dependencies]
-            versioning_options[:dependent]            = options[:dependent]
-
-            translation_class.versioned versioning_options
+          if options[:versioning].is_a?(Hash)
+            translation_class.versioned options[:versioning]
           else
             ::ActiveRecord::Base.extend(Globalize::Versioning::PaperTrail)
 
