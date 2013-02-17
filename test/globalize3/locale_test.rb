@@ -65,6 +65,7 @@ class LocaleTest < Test::Unit::TestCase
     Globalize.locale = :de
     assert_equal :en, I18n.locale
     Post.create :title => 'foo'
+
     assert_equal :de, Post.first.translations.first.locale
   end
 
