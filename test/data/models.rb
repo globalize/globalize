@@ -58,6 +58,10 @@ class Migrated < ActiveRecord::Base
   translates :name
 end
 
+class TwoAttributesMigrated < ActiveRecord::Base
+  translates :name, :body
+end
+
 class MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters < ActiveRecord::Base
   translates :name
 end
@@ -68,6 +72,9 @@ class UppercaseTableName < ActiveRecord::Base
 end
 
 class Untranslated < ActiveRecord::Base
+end
+
+class TwoAttributesUntranslated < ActiveRecord::Base
 end
 
 class Task < ActiveRecord::Base
