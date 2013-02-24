@@ -171,4 +171,16 @@ class Globalize3Test < Test::Unit::TestCase
     assert_translated page, :de, :title, 'Wilkommen'
     assert_translated page, :de, :body, 'Ein body'
   end
+
+  test "read_attribute for unsaved translation" do
+    validatee = Validatee.create!(:string => 'a')
+    Globalize.with_locale(:de) {
+      assert_equal :de, validatee.read_attribute(:locale)
+    }
+  end
+
+  test "read_attribute for unsaved untranslated model with locale column" do
+    untranslated = Untranslated.new(:locale => "Hello, I'm locale.")
+    assert_equal "Hello, I'm locale.", untranslated.read_attribute(:locale) 
+  end
 end
