@@ -12,8 +12,7 @@ module Globalize
       # Clear the `@globalize` instance method when `dup` is invoked to prevent inappropriate changes to the original copy
       def dup
         obj = super
-        obj.send(:remove_instance_variable, :@globalize) unless obj.instance_variable_get(:@globalize).nil?
-        obj
+        obj.tap { |o| o.send(:remove_instance_variable, :@globalize) } rescue obj
       end
     end
   end
