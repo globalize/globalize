@@ -8,6 +8,13 @@ module Globalize
       #def versioned_columns
         #super + self.class.translated_attribute_names
       #end
+
+      # Clear the `@globalize` instance method when `dup` is invoked to prevent inappropriate changes to the original copy
+      def dup
+        obj = super
+        obj.send(:remove_instance_variable, :@globalize) unless obj.instance_variable_get(:@globalize).nil?
+        obj
+      end
     end
   end
 end
