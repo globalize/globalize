@@ -21,6 +21,14 @@ class AttributesTest < Test::Unit::TestCase
     assert_equal 1, post.translations.length
   end
 
+  test 'does not save a translation if a model does not have one' do
+    product = Product.create
+    assert_equal 0, product.translations.length
+
+    product.update_attributes({"name" => "Widget X"})
+    assert_equal 0, product.translations.length
+  end
+
   test "attribute_names returns translated and regular attribute names" do
     assert_equal %w(blog_id content title), Post.new.attribute_names.sort & %w(blog_id content title)
   end
@@ -58,7 +66,7 @@ class AttributesTest < Test::Unit::TestCase
     post = Post.create(:title => 'title')
     assert_equal 1, post.translations.length
     I18n.locale = :de
-
+    
     post.reload
     assert_equal 1, post.translations.length
 
