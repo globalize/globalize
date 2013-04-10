@@ -42,10 +42,23 @@ module Globalize
         @translation_class ||= begin
           klass = self.const_get(:Translation) rescue nil
           if klass.nil? || klass.class_name != (self.class_name + "Translation")
-            klass = self.const_set(:Translation, Class.new(Globalize::ActiveRecord::Translation))
+            klass = self.const_set(:Translation, Class.new(translation_superclass))
           end
 
           klass.belongs_to name.underscore.gsub('/', '_').to_sym, :class_name => self.name, :foreign_key => translation_options[:foreign_key]
+          klass
+        end
+      end
+
+      def translation_superclass
+        # Class variables are evil but no idea how to solve this differently
+        @@translation_superclasses ||= {}
+        @@translation_superclasses[self.connection.config] ||= begin
+          # We actually need to use const_set so our dynamic class has a distinctive name, otherwise they are all the same and thus use only one connection
+          klass = self.const_set(:TranslationSuperclass, Class.new(Globalize::ActiveRecord::Translation))
+          klass.abstract_class = true
+          klass.establish_connection self.connection.config
+
           klass
         end
       end
