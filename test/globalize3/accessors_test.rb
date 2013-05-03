@@ -63,15 +63,4 @@ class AccessorsTest < Test::Unit::TestCase
     translations = {:en => 'John', :de => 'Jan', :ru => 'Иван'}.stringify_keys!
     assert_equal translations, user.name_translations
   end
-
-  test "interpolation" do
-    user = User.new(:name => 'John %{surname}')
-    assert_equal user.name(:surname => 'Bates'), 'John Bates'
-  end
-
-  test "interpolation error" do
-    user = User.new(:name => 'John %{surname}')
-    exception = assert_raise(I18n::MissingInterpolationArgument) { user.name }
-    assert_equal('missing interpolation argument in "John %{surname}" ({} given)', exception.message)
-  end
 end
