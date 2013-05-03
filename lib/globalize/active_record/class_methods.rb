@@ -145,7 +145,10 @@ module Globalize
           write_attribute(name, value)
         end
         define_method(name) do |*args|
-          read_attribute(name, {:locale => args.first})
+          locale = args.first.is_a?(Hash) ? nil : args.first
+          _translation = read_attribute(name, {:locale => locale})
+          interpolation_values =  args.detect {|a| a.is_a? Hash }
+          _translation.respond_to?(:gsub) ? I18n.interpolate(_translation,interpolation_values || {}) : _translation
         end
         alias_method :"#{name}_before_type_cast", name
       end
