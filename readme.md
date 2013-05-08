@@ -275,6 +275,9 @@ I18n.locale = :en
 post.title = "Globalize3 %{superlative}!"
 
 post.title
+# #=> "Globalize3 %{superlative}!"
+
+post.title(:foo => "bar")
 # SomeError: missing interpolation argument :superlative
 
 post.title(:superlative => "rocks")

@@ -148,7 +148,7 @@ module Globalize
           locale = args.first.is_a?(Hash) ? nil : args.first
           _translation = read_attribute(name, {:locale => locale})
           interpolation_values =  args.detect {|a| a.is_a? Hash }
-          _translation.respond_to?(:gsub) ? I18n.interpolate(_translation,interpolation_values || {}) : _translation
+          _translation.respond_to?(:gsub) && interpolation_values ? I18n.interpolate(_translation,interpolation_values) : _translation
         end
         alias_method :"#{name}_before_type_cast", name
       end

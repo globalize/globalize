@@ -8,9 +8,14 @@ class InterpolationTest < Test::Unit::TestCase
     assert_equal user.name(:surname => 'Bates'), 'John Bates'
   end
 
+  test "when no params are passed in" do
+    user = User.new(:name => 'John %{surname}')
+    assert_equal user.name, 'John %{surname}'
+  end
+
   test "interpolation error" do
     user = User.new(:name => 'John %{surname}')
-    exception = assert_raise(I18n::MissingInterpolationArgument) { user.name }
+    exception = assert_raise(I18n::MissingInterpolationArgument) { user.name(:foo => "bar") }
     assert_match(/missing interpolation argument.*John %{surname}/, exception.message)
   end
 end
