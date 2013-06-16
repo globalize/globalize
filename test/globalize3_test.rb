@@ -177,4 +177,23 @@ class Globalize3Test < Test::Unit::TestCase
     m = ModelWithCustomTableName.create(:name => 'Name', :locale => :en)
     assert_translated m, :en, :name, 'Name'
   end
+  
+  
+  test "Persisting changes to a translated model that also uses papertrail" do
+    PaperTrail.enabled = true
+    I18n.locale = :en
+    r = Restaurant.create!
+    d = r.dishes.create!(name: "EN", price: 10.0)        
+    r.reload
+    dattr = {'name' => "PL",
+        'description' => d.description,
+        'price' => d.price,
+        'id' => d.id
+    }
+    I18n.locale = :pl
+    r.update_attributes({'dishes_attributes' => {'0' => dattr } })
+    r.reload
+    assert_equal r.dishes.first.name, "PL"    
+  end
+  
 end

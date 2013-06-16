@@ -216,4 +216,23 @@ ActiveRecord::Schema.define do
     t.string  :locale
     t.string  :name
   end
+  
+  create_table :restaurants, :force=>true do |t|
+  end
+  
+  create_table :dishes, :force => true do |t|
+    t.string :name
+    t.integer :restaurant_id
+    t.string :description
+    t.float :price
+  end
+  
+  create_table :dish_translations, :force => true do |t|
+    t.integer :dish_id
+    t.string :locale
+    t.string :name
+    t.string :description
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 end
