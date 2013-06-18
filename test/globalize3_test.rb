@@ -183,7 +183,7 @@ class Globalize3Test < Test::Unit::TestCase
     prev_locale = I18n.locale
     I18n.locale = :en
     r = Restaurant.create!
-    d = r.dishes.create!(name: "EN", price: 10.0)        
+    d = r.dishes.create!(:name => "EN", :price => 10.0)        
     dattr = {
       'name' => "PL",
       'description' => d.description,
