@@ -145,9 +145,7 @@ module Globalize
           write_attribute(name, value)
         end
         define_method(name) do |*args|
-          options = translation_options_from args
-          translation = read_attribute(name, {:locale => options[:locale]})
-          try_interpolation translation, options[:interpolation_args]
+          Globalize::Interpolation.interpolate(name, self, args)
         end
         alias_method :"#{name}_before_type_cast", name
       end

@@ -219,22 +219,6 @@ module Globalize
           yield
         end
       end
-
-      def translation_options_from(args)
-        options = {}
-        options[:locale] = args.detect {|a| !a.is_a? Hash }
-        options[:interpolation_args] = args.detect {|a| a.is_a? Hash }
-        options
-      end
-
-      def try_interpolation(translation,args)
-        if args
-          I18n.interpolate(translation,args)
-        else
-          translation
-        end
-      end
-
     end
   end
 end
