@@ -30,10 +30,10 @@ Gem::Specification.new do |s|
   end
   s.add_dependency 'paper_trail',  '~> 2'
 
-  s.add_development_dependency 'database_cleaner', '~> 0.6.0'
+  s.add_development_dependency 'database_cleaner'
   s.add_development_dependency 'mocha'
   s.add_development_dependency 'pathname_local'
   s.add_development_dependency 'test_declarative'
 
-  s.add_development_dependency 'pg'
+  s.add_development_dependency 'combustion'
 end

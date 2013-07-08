@@ -1,0 +1,10 @@
+<%
+  adapter = ENV['DB'] || 'sqlite3'
+  adapter = 'mysql2' if adapter == 'mysql'
+%>
+test:
+  adapter: <%= adapter %>
+  database: "<%= adapter == 'sqlite3' ? ':memory:' : 'globalize3_test' %>"
+  username: <%= adapter == 'postgresql' ? (ENV['USER'] || 'postgres') : 'root' %>
+  min_messages: warning
+  encoding: utf8

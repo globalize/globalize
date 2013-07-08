@@ -1,14 +1,17 @@
 language: ruby
-script: "bundle exec rake"
+before_script:
+  - "mysql -e 'create database globalize3_test;' > /dev/null"
+  - "psql -c 'create database globalize3_test;' -U postgres >/dev/null"
+script: bundle exec rake
 env:
   - DB=sqlite3
-  - DB=postgres
+  - DB=postgresql
   - DB=mysql
   - RAILS_3_0=true DB=sqlite3
-  - RAILS_3_0=true DB=postgres
+  - RAILS_3_0=true DB=postgresql
   - RAILS_3_0=true DB=mysql
   - RAILS_3_1=true DB=sqlite3
-  - RAILS_3_1=true DB=postgres
+  - RAILS_3_1=true DB=postgresql
   - RAILS_3_1=true DB=mysql
 rvm:
   - 1.9.3

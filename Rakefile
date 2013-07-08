@@ -8,7 +8,7 @@ task :default => :test
 desc 'Run all tests.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
-  t.pattern = 'test/**/pg_order_symbol_test.rb'
+  t.pattern = 'test/**/*_test.rb'
   t.verbose = true
 end
 
