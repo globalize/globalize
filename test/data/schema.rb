@@ -12,6 +12,14 @@ ActiveRecord::Schema.define do
   create_table :posts, :force => true do |t|
     t.references :blog
     t.boolean    :published
+    t.datetime :created_at
+  end
+
+  create_table :my_posts, :force => true do |t|
+    t.string :title
+    t.references :blog
+    t.boolean    :published
+    t.datetime :created_at
   end
 
   create_table :post_translations, :force => true do |t|

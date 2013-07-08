@@ -12,7 +12,13 @@ log = '/tmp/globalize3_test.log'
 FileUtils.touch(log) unless File.exists?(log)
 ActiveRecord::Base.logger = Logger.new(log)
 ActiveRecord::LogSubscriber.attach_to(:active_record)
-ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => ':memory:')
+ActiveRecord::Base.establish_connection({
+      :adapter  => 'postgresql',
+      :host     => '127.0.0.1',
+      :database => 'globalize3_test',
+      :encoding => 'utf8',
+      :username => 'gagan',
+    })
 
 $:.unshift File.expand_path('../../lib', __FILE__)
 require 'globalize'
