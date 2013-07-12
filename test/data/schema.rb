@@ -216,4 +216,13 @@ ActiveRecord::Schema.define do
     t.string  :locale
     t.string  :name
   end
+
+  create_table :same_name_as_columns, :force => true do |t|
+  end
+
+  create_table :same_name_as_column_translations, :force => true do |t|
+    t.integer :same_name_as_column_id
+    t.string :locale
+    t.string :same_name_as_column
+  end
 end
