@@ -25,10 +25,17 @@ module ActiveRecord
 end
 
 class CreateRowTest < MiniTest::Spec
-  it "no update queries for creating row" do
-    ActiveSupport::Notifications.subscribe('sql.active_record', ActiveRecord::Updater.new)
+  before { ActiveSupport::Notifications.subscribe('sql.active_record', ActiveRecord::Updater.new) }
+  after { ActiveSupport::Notifications.unsubscribe('sql.active_record') }
+
+  it "does not perform update queries when creating row in this locale" do
     account = Page.create!(:title => 'title v1')
-    ActiveSupport::Notifications.unsubscribe('sql.active_record')
+    assert_equal 0, ActiveRecord::Updater.query_count
+  end
+
+  # changing locale should not make any difference
+  it "does not perform update queries when creating row in other locale" do
+    Globalize.with_locale(:de) { account = Page.create!(:title => 'title v1') }
     assert_equal 0, ActiveRecord::Updater.query_count
   end
 end
