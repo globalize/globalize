@@ -3,13 +3,7 @@ require File.expand_path('../test_helper', __FILE__)
 
 module ActiveRecord
   class Updater
-    cattr_accessor :query_count do
-      0
-    end
-
-    cattr_accessor :queries do
-      []
-    end
+    cattr_accessor :query_count, :queries
 
     FILTER = [/UPDATE/]
 
@@ -25,7 +19,12 @@ module ActiveRecord
 end
 
 class CreateRowTest < MiniTest::Spec
-  before { ActiveSupport::Notifications.subscribe('sql.active_record', ActiveRecord::Updater.new) }
+  before do
+    ActiveSupport::Notifications.subscribe('sql.active_record', ActiveRecord::Updater.new)
+    ActiveRecord::Updater.query_count = 0
+    ActiveRecord::Updater.queries = []
+  end
+
   after { ActiveSupport::Notifications.unsubscribe('sql.active_record') }
 
   it "does not perform update queries when creating row in this locale" do
