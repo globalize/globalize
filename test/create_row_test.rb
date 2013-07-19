@@ -28,13 +28,20 @@ class CreateRowTest < MiniTest::Spec
   after { ActiveSupport::Notifications.unsubscribe('sql.active_record') }
 
   it "does not perform update queries when creating row in this locale" do
-    account = Page.create!(:title => 'title v1')
+    Page.create!(:title => 'title v1')
     assert_equal 0, ActiveRecord::Updater.query_count
   end
 
   # changing locale should not make any difference
   it "does not perform update queries when creating row in other locale" do
-    Globalize.with_locale(:de) { account = Page.create!(:title => 'title v1') }
+    Globalize.with_locale(:de) { Page.create!(:title => 'title v1') }
+    assert_equal 0, ActiveRecord::Updater.query_count
+  end
+
+  it "does not perform update queries with cached translation" do
+    p = Page.new(:title => 'title v1')
+    p.translation.title
+    p.save!
     assert_equal 0, ActiveRecord::Updater.query_count
   end
 end
