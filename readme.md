@@ -25,7 +25,8 @@ When using bundler put it in your Gemfile:
 ```ruby
 source 'https://rubygems.org'
 
-gem 'globalize3'
+gem 'globalize3', git: 'git://github.com/svenfuchs/globalize3.git', branch: 'rails4'
+gem 'paper_trail', git: 'https://github.com/airblade/paper_trail.git', branch: 'rails4'
 ```
 
 ## Model translations
