@@ -180,8 +180,8 @@ class GlobalizeTest < Test::Unit::TestCase
 
   test "Calling to_json of a new globalized object cause translations initialized without foreign key" do
     picture = Picture.new
-    picture.attributes = { title: 'Tite en', locale: :en }
-    picture.attributes = { title: 'Titel de', locale: :de }
+    with_locale(:en) { picture.title = "Tite en" }
+    with_locale(:de) { picture.title = "Tite de" }
     # deliberately calling to_json to cause translations initialized without foreign key
     # if Picture has 'accepts_nested_attributes_for :translations', this is not a problem
     picture.to_json
