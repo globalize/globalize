@@ -8,6 +8,7 @@ Gem::Specification.new do |s|
   s.homepage     = 'http://github.com/globalize/globalize'
   s.summary      = 'Rails I18n de-facto standard library for ActiveRecord model/data translation'
   s.description  = "#{s.summary}."
+  s.license      = "MIT"
 
   s.files        = Dir['{lib/**/*,[A-Z]*}']
   s.platform     = Gem::Platform::RUBY
