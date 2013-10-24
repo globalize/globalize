@@ -36,4 +36,17 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'test_declarative'
 
   s.add_development_dependency 'sqlite3'
+
+  s.post_install_message = <<-END
+
+HEADS UP! Globalize3 has been renamed "Globalize" and now supports both
+ActiveRecord 3.x and ActiveRecord 4. To use the new gem with ActiveRecord
+3.x, replace "gem 'globalize3'" with "gem 'globalize', '~> 3.0.0'" in your
+Gemfile.
+
+All future updates to the ActiveRecord 3.x version of Globalize will happen
+in versions 3.x of the new gem (globalize). globalize3 is deprecated and will
+no longer be updated.
+
+  END
 end
