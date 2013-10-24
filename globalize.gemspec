@@ -1,12 +1,12 @@
-require File.expand_path('../lib/globalize3/version', __FILE__)
+require File.expand_path('../lib/globalize/version', __FILE__)
 
 Gem::Specification.new do |s|
-  s.name         = 'globalize3'
-  s.version      = Globalize3::VERSION
-  s.authors      = ['Sven Fuchs', 'Joshua Harvey', 'Clemens Kofler', 'John-Paul Bader', 'Tomasz Stachewicz', 'Philip Arndt']
+  s.name         = 'globalize'
+  s.version      = Globalize::Version
+  s.authors      = ['Sven Fuchs', 'Joshua Harvey', 'Clemens Kofler', 'John-Paul Bader', 'Tomasz Stachewicz', 'Philip Arndt', 'Chris Salzberg']
   s.email        = 'nobody@globalize-rails.org'
-  s.homepage     = 'http://github.com/svenfuchs/globalize3'
-  s.summary      = 'Rails I18n de-facto standard library for ActiveRecord 3 model/data translation'
+  s.homepage     = 'http://github.com/globalize/globalize'
+  s.summary      = 'Rails I18n de-facto standard library for ActiveRecord model/data translation'
   s.description  = "#{s.summary}."
 
   s.files        = Dir['{lib/**/*,[A-Z]*}']
@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
     s.add_dependency 'activerecord', '~> 3.1.0'
     s.add_dependency 'activemodel', '~> 3.1.0'
   elsif ENV['RAILS_3_2']
-  	s.add_dependency 'activerecord', '~> 3.2.0'
+    s.add_dependency 'activerecord', '~> 3.2.0'
     s.add_dependency 'activemodel', '~> 3.2.0'
   else
     # normal case
