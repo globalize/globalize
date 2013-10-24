@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version      = Globalize::Version
   s.authors      = ['Sven Fuchs', 'Joshua Harvey', 'Clemens Kofler', 'John-Paul Bader', 'Tomasz Stachewicz', 'Philip Arndt', 'Chris Salzberg']
   s.email        = 'nobody@globalize-rails.org'
-  s.homepage     = 'http://github.com/globalize/globalize'
+  s.homepage     = 'https://github.com/globalize/globalize'
   s.summary      = 'Rails I18n de-facto standard library for ActiveRecord model/data translation'
   s.description  = "#{s.summary}."
   s.license      = "MIT"
@@ -13,7 +13,6 @@ Gem::Specification.new do |s|
   s.files        = Dir['{lib/**/*,[A-Z]*}']
   s.platform     = Gem::Platform::RUBY
   s.require_path = 'lib'
-  s.rubyforge_project = '[none]'
 
   if ENV['RAILS_3_0']
     s.add_dependency 'activerecord', '~> 3.0.0'
