@@ -26,11 +26,13 @@ module Globalize
 
           unless fallbacks_for?(value)
             set_metadata(value, :locale => fallback, :requested_locale => locale)
-            return value
+
+            # value, fallback?
+            return value, locale != fallback
           end
         end
 
-        return nil
+        return nil, false
       end
 
       def save_translations!

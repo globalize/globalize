@@ -33,9 +33,15 @@ module Globalize
           changed_attributes.delete(name_str) if value == old
         else
           # If there's not a change yet, record it.
-          old = globalize.fetch(options[:locale], name)
+          old, fallback = globalize.fetch(options[:locale], name)
           old = old.dup if old.duplicable?
-          changed_attributes[name_str] = old if value != old
+
+          if fallback
+            # reset value, otherwise we will run into a shell game!
+            value = nil if value == old
+          else
+            changed_attributes[name_str] = old if value != old
+          end
         end
 
         globalize.write(options[:locale], name, value)
@@ -48,7 +54,7 @@ module Globalize
         if name == :locale
           self.try(:locale).presence || self.translation.locale
         elsif self.class.translated?(name)
-          if (value = globalize.fetch(options[:locale] || Globalize.locale, name))
+          if (value = globalize.fetch(options[:locale] || Globalize.locale, name)[0])
             value
           else
             super(name)
@@ -109,7 +115,7 @@ module Globalize
         obj.instance_variable_set(:@translations, nil) if new_record? # Reset the collection because of rails bug: http://pastie.org/1521874
         obj.instance_variable_set(:@globalize, nil )
         each_locale_and_translated_attribute do |locale, name|
-          obj.globalize.write(locale, name, globalize.fetch(locale, name) )
+          obj.globalize.write(locale, name, globalize.fetch(locale, name)[0] )
         end
 
         return obj

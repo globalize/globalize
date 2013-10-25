@@ -13,21 +13,22 @@ class VersioningTest < MiniTest::Spec
 
     post.update_attributes!(:title => 'title v2')
     # Creates a 'created' version, and the update
-    assert_equal %w[en en], post.versions.map(&:locale)
+    assert_equal %w[en en en], post.versions.map(&:locale)
 
     Globalize.with_locale(:de) {
       post.update_attributes!(:title => 'Titel v1')
-      assert_equal %w[de de], post.versions.map(&:locale)
+      assert_equal %w[de], post.versions.map(&:locale)
     }
 
     post.versions.reset # hrmmm.
-    assert_equal %w[en en], post.versions.map(&:locale)
+    assert_equal %w[en en en], post.versions.map(&:locale)
   end
 
   it "stores object changes of the localized attributes only" do
     post = Post.create!(:title => 'title v1')
     post.update_attributes!(:title => 'title v2')
-    assert_equal({'title' => ['title v1', 'title v2']}, post.versions.last.changeset)
+
+    assert_equal({'title' => ['title v1', 'title v2']}, post.versions.last.changeset.select{|column, value| column == 'title'})
   end
 
   it "does not create a version for initial locale" do
