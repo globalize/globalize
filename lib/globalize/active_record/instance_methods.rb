@@ -35,7 +35,13 @@ module Globalize
           # If there's not a change yet, record it.
           old, fallback = globalize.fetch(options[:locale], name)
           old = old.dup if old.duplicable?
-          changed_attributes[name_str] = old if value != old
+
+          if fallback
+            # reset value, otherwise we will run into a shell game!
+            value = nil if value == old
+          else
+            changed_attributes[name_str] = old if value != old
+          end
         end
 
         globalize.write(options[:locale], name, value)
