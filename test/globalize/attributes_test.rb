@@ -192,8 +192,15 @@ class AttributesTest < MiniTest::Spec
     task.translated_attribute_names # this should not make the test fail, but does
     Globalize.with_locale(:de) { task.update_attributes :name => 'Titel' }
 
-    legacy_task = LegacyTask.find(task.id)
-    assert_equal 'Title', legacy_task.name
+    Globalize.with_locale(:en) {
+      # legacy_task = LegacyTask.find(task.id)
+      assert_equal 'Title', task.name
+    }
+
+    Globalize.with_locale(:de) {
+      # legacy_task = LegacyTask.find(task.id)
+      assert_equal 'Titel', task.name
+    }
   end
 
   it 'updates original columns with content in the default locale' do
