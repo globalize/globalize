@@ -44,7 +44,7 @@ module Globalize
             options = {:locale => options}
           end
           options = {:locale => Globalize.locale}.merge(options)
-          
+
           # Dirty tracking, paraphrased from
           # ActiveRecord::AttributeMethods::Dirty#write_attribute.
           name_str = name.to_s
@@ -54,11 +54,16 @@ module Globalize
             changed_attributes.delete(name_str) if value == old
           else
             # If there's not a change yet, record it.
-            old = globalize.fetch(options[:locale], name)
+            old, fallback = globalize.fetch(options[:locale], name)
             old = old.clone if old.duplicable?
-            changed_attributes[name_str] = old if value != old
+
+            if fallback
+              value = nil if value == old
+            else
+              changed_attributes[name_str] = old if value != old
+            end
           end
-          
+
           globalize.write(options[:locale], name, value)
         else
           super(name, value)
@@ -74,7 +79,7 @@ module Globalize
 
         options = {:translated => true, :locale => nil}.merge(options)
         if self.class.translated?(name) and options[:translated]
-          if (value = globalize.fetch(options[:locale] || Globalize.locale, name))
+          if (value = globalize.fetch(options[:locale] || Globalize.locale, name)[0])
             value
           else
             super(name)
@@ -135,7 +140,7 @@ module Globalize
         obj.instance_variable_set(:@translations, nil) if new_record? # Reset the collection because of rails bug: http://pastie.org/1521874
         obj.instance_variable_set(:@globalize, nil )
         each_locale_and_translated_attribute do |locale, name|
-          obj.globalize.write(locale, name, globalize.fetch(locale, name) )
+          obj.globalize.write(locale, name, globalize.fetch(locale, name)[0] )
         end
 
         return obj

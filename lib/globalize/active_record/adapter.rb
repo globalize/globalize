@@ -29,11 +29,11 @@ module Globalize
 
           unless fallbacks_for?(value)
             set_metadata(value, :locale => fallback, :requested_locale => locale)
-            return value
+            return value, fallback != locale
           end
         end
 
-        return nil
+        return nil, false
       end
 
       def write(locale, name, value)
@@ -45,7 +45,7 @@ module Globalize
         record.translations.each do |t|
           existing_translations_by_locale[t.locale.to_s] = t
         end
-        
+
         stash.each do |locale, attrs|
           if attrs.any?
             locale_str = locale.to_s
