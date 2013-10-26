@@ -58,6 +58,16 @@ module Globalize
         "#{translation_class.table_name}.#{name}"
       end
 
+      def relation
+        relation = Relation.new(self, arel_table)
+
+        if finder_needs_type_condition?
+          relation.where(type_condition).create_with(inheritance_column.to_sym => sti_name)
+        else
+          relation
+        end
+      end
+
       if RUBY_VERSION < '1.9'
         def respond_to?(method_id, *args, &block)
           supported_on_missing?(method_id) || super
