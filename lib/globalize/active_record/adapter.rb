@@ -46,15 +46,13 @@ module Globalize
           existing_translations_by_locale[t.locale.to_s] = t
         end
 
-        stash.each do |locale, attrs|
-          if attrs.any?
-            locale_str = locale.to_s
-            translation = existing_translations_by_locale[locale_str] ||
-              record.translations.find_or_initialize_by_locale(locale_str)
-            attrs.each { |name, value| translation[name] = value }
-            ensure_foreign_key_for(translation)
-            translation.save!
-          end
+        stash.reject{|locale, attrs| attrs.empty?}.each do |locale, attrs|
+          locale_str = locale.to_s
+          translation = existing_translations_by_locale[locale_str] ||
+            record.translations.find_or_initialize_by_locale(locale_str)
+          attrs.each { |name, value| translation[name] = value }
+          ensure_foreign_key_for(translation)
+          translation.save!
         end
 
         reset
