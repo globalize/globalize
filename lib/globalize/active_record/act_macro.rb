@@ -1,7 +1,10 @@
+require 'active_support/deprecation'
+require 'active_support/core_ext/module/deprecation'
+
 module Globalize
   module ActiveRecord
     module ActMacro
-      def translates(*attr_names)
+      def globalize(*attr_names)
         # Bypass setup_translates! if the initial bootstrapping is done already.
         setup_translates!(attr_names.extract_options!) unless translates?
 
@@ -11,6 +14,13 @@ module Globalize
 
         allow_translation_of_attributes(attr_names) if attr_names.present?
       end
+
+      def translates(*attr_names)
+        globalize(*attr_names)
+      end
+
+      deprecate :translates => :globalize,
+                :deprecator => ActiveSupport::Deprecation.new('4.0', 'Globalize')
 
       def class_name
         @class_name ||= begin

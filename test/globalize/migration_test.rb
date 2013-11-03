@@ -128,7 +128,7 @@ class MigrationTest < MiniTest::Spec
     untranslated = model.create! :name => 'Untranslated'
 
     # Now add translation support and migrate (also tests .untranslated_attributes)
-    model.instance_eval %{ translates :name }
+    model.instance_eval %{ globalize :name }
     model.create_translation_table!({:name => :string}, {:migrate_data => true})
     assert model.translation_class.table_exists?
 
@@ -169,7 +169,7 @@ class MigrationTest < MiniTest::Spec
 
     untranslated_record = model.create! :name => 'Untranslated', :body => "Untranslated body"
 
-    model.instance_eval %{ translates :name, :body }
+    model.instance_eval %{ globalize :name, :body }
 
     model.create_translation_table!({:name => :string}, {:migrate_data => true})
 

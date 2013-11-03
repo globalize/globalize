@@ -1,3 +1,3 @@
 class Account < ActiveRecord::Base
-  translates :notes
+  globalize :notes
 end

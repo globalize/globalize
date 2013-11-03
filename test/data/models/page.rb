@@ -1,4 +1,4 @@
 class Page < ActiveRecord::Base
-  translates :title
-  translates :body
+  globalize :title
+  globalize :body
 end

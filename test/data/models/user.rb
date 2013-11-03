@@ -1,4 +1,4 @@
 class User < ActiveRecord::Base
-  translates :name
+  globalize :name
   validates_presence_of :name, :email
 end

@@ -1,3 +1,3 @@
 class ScopedValidatee < ActiveRecord::Base
-  translates :string, :scope_string
+  globalize :string, :scope_string
 end

@@ -1,3 +1,3 @@
 class Parent < ActiveRecord::Base
-  translates :content
+  globalize :content
 end

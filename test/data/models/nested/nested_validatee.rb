@@ -1,5 +1,5 @@
 module Nested
   class NestedValidatee < ActiveRecord::Base
-    translates :string
+    globalize :string
   end
 end

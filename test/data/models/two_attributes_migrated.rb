@@ -1,3 +1,3 @@
 class TwoAttributesMigrated < ActiveRecord::Base
-  translates :name, :body
+  globalize :name, :body
 end

@@ -1,3 +1,3 @@
 class Locale < ActiveRecord::Base
-  translates :name
+  globalize :name
 end

@@ -36,7 +36,7 @@ Model translations allow you to translate your models' attribute values. E.g.
 
 ```ruby
 class Post < ActiveRecord::Base
-  translates :title, :text
+  globalize :title, :text
 end
 ```
 
@@ -152,7 +152,7 @@ However it is possible to also use fallbacks for `blank` translations by adding
 
 ```ruby
 class Post < ActiveRecord::Base
-  translates :title, :name
+  globalize :title, :name
 end
 
 puts post.translations.inspect
@@ -170,7 +170,7 @@ post.name  # => 'Globalize'
 
 ```ruby
 class Post < ActiveRecord::Base
-  translates :title, :name, :fallbacks_for_empty_translations => true
+  globalize :title, :name, :fallbacks_for_empty_translations => true
 end
 
 puts post.translations.inspect
@@ -192,7 +192,7 @@ It is possible to setup locales to fallback to each other.
 
 ```ruby
 class Post < ActiveRecord::Base
-  translates :title, :name
+  globalize :title, :name
 end
 
 Globalize.fallbacks = {:en => [:en, :pl], :pl => [:pl, :en]}
@@ -252,7 +252,7 @@ Globalize supports interpolation in a similar manner to I18n.
 
 ```ruby
 class Post < ActiveRecord::Base
-  translates :title
+  globalize :title
 end
 
 I18n.locale = :en
