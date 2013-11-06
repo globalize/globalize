@@ -34,6 +34,14 @@ class VersioningTest < Test::Unit::TestCase
     assert_equal 'Titel v1', post.title(:de)
   end
 
+  test "globalize and paper trail work together in the same model" do
+    paper = Paper.create!(:name => "About Us", :description => 'We are great.')
+    paper.update_attributes!(:name => "About.")
+    old_paper = paper.versions.last.reify
+
+    assert_equal old_paper.name, "About Us"
+  end
+
   test "reverting happens per locale" do
     post = Post.create!(:title => 'title v1')
 
