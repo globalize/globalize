@@ -109,6 +109,7 @@ module Globalize
       end
 
       def set_translations(options)
+        globalize.reset
         options.keys.each do |locale|
           translation = translation_for(locale) ||
                         translations.build(:locale => locale.to_s)
@@ -118,7 +119,6 @@ module Globalize
           end
           translation.save
         end
-        globalize.reset
       end
 
       def reload(options = nil)
@@ -132,6 +132,7 @@ module Globalize
         obj = super
         return obj unless respond_to?(:translated_attribute_names)
 
+        obj.association(:translations).instance_variable_set(:@owner, obj) if obj.respond_to?(:association)
         obj.instance_variable_set(:@translations, nil) if new_record? # Reset the collection because of rails bug: http://pastie.org/1521874
         obj.instance_variable_set(:@globalize, nil )
         each_locale_and_translated_attribute do |locale, name|
