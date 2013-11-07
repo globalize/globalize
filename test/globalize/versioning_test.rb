@@ -6,15 +6,15 @@ class VersioningTest < Test::Unit::TestCase
     post.update_attributes!(:title => 'title v2')
     # Creates a 'created' version, and the update
 
-    assert_equal %w[en en], post.translation.versions.map(&:locale)
+    assert_equal %w[en en], post.versions.map(&:locale)
 
     Globalize.with_locale(:de) {
       post.update_attributes!(:title => 'Titel v1')
-      assert_equal %w[de de], post.translation.versions.map(&:locale)
+      assert_equal %w[de de], post.versions.map(&:locale)
     }
 
-    post.translation.versions.reset # hrmmm.
-    assert_equal %w[en en], post.translation.versions.map(&:locale)
+    post.versions.reset # hrmmm.
+    assert_equal %w[en en], post.versions.map(&:locale)
   end
 
   test "does not create a version for initial locale" do
