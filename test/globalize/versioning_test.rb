@@ -41,6 +41,11 @@ class VersioningTest < Test::Unit::TestCase
     old_paper = paper.versions.last.reify
 
     assert_equal old_paper.name, "About Us"
+
+    paper.update_attributes!(:description => "We are good.")
+
+    old_paper = paper.rollback
+    assert_equal old_paper.description, 'We are great.'
   end
 
   test "reverting happens per locale" do
