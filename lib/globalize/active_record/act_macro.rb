@@ -64,7 +64,9 @@ module Globalize
                                 :dependent   => :destroy,
                                 :extend      => HasManyExtensions,
                                 :autosave    => false
-
+        
+        translation_class.belongs_to "translated_#{table_name.singularize}".to_sym
+        
         after_create :save_translations!
         after_update :save_translations!
 
