@@ -64,7 +64,9 @@ module Globalize
                                 :dependent   => :destroy,
                                 :extend      => HasManyExtensions,
                                 :autosave    => false
-
+        
+        translation_class.belongs_to :translated_object
+        
         after_create :save_translations!
         after_update :save_translations!
 
