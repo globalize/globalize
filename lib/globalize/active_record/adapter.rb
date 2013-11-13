@@ -27,7 +27,11 @@ module Globalize
 
           unless fallbacks_for?(value)
             set_metadata(value, :locale => fallback, :requested_locale => locale)
-            fallback_translations.write(locale, name, value) unless locale == fallback
+            if locale == fallback
+              fallback_translations.destroy(locale, name) if fallback_translations.contains?(locale, name)
+            else
+              fallback_translations.write(locale, name, value)
+            end
             return value
           end
         end
@@ -37,7 +41,6 @@ module Globalize
 
       def save_translations!
         existing_translations_by_locale = Hash[record.translations.map { |t| [ t.locale, t ] }]
-
         stash.reject {|locale, attrs| attrs.empty?}.each do |locale, attrs|
           translation = existing_translations_by_locale[locale] ||
                           record.translations.build(locale: locale.to_s)

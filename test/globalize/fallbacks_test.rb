@@ -34,21 +34,6 @@ class TranslatedTest < MiniTest::Spec
     assert post.save
   end
 
-  it "saving without fallback value" do
-    I18n.fallbacks.map 'de-DE' => [ 'en-US' ]
-
-    I18n.locale = 'en-US'
-    post = Post.create :title => 'english title'
-
-    I18n.locale = 'de-DE'
-    post.title = nil
-    post.save
-
-    with_locale('de-DE') do
-      assert_equal post.title, nil
-    end
-  end
-
   it "resolves a simple fallback" do
     I18n.locale = 'de-DE'
     post = Post.create :title => 'foo'
@@ -203,6 +188,23 @@ class TranslatedTest < MiniTest::Spec
 
     I18n.locale = :en
     assert_equal 'pl_text', pl_task.name
+
+    Globalize.fallbacks = nil
+  end
+
+  it "saving without fallback value" do
+    I18n.fallbacks.clear
+    Globalize.fallbacks = {:en => [:en, :pl], :pl => [:pl, :en]}
+
+    I18n.locale = :en
+    task = Task.create(:name => 'en_text')
+    assert_equal 'en_text', task.name
+
+    I18n.locale = :pl
+    task.name = nil
+    task.save!
+    assert_equal 'en_text', task.translations.where(:locale => :en).first.name
+    assert_equal nil, task.translations.where(:locale => :pl).first.name
 
     Globalize.fallbacks = nil
   end
