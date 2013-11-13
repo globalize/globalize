@@ -192,6 +192,21 @@ class TranslatedTest < Test::Unit::TestCase
     Globalize.fallbacks = nil
   end
 
+  test "saving without fallback value" do
+    I18n.fallbacks.clear
+    Globalize.fallbacks = {:en => [:en, :pl], :pl => [:pl, :en]}
+
+    I18n.locale = :en
+    task = Task.create :name => 'en task'
+
+    I18n.locale = :pl
+    task.name = nil
+    task.save!
+
+    assert_equal task.translations.where(:locale => :en).first.name, 'en task'
+    assert_equal task.translations.where(:locale => :pl).first.name, nil
+  end
+
   test "name_translations should not use fallbacks" do
     I18n.fallbacks.clear
     I18n.fallbacks.map :en => [ :de ]
