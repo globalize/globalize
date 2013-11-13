@@ -34,6 +34,21 @@ class TranslatedTest < MiniTest::Spec
     assert post.save
   end
 
+  it "saving without fallback value" do
+    I18n.fallbacks.map 'de-DE' => [ 'en-US' ]
+
+    I18n.locale = 'en-US'
+    post = Post.create :title => 'english title'
+
+    I18n.locale = 'de-DE'
+    post.title = nil
+    post.save
+
+    with_locale('de-DE') do
+      assert_equal post.title, nil
+    end
+  end
+
   it "resolves a simple fallback" do
     I18n.locale = 'de-DE'
     post = Post.create :title => 'foo'
