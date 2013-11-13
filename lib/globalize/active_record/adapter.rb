@@ -30,7 +30,11 @@ module Globalize
 
           unless fallbacks_for?(value)
             set_metadata(value, :locale => fallback, :requested_locale => locale)
-            fallback_translations.write(locale, name, value) unless locale == fallback
+            if locale == fallback
+              fallback_translations.destroy(locale, name) if fallback_translations.contains?(locale, name)
+            else
+              fallback_translations.write(locale, name, value)
+            end
             return value
           end
         end
