@@ -21,6 +21,10 @@ module Globalize
       def write(locale, name, value)
         self[locale][name.to_s] = value
       end
+
+      def destroy(locale, name)
+        self[locale].delete(name.to_s)
+      end
     end
   end
 end
