@@ -29,11 +29,11 @@ module Globalize
 
           unless fallbacks_for?(value)
             set_metadata(value, :locale => fallback, :requested_locale => locale)
-            return value
+            return value, fallback != locale
           end
         end
 
-        return nil
+        return nil, false
       end
 
       def write(locale, name, value)
@@ -45,15 +45,14 @@ module Globalize
         record.translations.each do |t|
           existing_translations_by_locale[t.locale.to_s] = t
         end
-        
-        stash.each do |locale, attrs|
-          if attrs.any?
-            locale_str = locale.to_s
-            translation = existing_translations_by_locale[locale_str] ||
-              record.translations.find_or_initialize_by_locale(locale_str)
-            attrs.each { |name, value| translation[name] = value }
-            translation.save!
-          end
+
+        stash.reject{|locale, attrs| attrs.empty?}.each do |locale, attrs|
+          locale_str = locale.to_s
+          translation = existing_translations_by_locale[locale_str] ||
+            record.translations.find_or_initialize_by_locale(locale_str)
+          attrs.each { |name, value| translation[name] = value }
+          ensure_foreign_key_for(translation)
+          translation.save!
         end
 
         reset
@@ -64,6 +63,10 @@ module Globalize
       end
 
     protected
+      def ensure_foreign_key_for(translation)
+        # Sometimes the translation is initialised before a foreign key can be set.
+        translation[translation.reflections[:globalized_model].foreign_key] = record.id
+      end
 
       def type_cast(name, value)
         if value.nil?
