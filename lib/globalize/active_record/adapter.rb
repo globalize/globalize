@@ -58,6 +58,7 @@ module Globalize
             translation = existing_translations_by_locale[locale_str] ||
               record.translations.find_or_initialize_by_locale(locale_str)
             attrs.each { |name, value| translation[name] = fallback_translations.contains?(locale, name) ? nil : value }
+            ensure_foreign_key_for(translation)
             translation.save!
           end
         end
@@ -70,6 +71,10 @@ module Globalize
       end
 
     protected
+      def ensure_foreign_key_for(translation)
+        # Sometimes the translation is initialised before a foreign key can be set.
+        translation[translation.reflections[:globalized_model].foreign_key] = record.id
+      end
 
       def type_cast(name, value)
         if value.nil?
