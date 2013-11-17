@@ -1,3 +1,3 @@
 class Word < ActiveRecord::Base
-  translates :term, :definition
+  globalize :term, :definition
 end

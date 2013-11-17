@@ -34,7 +34,7 @@ class TranslationClassTest < MiniTest::Spec
     module Foo
       module Bar
         class Baz < ActiveRecord::Base
-          translates :bumm
+          globalize :bumm
         end
       end
     end

@@ -1,4 +1,4 @@
 class SerializedHash < ActiveRecord::Base
   serialize :meta, Hash
-  translates :meta
+  globalize :meta
 end

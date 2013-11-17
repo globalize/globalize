@@ -1,3 +1,3 @@
 class Migrated < ActiveRecord::Base
-  translates :name
+  globalize :name
 end

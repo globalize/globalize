@@ -1,37 +1,26 @@
+require 'active_support/deprecation'
+require 'active_support/core_ext/module/deprecation'
+
 module Globalize
   module ActiveRecord
     module ActMacro
-      def translates(*attr_names)
+      def globalize(*attr_names)
+        # Bypass setup_translates! if the initial bootstrapping is done already.
+        setup_translates!(attr_names.extract_options!) unless translates?
 
-        options = attr_names.extract_options!
-        setup_translates!(options) unless translates?
-
+        # Add any extra translatable attributes.
         attr_names = attr_names.map(&:to_sym)
         attr_names -= translated_attribute_names if defined?(translated_attribute_names)
 
-        if attr_names.present?
-          attr_names.each do |attr_name|
-            # Detect and apply serialization.
-            serializer = self.serialized_attributes[attr_name.to_s]
-            if serializer.present?
-              if defined?(::ActiveRecord::Coders::YAMLColumn) &&
-                 serializer.is_a?(::ActiveRecord::Coders::YAMLColumn)
-
-                serializer = serializer.object_class
-              end
-
-              translation_class.send :serialize, attr_name, serializer
-            end
-
-            # Create accessors for the attribute.
-            translated_attr_accessor(attr_name)
-            translations_accessor(attr_name)
-
-            # Add attribute to the list.
-            self.translated_attribute_names << attr_name
-          end
-        end
+        allow_translation_of_attributes(attr_names) if attr_names.present?
       end
+
+      def translates(*attr_names)
+        globalize(*attr_names)
+      end
+
+      deprecate :translates => :globalize,
+                :deprecator => ActiveSupport::Deprecation.new('4.0', 'Globalize')
 
       def class_name
         @class_name ||= begin
@@ -45,7 +34,21 @@ module Globalize
       end
 
       protected
-      def setup_translates!(options)
+      def allow_translation_of_attributes(attr_names)
+        attr_names.each do |attr_name|
+          # Detect and apply serialization.
+          enable_serializable_attribute(attr_name)
+
+          # Create accessors for the attribute.
+          translated_attr_accessor(attr_name)
+          translations_accessor(attr_name)
+
+          # Add attribute to the list.
+          self.translated_attribute_names << attr_name
+        end
+      end
+
+      def apply_globalize_options(options)
         options[:table_name] ||= "#{table_name.singularize}_translations"
         options[:foreign_key] ||= class_name.foreign_key
 
@@ -53,6 +56,23 @@ module Globalize
         self.translated_attribute_names = []
         self.translation_options        = options
         self.fallbacks_for_empty_translations = options[:fallbacks_for_empty_translations]
+      end
+
+      def enable_serializable_attribute(attr_name)
+        serializer = self.serialized_attributes[attr_name.to_s]
+        if serializer.present?
+          if defined?(::ActiveRecord::Coders::YAMLColumn) &&
+             serializer.is_a?(::ActiveRecord::Coders::YAMLColumn)
+
+            serializer = serializer.object_class
+          end
+
+          translation_class.send :serialize, attr_name, serializer
+        end
+      end
+
+      def setup_translates!(options)
+        apply_globalize_options(options)
 
         include InstanceMethods
         extend  ClassMethods, Migration
@@ -67,17 +87,6 @@ module Globalize
 
         after_create :save_translations!
         after_update :save_translations!
-
-        if options[:versioning]
-          if options[:versioning].is_a?(Hash)
-            translation_class.versioned options[:versioning]
-          else
-            ::ActiveRecord::Base.extend(Globalize::Versioning::PaperTrail)
-
-            translation_class.has_paper_trail
-            delegate :version, :versions, :to => :translation
-          end
-        end
       end
     end
 

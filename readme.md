@@ -36,7 +36,7 @@ Model translations allow you to translate your models' attribute values. E.g.
 
 ```ruby
 class Post < ActiveRecord::Base
-  translates :title, :text
+  globalize :title, :text
 end
 ```
 
@@ -131,23 +131,7 @@ NOTE: Make sure you drop the translated columns from the parent table after all 
 
 ## Versioning with Globalize
 
-Globalize nicely integrates with
-[paper_trail](https://github.com/airblade/paper_trail). To add versioning
-support to your model, you'll want to add the `:versioning => true`
-option to your call to <code>translates</code>.  An example from our test suite:
-
-```ruby
-translates :title, :content, :published, :published_at, :versioning => true
-```
-
-You will also need to have already generated the versions table that paper_trail
-expects.  See the paper_trail README for more details.
-
-If you are adding globalize to any previously versioned models, please note
-that you will need to add a new `locale` column to your versioning table.
-
-Also, please see the tests in `test/globalize/versioning_test.rb` for some
-current gotchas.
+Please use the [globalize-versioning](https://github.com/globalize/globalize-versioning) library for versioning support with Globalize.
 
 ## I18n fallbacks for empty translations
 
@@ -168,7 +152,7 @@ However it is possible to also use fallbacks for `blank` translations by adding
 
 ```ruby
 class Post < ActiveRecord::Base
-  translates :title, :name
+  globalize :title, :name
 end
 
 puts post.translations.inspect
@@ -186,7 +170,7 @@ post.name  # => 'Globalize'
 
 ```ruby
 class Post < ActiveRecord::Base
-  translates :title, :name, :fallbacks_for_empty_translations => true
+  globalize :title, :name, :fallbacks_for_empty_translations => true
 end
 
 puts post.translations.inspect
@@ -208,7 +192,7 @@ It is possible to setup locales to fallback to each other.
 
 ```ruby
 class Post < ActiveRecord::Base
-  translates :title, :name
+  globalize :title, :name
 end
 
 Globalize.fallbacks = {:en => [:en, :pl], :pl => [:pl, :en]}
@@ -268,7 +252,7 @@ Globalize supports interpolation in a similar manner to I18n.
 
 ```ruby
 class Post < ActiveRecord::Base
-  translates :title
+  globalize :title
 end
 
 I18n.locale = :en

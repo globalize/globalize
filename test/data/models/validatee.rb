@@ -1,3 +1,3 @@
 class Validatee < ActiveRecord::Base
-  translates :string
+  globalize :string
 end

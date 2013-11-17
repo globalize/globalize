@@ -1,4 +1,4 @@
 class SerializedAttr < ActiveRecord::Base
   serialize :meta
-  translates :meta
+  globalize :meta
 end
