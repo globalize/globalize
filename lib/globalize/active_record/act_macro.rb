@@ -58,6 +58,11 @@ module Globalize
         self.translation_options        = options
         self.fallbacks_for_empty_translations = options[:fallbacks_for_empty_translations]
 
+        # Alias original relation method so we can safely override it in ClassMethods.
+        class << self
+          alias relation_without_globalize relation
+        end
+
         include InstanceMethods
         extend  ClassMethods, Migration
 

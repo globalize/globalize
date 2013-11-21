@@ -1,6 +1,6 @@
 module Globalize
   module ActiveRecord
-    class Relation < ::ActiveRecord::Relation
+    module QueryMethods
 
       if ::ActiveRecord::VERSION::STRING >= "3.2.1"
         def where_values_hash
