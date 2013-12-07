@@ -3,14 +3,15 @@ module Globalize
     class Adapter
       # The cache caches attributes that already were looked up for read access.
       # The stash keeps track of new or changed values that need to be saved.
-      attr_accessor :record, :stash, :translations
-      private :record=, :stash=
+      attr_accessor :record, :stash, :translations, :fallback_translations
+      private :record=, :stash=, :fallback_translations=
 
       delegate :translation_class, :to => :'record.class'
 
       def initialize(record)
         self.record = record
         self.stash = Attributes.new
+        self.fallback_translations = Attributes.new
       end
 
       def fetch_stash(locale, name)
@@ -29,6 +30,11 @@ module Globalize
 
           unless fallbacks_for?(value)
             set_metadata(value, :locale => fallback, :requested_locale => locale)
+            if locale == fallback
+              fallback_translations.destroy(locale, name) if fallback_translations.contains?(locale, name)
+            else
+              fallback_translations.write(locale, name, value)
+            end
             return value
           end
         end
@@ -45,13 +51,14 @@ module Globalize
         record.translations.each do |t|
           existing_translations_by_locale[t.locale.to_s] = t
         end
-        
+
         stash.each do |locale, attrs|
           if attrs.any?
             locale_str = locale.to_s
             translation = existing_translations_by_locale[locale_str] ||
               record.translations.find_or_initialize_by_locale(locale_str)
-            attrs.each { |name, value| translation[name] = value }
+            attrs.each { |name, value| translation[name] = fallback_translations.contains?(locale, name) ? nil : value }
+            ensure_foreign_key_for(translation)
             translation.save!
           end
         end
@@ -64,6 +71,10 @@ module Globalize
       end
 
     protected
+      def ensure_foreign_key_for(translation)
+        # Sometimes the translation is initialised before a foreign key can be set.
+        translation[translation.reflections[:globalized_model].foreign_key] = record.id
+      end
 
       def type_cast(name, value)
         if value.nil?
