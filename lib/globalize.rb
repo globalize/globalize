@@ -10,7 +10,6 @@ end
 
 module Globalize
   autoload :ActiveRecord, 'globalize/active_record'
-  autoload :Versioning,   'globalize/versioning'
   autoload :Interpolation,   'globalize/interpolation'
 
   class << self
