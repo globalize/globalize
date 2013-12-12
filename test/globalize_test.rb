@@ -177,4 +177,17 @@ class GlobalizeTest < Test::Unit::TestCase
     m = ModelWithCustomTableName.create(:name => 'Name', :locale => :en)
     assert_translated m, :en, :name, 'Name'
   end
+
+  test "Calling to_json of a new globalized object cause translations initialized without foreign key" do
+    picture = Picture.new
+    picture.attributes = { title: 'Tite en', locale: :en }
+    picture.attributes = { title: 'Titel de', locale: :de }
+    # deliberately calling to_json to cause translations initialized without foreign key
+    # if Picture has 'accepts_nested_attributes_for :translations', this is not a problem
+    picture.to_json
+    picture.save
+
+    picture.reload
+    assert_equal 2, picture.translations.size
+  end
 end
