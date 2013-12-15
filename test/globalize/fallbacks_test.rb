@@ -192,6 +192,23 @@ class TranslatedTest < MiniTest::Spec
     Globalize.fallbacks = nil
   end
 
+  it "saving without fallback value" do
+    I18n.fallbacks.clear
+    Globalize.fallbacks = {:en => [:en, :pl], :pl => [:pl, :en]}
+
+    I18n.locale = :en
+    task = Task.create(:name => 'en_text')
+    assert_equal 'en_text', task.name
+
+    I18n.locale = :pl
+    task.name = nil
+    task.save!
+    assert_equal 'en_text', task.translations.where(:locale => :en).first.name
+    assert_equal nil, task.translations.where(:locale => :pl).first.name
+
+    Globalize.fallbacks = nil
+  end
+
   it "name_translations should not use fallbacks" do
     I18n.fallbacks.clear
     I18n.fallbacks.map :en => [ :de ]

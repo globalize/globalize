@@ -3,14 +3,15 @@ module Globalize
     class Adapter
       # The cache caches attributes that already were looked up for read access.
       # The stash keeps track of new or changed values that need to be saved.
-      attr_accessor :record, :stash, :translations
-      private :record=, :stash=
+      attr_accessor :record, :stash, :translations, :fallback_translations
+      private :record=, :stash=, :fallback_translations=
 
       delegate :translation_class, :to => :'record.class'
 
       def initialize(record)
         @record = record
         @stash = Attributes.new
+        @fallback_translations = Attributes.new
       end
 
       def fetch_stash(locale, name)
@@ -26,6 +27,11 @@ module Globalize
 
           unless fallbacks_for?(value)
             set_metadata(value, :locale => fallback, :requested_locale => locale)
+            if locale == fallback
+              fallback_translations.destroy(locale, name) if fallback_translations.contains?(locale, name)
+            else
+              fallback_translations.write(locale, name, value)
+            end
             return value
           end
         end
@@ -35,11 +41,10 @@ module Globalize
 
       def save_translations!
         existing_translations_by_locale = Hash[record.translations.map { |t| [ t.locale, t ] }]
-
         stash.reject {|locale, attrs| attrs.empty?}.each do |locale, attrs|
           translation = existing_translations_by_locale[locale] ||
                           record.translations.build(locale: locale.to_s)
-          attrs.each { |name, value| translation[name] = value }
+          attrs.each { |name, value| translation[name] = fallback_translations.contains?(locale, name) ? nil : value }
           ensure_foreign_key_for(translation)
           translation.save!
         end
