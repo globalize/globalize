@@ -5,9 +5,10 @@ class VersioningTest < Test::Unit::TestCase
     post = Post.create!(:title => 'title v1', :content => '')
     post.update_attributes!(:title => 'title v2')
     # Creates a 'created' version, and the update
+
     assert_equal %w[en en], post.versions.map(&:locale)
 
-    Globalize.with_locale(:de) {
+    with_locale(:de) {
       post.update_attributes!(:title => 'Titel v1')
       assert_equal %w[de de], post.versions.map(&:locale)
     }
@@ -32,6 +33,24 @@ class VersioningTest < Test::Unit::TestCase
 
     assert_equal 'title v1', post.title(:en)
     assert_equal 'Titel v1', post.title(:de)
+  end
+
+  test "globalize and paper trail work together in the same model" do
+    paper = Paper.create!(:name => "About Us", :description => 'We are great.')
+    paper.update_attributes!(:name => "About.")
+    old_paper = paper.versions.last.reify
+
+    assert_equal old_paper.name, "About Us"
+
+    paper.update_attributes!(:description => "We are good.")
+
+    with_locale(:de) {
+      paper.update_attributes!(:description => 'Wir sind gut.')
+      assert_equal [:en, :de], paper.translations.map(&:locale)
+    }
+
+    old_paper = paper.rollback
+    assert_equal old_paper.description, 'We are great.'
   end
 
   test "reverting happens per locale" do

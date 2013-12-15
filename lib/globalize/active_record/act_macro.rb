@@ -84,7 +84,12 @@ module Globalize
             ::ActiveRecord::Base.extend(Globalize::Versioning::PaperTrail)
 
             translation_class.has_paper_trail
-            delegate :version, :versions, :to => :translation
+
+            if (self.respond_to?(:paper_trail_enabled_for_model) && self.paper_trail_enabled_for_model)
+              # puts "WARNING: You're using paper_trail + globalize in the same model. To find versions use obj.translation.versions."
+            else
+              delegate :version, :versions, :to => :translation                  
+            end
           end
         end
 

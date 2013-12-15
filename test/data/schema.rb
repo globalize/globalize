@@ -216,4 +216,14 @@ ActiveRecord::Schema.define do
     t.string  :locale
     t.string  :name
   end
+
+  create_table :papers, :force => true do |t|
+    t.string :name
+  end
+
+  create_table :paper_translations, :force => true do |t|
+    t.string :locale
+    t.string :description
+    t.integer :paper_id
+  end
 end
