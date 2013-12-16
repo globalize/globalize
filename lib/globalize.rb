@@ -3,6 +3,11 @@ require 'patches/active_record/xml_attribute_serializer'
 require 'patches/active_record/query_method'
 require 'patches/active_record/uniqueness_validator'
 
+# until https://github.com/svenfuchs/i18n/issues/232 is resolved
+if I18n::VERSION < "0.6"
+  require 'patches/i18n/interpolate'
+end
+
 module Globalize
   autoload :ActiveRecord, 'globalize/active_record'
   autoload :Versioning,   'globalize/versioning'
