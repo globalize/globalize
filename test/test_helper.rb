@@ -81,6 +81,15 @@ ActiveRecord::Base.class_eval do
       connection.indexes(table_name).any? { |index| index.columns == [column_name.to_s] }
     end
   end
+
+  # undo dup backport if Object has private method initialize_dup, so that
+  # initialize_dup does not get accidentally called when testing against
+  # rbx-2.x and Rails 3.1
+  if Module.const_defined?(:RUBY_ENGINE) && (RUBY_ENGINE == 'rbx') && Object.respond_to?(:initialize_dup, true)
+    def dup
+      super
+    end
+  end
 end
 
 class BackendWithFallbacks < I18n::Backend::Simple
