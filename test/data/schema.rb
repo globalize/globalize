@@ -23,6 +23,16 @@ ActiveRecord::Schema.define do
     t.datetime   :published_at
   end
 
+  create_table :slugged_posts, :force => true do |t|
+    t.string     :slug
+  end
+
+  create_table :slugged_post_translations, :force => true do |t|
+    t.string     :locale
+    t.references :slugged_post
+    t.string     :title
+  end
+
   create_table :parents, :force => true do |t|
   end
 
