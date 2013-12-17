@@ -141,24 +141,26 @@ module Globalize
       private
 
       # Override the default relation method in order to return a subclass
-      # of ActiveRecord::Relation with custom finder methods for translated
-      # attributes.
-      def relation
-        relation = globalize_relation_class.new(self, arel_table)
+      # of ActiveRecord::Relation with custom where_values_hash method,
+      # for use in find_or_create_by_instantiator (Rails version >= 3.2.1)
+      if ::ActiveRecord::VERSION::STRING >= "3.2.1"
+        def relation
+          relation = globalize_relation_class.new(self, arel_table)
 
-        if finder_needs_type_condition?
-          relation.where(type_condition).create_with(inheritance_column.to_sym => sti_name)
-        else
-          relation
+          if finder_needs_type_condition?
+            relation.where(type_condition).create_with(inheritance_column.to_sym => sti_name)
+          else
+            relation
+          end
         end
-      end
 
-      # Use pattern defined in FriendlyId 4.x to avoid conflict with any other
-      # gems (such as FriendlyId) which override relation method.
-      def globalize_relation_class
-        @globalize_relation_class ||= Class.new(relation_without_globalize.class).tap do |klass|
-          klass.send :include, QueryMethods
-          const_set('GlobalizeActiveRecordRelation', klass)
+        # Use pattern defined in FriendlyId 4.x to avoid conflict with any other
+        # gems (such as FriendlyId) which override relation method.
+        def globalize_relation_class
+          @globalize_relation_class ||= Class.new(relation_without_globalize.class).tap do |klass|
+            klass.send :include, QueryMethods
+            const_set('GlobalizeActiveRecordRelation', klass)
+          end
         end
       end
 
