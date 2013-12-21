@@ -147,23 +147,6 @@ class FallbacksTest < MiniTest::Spec
       task.update_attributes :name => ''
       assert_equal 'foo', task.name
     end
-
-    # isn't this covered by the last test?
-    it 'resolves fallbacks with empty translations 2' do
-      I18n.fallbacks.map :'de-DE' => [ :'en-US' ]
-      task = Task.create :name => 'foo'
-      post = Post.create :title => 'foo'
-
-      I18n.locale = :'de-DE'
-      assert_equal 'foo', task.name
-      assert_equal 'foo', post.title
-
-      task.update_attributes :name => ''
-      assert_equal 'foo', task.name
-
-      post.update_attributes :title => ''
-      assert_equal '', post.title
-    end
   end
 
   describe 'STI model' do
