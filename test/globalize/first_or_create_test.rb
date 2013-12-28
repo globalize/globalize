@@ -2,7 +2,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class FirstOrCreateTest < MiniTest::Spec
-  describe '#first_or_create' do
+  describe '.first_or_create' do
     if ::ActiveRecord::VERSION::STRING >= "3.2.1"
       it 'returns first record with matching translated attribute if match found' do
         post = Post.create(:title => 'test_title')
