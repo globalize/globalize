@@ -45,17 +45,13 @@ module Globalize
         options = {:translated => true, :locale => nil}.merge(options)
         return super(name) unless options[:translated]
 
-        if name == :locale
-          self.try(:locale).presence || self.translation.locale
-        elsif self.class.translated?(name)
-          if (value = globalize.fetch(options[:locale] || Globalize.locale, name))
-            value
-          else
-            super(name)
-          end
-        else
-          super(name)
+        return self.try(:locale).presence || self.translation.locale if name == :locale
+
+        if translated?(name) && (translated_value = globalize.fetch(options[:locale] || Globalize.locale, name))
+          return translated_value
         end
+
+        super(name)
       end
 
       def attribute_names
@@ -79,13 +75,8 @@ module Globalize
       end
 
       def set_translations(options)
-        options.keys.each do |locale|
-          translation = translation_for(locale) ||
-                        translations.build(:locale => locale.to_s)
-
-          options[locale].each do |key, value|
-            translation.send :"#{key}=", value
-          end
+        options.each do |locale, attributes|
+          translation = set_translation(locale, attributes)
           translation.save
         end
         globalize.reset
@@ -124,9 +115,9 @@ module Globalize
         @translation_caches ||= {}
       end
 
-      def translations_by_locale(&block)
+      def translations_by_locale
         translations.each_with_object(HashWithIndifferentAccess.new) do |t, hash|
-          hash[t.locale] = block_given? ? block.call(t) : t
+          hash[t.locale] = block_given? ? (yield t) : t
         end
       end
 
@@ -186,6 +177,14 @@ module Globalize
         else
           yield
         end
+      end
+
+    private
+
+      def set_translation(locale, attributes)
+        translation = translation_for(locale) || translations.build(:locale => locale.to_s)
+        attributes.each { |name, value| translation.send :"#{name}=", value }
+        translation
       end
     end
   end
