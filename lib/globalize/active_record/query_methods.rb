@@ -38,7 +38,16 @@ module Globalize
         eval <<-END_RUBY
           def #{method_name}(limit=nil)
             if limit
-              super
+              super.tap do |a|
+                if translations_reload_needed
+                  a.each do |f|
+                    if f
+                      f.translations.reload
+                    end
+                  end
+                end
+                translations_reload_needed = false
+              end
             else
               find_#{method_name}.tap do |f|
                 if f && translations_reload_needed
