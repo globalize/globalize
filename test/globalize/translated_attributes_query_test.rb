@@ -139,6 +139,12 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
         @first = Post.where(:title => 'title').first
         assert_equal @first.translations, @posts[0].translations
       end
+
+      it 'returns record with all translations (with limit)' do
+        @first = Post.where(:title => 'title').first(3)
+        assert_equal @first.first.translations, @posts[0].translations
+        assert_equal @first.last.translations,  @posts[2].translations
+      end
     end
 
     describe '.last' do
