@@ -9,9 +9,6 @@ env:
   - DB=sqlite3
   - DB=postgres
   - DB=mysql
-  - RAILS_3_0=true DB=sqlite3
-  - RAILS_3_0=true DB=postgres
-  - RAILS_3_0=true DB=mysql
   - RAILS_3_1=true DB=sqlite3
   - RAILS_3_1=true DB=postgres
   - RAILS_3_1=true DB=mysql
