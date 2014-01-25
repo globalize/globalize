@@ -1,4 +1,4 @@
-# Globalize [![Build Status](https://travis-ci.org/globalize/globalize.png?branch=3-0-stable)](https://travis-ci.org/globalize/globalize)
+# Globalize [![Build Status](https://travis-ci.org/globalize/globalize.png?branch=3-1)](https://travis-ci.org/globalize/globalize)
 
 Globalize builds on the [I18n API in Ruby on Rails](http://guides.rubyonrails.org/i18n.html)
 to add model translations to ActiveRecord models.
@@ -22,13 +22,15 @@ When using bundler put this in your Gemfile:
 gem 'globalize', '~> 4.0.0'
 ```
 
-To use the ActiveRecord 3.x version of globalize, specify the version number `3.0.0`:
+To use the version of globalize for ActiveRecord >= 3.1, specify:
 
 ````ruby
-gem 'globalize', '~> 3.0.4'
+gem 'globalize', '~> 3.1.0'
 ````
 
-The [`3-0-stable` branch](https://github.com/globalize/globalize/tree/3-0-stable) of this repository is the ActiveRecord 3.x version of globalize. Note that `globalize3` has been deprecated and you are encouraged to update your Gemfile accordingly.
+If you are using ActiveRecord 3.0, use version 3.0: `gem 'globalize', '~> 3.0.4'`.
+
+The [`3-1` branch](https://github.com/globalize/globalize/tree/3-1) and [`3-0-stable` branch](https://github.com/globalize/globalize/tree/3-0-stable) of this repository correspond to the ActiveRecord 3.x versions of globalize. Note that `globalize3` has been deprecated and you are encouraged to update your Gemfile accordingly.
 
 ## Model translations
 
