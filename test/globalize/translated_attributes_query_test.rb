@@ -258,4 +258,43 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
       assert_equal attachment, blog.attachments.where(file_type: "image").first
     end
   end
+
+  describe "without a record for default locale" do
+    before do
+      @artwork = Artwork.new
+    end
+
+    it "returns default locale without creating a record for it" do
+      @artwork.translations.build(locale: :de, title: "Titel")
+      locale = @artwork.read_attribute(:locale)
+
+      assert_equal :en, locale
+      assert_equal 1, @artwork.translations.size
+    end
+
+    it "doesn't create translation for default locale on save" do
+      @artwork.translations.build(locale: :de, title: "Titel")
+      @artwork.save
+
+      assert_equal 1, @artwork.translations.count
+      assert_equal :de, @artwork.translations.first.locale
+    end
+
+    it "doesn't create any translation on save" do
+      @artwork.save
+
+      assert_equal 0, @artwork.translations.count
+    end
+
+    it "creates a translation for default locale after the assignment of translated attributes" do
+      @artwork.save
+      @artwork.title = "Title"
+      @artwork.save
+
+      assert_equal 1, @artwork.translations.count
+      assert_equal :en, @artwork.translations.first.locale
+      assert_equal "Title", @artwork.title
+    end
+
+  end
 end
