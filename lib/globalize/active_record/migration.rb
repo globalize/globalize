@@ -30,7 +30,7 @@ module Globalize
           complete_translated_fields if fields.blank?
           validate_translated_fields
 
-          create_translation_table
+          create_translation_table(options)
           add_translation_fields!(fields, options)
           create_translations_index
           clear_schema_cache!
@@ -66,11 +66,20 @@ module Globalize
           end
         end
 
-        def create_translation_table
-          connection.create_table(translations_table_name) do |t|
-            t.references table_name.sub(/^#{table_name_prefix}/, '').singularize, :null => false
-            t.string :locale, :null => false
-            t.timestamps
+        def create_translation_table(options = {})
+          if options[:use_uuid] == true
+            connection.create_table(translations_table_name, id: false) do |t|
+              t.uuid :id, primary: true
+              t.references table_name.sub(/^#{table_name_prefix}/, '').singularize, :null => false
+              t.string :locale, :null => false
+              t.timestamps
+            end
+          else
+            connection.create_table(translations_table_name) do |t|
+              t.references table_name.sub(/^#{table_name_prefix}/, '').singularize, :null => false
+              t.string :locale, :null => false
+              t.timestamps
+            end
           end
         end
 

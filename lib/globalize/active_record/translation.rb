@@ -3,6 +3,9 @@ module Globalize
     class Translation < ::ActiveRecord::Base
 
       validates :locale, :presence => true
+      self.primary_key = :id
+
+      before_save :generate_uuid
 
       class << self
         # Sometimes ActiveRecord queries .table_exists? before the table name
@@ -31,6 +34,16 @@ module Globalize
 
       def locale=(locale)
         write_attribute :locale, locale.to_s
+      end
+
+      private
+      def generate_uuid
+        unless self.id
+          begin
+            uuid = SecureRandom.uuid
+            self.id = uuid
+          end until self.class.where(id: uuid).length == 0
+        end
       end
     end
   end
