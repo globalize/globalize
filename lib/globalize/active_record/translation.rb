@@ -5,7 +5,7 @@ module Globalize
       validates :locale, :presence => true
       self.primary_key = :id
 
-      before_save :generate_uuid
+      before_save :generate_uuid_if_necessary
 
       class << self
         # Sometimes ActiveRecord queries .table_exists? before the table name
@@ -37,8 +37,9 @@ module Globalize
       end
 
       private
-      def generate_uuid
-        unless self.id
+      def generate_uuid_if_necessary
+        unless self.id &&
+               self.class.column_types[self.class.primary_key].type == :uuid
           begin
             uuid = SecureRandom.uuid
             self.id = uuid
