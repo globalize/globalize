@@ -84,7 +84,7 @@ module Globalize
           options[locale].each do |key, value|
             translation.send :"#{key}=", value
           end
-          translation.save
+          translation.save if persisted?
         end
         globalize.reset
       end

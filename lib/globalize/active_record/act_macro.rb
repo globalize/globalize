@@ -74,7 +74,8 @@ module Globalize
                                 :foreign_key => options[:foreign_key],
                                 :dependent   => :destroy,
                                 :extend      => HasManyExtensions,
-                                :autosave    => true
+                                :autosave    => true,
+                                :inverse_of  => :globalized_model
 
         before_create :save_translations!
         before_update :save_translations!
