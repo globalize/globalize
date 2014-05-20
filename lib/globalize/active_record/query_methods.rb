@@ -42,18 +42,24 @@ module Globalize
         end
       end
 
-      def where_values_hash
+      def where_values_hash(relation_table_name = translations_table_name)
         equalities = respond_to?(:with_default_scope) ? with_default_scope.where_values : where_values
         equalities = equalities.grep(Arel::Nodes::Equality).find_all { |node|
-          node.left.relation.name == translations_table_name
+          node.left.relation.name == relation_table_name
         }
 
         binds = Hash[bind_values.find_all(&:first).map { |column, v| [column.name, v] }]
-
-        super.merge(Hash[equalities.map { |where|
-          name = where.left.name
-          [name, binds.fetch(name.to_s) { where.right }]
-        }])
+        begin # this is working for 4-1-stable branch
+          super.merge(Hash[equalities.map { |where|
+            name = where.left.name
+            [name, binds.fetch(name.to_s) { where.right }]
+          }])
+        rescue ArgumentError # this is for compatibility to 4.1.0
+          super().merge(Hash[equalities.map { |where|
+            name = where.left.name
+            [name, binds.fetch(name.to_s) { where.right }]
+          }])
+        end
       end
 
       def join_translations(relation = self)
