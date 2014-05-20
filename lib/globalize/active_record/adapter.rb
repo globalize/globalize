@@ -37,7 +37,10 @@ module Globalize
         stash.reject {|locale, attrs| attrs.empty?}.each do |locale, attrs|
           translation = record.translations_by_locale[locale] ||
                         record.translations.build(locale: locale.to_s)
-          attrs.each { |name, value| translation[name] = value }
+          attrs.each do |name, value|
+            method_name = "#{name}="
+            translation.public_send(method_name, value) if translation.respond_to? method_name
+          end
           ensure_foreign_key_for(translation)
           translation.save!
         end
