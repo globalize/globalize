@@ -53,7 +53,7 @@ module Globalize
 
       def ensure_foreign_key_for(translation)
         # Sometimes the translation is initialised before a foreign key can be set.
-        translation[translation.reflections[:globalized_model].foreign_key] = record.id
+        translation[translation._reflections[:globalized_model].foreign_key] = record.id
       end
 
       def type_cast(name, value)
