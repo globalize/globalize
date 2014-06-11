@@ -3,7 +3,6 @@ module Globalize
     class Translation < ::ActiveRecord::Base
 
       validates :locale, :presence => true
-      self.primary_key = :id
 
       before_save :generate_uuid_if_necessary
 
