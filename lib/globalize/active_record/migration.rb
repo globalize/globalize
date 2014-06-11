@@ -67,9 +67,8 @@ module Globalize
         end
 
         def create_translation_table(options = {})
-          if options[:use_uuid] == true
-            connection.create_table(translations_table_name, id: false) do |t|
-              t.uuid :id, primary: true
+          if options[:use_uuid]
+            connection.create_table(translations_table_name, id: :uuid) do |t|
               t.uuid (table_name.sub(/^#{table_name_prefix}/, '').singularize + "_id"), :null => false
               t.string :locale, :null => false
               t.timestamps
