@@ -5,7 +5,6 @@ NOTES
 .DS_Store
 .bundle
 Gemfile.lock
-globalize.iml
 .rvmrc
 *.sw*
 *.gem
