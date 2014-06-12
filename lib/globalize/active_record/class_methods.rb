@@ -9,7 +9,7 @@ module Globalize
 
       def with_translations(*locales)
         locales = translated_locales if locales.empty?
-        preload(:translations).joins(:translations).readonly(false).with_locales(locales)#.with_required_attributes
+        preload(:translations).joins(:translations).readonly(false).with_locales(locales)
       end
 
       def with_required_attributes
@@ -18,23 +18,8 @@ module Globalize
         end
       end
 
-      def with_translated_attribute(name, value, locales = Globalize.fallbacks)
-        with_translations.where(
-          translated_column_name(name)    => value,
-          translated_column_name(:locale) => Array(locales).map(&:to_s)
-        )
-      end
-
       def translated?(name)
         translated_attribute_names.include?(name.to_sym)
-      end
-
-      def required_attributes
-        validators.map { |v| v.attributes if v.is_a?(ActiveModel::Validations::PresenceValidator) }.flatten
-      end
-
-      def required_translated_attributes
-        translated_attribute_names & required_attributes
       end
 
       def translation_class
