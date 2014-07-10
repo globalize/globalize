@@ -230,5 +230,29 @@ class GlobalizeTest < MiniTest::Spec
         end
       end
     end
+
+    describe 'with presence validation of translated fields' do
+      before do
+        Post::Translation.instance_eval do
+          def self.validate
+            errors.add(:base, 'can\'t be blank') if self.title.blank?
+          end
+        end
+      end
+
+      after do
+        Post::Translation.instance_eval do
+          def self.validate
+            true
+          end
+        end
+      end
+
+      it 'saves translations successfully' do
+        count = Post::Translation.count
+        Post.create(:title => 'title 1')
+        assert_equal Post::Translation.count, count + 1
+      end
+    end
   end
 end
