@@ -153,6 +153,10 @@ module Globalize
 
         globalize.send(:column_for_attribute, name)
       end
+      
+      def cache_key
+        super + '-' + Globalize.locale.to_s
+      end
 
     protected
 
