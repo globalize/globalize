@@ -1,5 +1,5 @@
 ![Globalize](http://globalize.github.io/globalize/images/globalize.png)
-
+--
 [![Build Status](https://travis-ci.org/globalize/globalize.png?branch=master)](https://travis-ci.org/globalize/globalize) [![Code Climate](https://codeclimate.com/github/globalize/globalize.png)](https://codeclimate.com/github/globalize/globalize)
 
 Globalize builds on the [I18n API in Ruby on Rails](http://guides.rubyonrails.org/i18n.html)
