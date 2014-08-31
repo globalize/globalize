@@ -1,5 +1,5 @@
 ![Globalize](http://globalize.github.io/globalize/images/globalize.png)
-
+--
 [![Build Status](https://travis-ci.org/globalize/globalize.png?branch=master)](https://travis-ci.org/globalize/globalize) [![Code Climate](https://codeclimate.com/github/globalize/globalize.png)](https://codeclimate.com/github/globalize/globalize)
 
 You can chat with us using Gitter:
