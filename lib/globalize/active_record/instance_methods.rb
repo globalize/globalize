@@ -26,16 +26,18 @@ module Globalize
 
         # Dirty tracking, paraphrased from
         # ActiveRecord::AttributeMethods::Dirty#write_attribute.
-        name_str = name.to_s
-        if attribute_changed?(name_str)
-          # If there's already a change, delete it if this undoes the change.
-          old = changed_attributes[name_str]
-          changed_attributes.delete(name_str) if value == old
-        else
-          # If there's not a change yet, record it.
-          old = globalize.fetch(options[:locale], name)
-          old = old.dup if old.duplicable?
-          changed_attributes[name_str] = old if value != old
+        unless Rails.version >= '4.2'
+          name_str = name.to_s
+          if attribute_changed?(name_str)
+            # If there's already a change, delete it if this undoes the change.
+            old = changed_attributes[name_str]
+            @changed_attributes.delete(name_str) if value == old
+          else
+            # If there's not a change yet, record it.
+            old = globalize.fetch(options[:locale], name)
+            old = old.dup if old.duplicable?
+            @changed_attributes[name_str] = old if value != old
+          end
         end
 
         globalize.write(options[:locale], name, value)
@@ -93,7 +95,7 @@ module Globalize
 
       def reload(options = nil)
         translation_caches.clear
-        translated_attribute_names.each { |name| @attributes.delete(name.to_s) }
+        translated_attribute_names.each { |name| @attributes.reset(name.to_s) }
         globalize.reset
         super(options)
       end
