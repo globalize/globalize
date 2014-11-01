@@ -26,7 +26,7 @@ module Globalize
 
         # Dirty tracking, paraphrased from
         # ActiveRecord::AttributeMethods::Dirty#write_attribute.
-        unless Rails.version >= '4.2'
+        unless RAILS_4_2
           name_str = name.to_s
           if attribute_changed?(name_str)
             # If there's already a change, delete it if this undoes the change.
@@ -96,7 +96,7 @@ module Globalize
       def reload(options = nil)
         translation_caches.clear
         translated_attribute_names.each do |name|
-          (Rails.version >= '4.2') ? @attributes.reset(name.to_s) : @attributes.delete(name.to_s)
+          RAILS_4_2 ? @attributes.reset(name.to_s) : @attributes.delete(name.to_s)
         end
         globalize.reset
         super(options)
