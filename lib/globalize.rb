@@ -4,6 +4,8 @@ require 'patches/active_record/query_method'
 require 'patches/active_record/uniqueness_validator'
 
 module Globalize
+  RAILS_4_2 = (defined?(Rails) and Rails.version >= '4.2') or ENV['RAILS_4_2']
+
   autoload :ActiveRecord, 'globalize/active_record'
   autoload :Interpolation,   'globalize/interpolation'
 
