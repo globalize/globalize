@@ -95,7 +95,9 @@ module Globalize
 
       def reload(options = nil)
         translation_caches.clear
-        translated_attribute_names.each { |name| @attributes.reset(name.to_s) }
+        translated_attribute_names.each do |name|
+          (Rails.version >= '4.2') ? @attributes.reset(name.to_s) : @attributes.delete(name.to_s)
+        end
         globalize.reset
         super(options)
       end
