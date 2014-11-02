@@ -37,7 +37,11 @@ module Globalize
         stash.reject {|locale, attrs| attrs.empty?}.each do |locale, attrs|
           translation = record.translations_by_locale[locale] ||
                         record.translations.build(locale: locale.to_s)
-          attrs.each { |name, value| translation[name] = value }
+
+          attrs.each do |name, value|
+            value = value.val if (defined?(Arel::Nodes::Casted) and value.is_a?(Arel::Nodes::Casted))
+            translation[name] = value
+          end
           ensure_foreign_key_for(translation)
           translation.save!
         end
