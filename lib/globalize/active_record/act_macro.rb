@@ -71,7 +71,8 @@ module Globalize
 
         translation_class.table_name = options[:table_name]
 
-        has_many :translations, :class_name  => translation_class.name,
+        has_many :translations, -> { order(:created_at => :desc) },
+                                :class_name  => translation_class.name,
                                 :foreign_key => options[:foreign_key],
                                 :dependent   => :destroy,
                                 :extend      => HasManyExtensions,
