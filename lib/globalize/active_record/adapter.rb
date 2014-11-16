@@ -57,7 +57,7 @@ module Globalize
 
       # Sometimes the translation is initialised before a foreign key can be set.
       def ensure_foreign_key_for(translation)
-        key = RAILS_4_2 ? "globalized_model" : :globalized_model
+        key = (RAILS_4_2 ? "globalized_model" : :globalized_model)
         translation[translation.class.reflections[key].foreign_key] = record.id
       end
 
