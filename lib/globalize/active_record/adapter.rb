@@ -39,7 +39,7 @@ module Globalize
                         record.translations.build(locale: locale.to_s)
 
           attrs.each do |name, value|
-            value = value.val if (defined?(Arel::Nodes::Casted) and value.is_a?(Arel::Nodes::Casted))
+            value = value.val if value.is_a?(Arel::Nodes::Casted)
             translation[name] = value
           end
           ensure_foreign_key_for(translation)
@@ -57,8 +57,7 @@ module Globalize
 
       # Sometimes the translation is initialised before a foreign key can be set.
       def ensure_foreign_key_for(translation)
-        key = (RAILS_4_2 ? "globalized_model" : :globalized_model)
-        translation[translation.class.reflections[key].foreign_key] = record.id
+        translation[translation.class.reflections["globalized_model"].foreign_key] = record.id
       end
 
       def type_cast(name, value)

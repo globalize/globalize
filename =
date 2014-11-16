@@ -1,1 +1,0 @@
-git add . && git commit -a -m "load dirty tracking patch only for rails 4.2 to keep backwards compatibility"

@@ -94,7 +94,7 @@ module Globalize
       def reload(options = nil)
         translation_caches.clear
         translated_attribute_names.each do |name|
-          RAILS_4_2 ? @attributes.reset(name.to_s) : @attributes.delete(name.to_s)
+          @attributes.reset(name.to_s)
         end
         globalize.reset
         super(options)
