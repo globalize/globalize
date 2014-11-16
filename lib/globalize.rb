@@ -2,6 +2,7 @@ require 'active_record'
 require 'patches/active_record/xml_attribute_serializer'
 require 'patches/active_record/query_method'
 require 'patches/active_record/uniqueness_validator'
+require 'patches/active_record/rails_4_2_patches'
 
 module Globalize
   RAILS_4_2 = (ENV['RAILS_4_2'] or (defined?(Rails) and Rails.version >= '4.2'))
