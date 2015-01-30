@@ -4,6 +4,8 @@ module Globalize
 
       validates :locale, :presence => true
 
+      before_save :generate_uuid_if_necessary
+
       class << self
         # Sometimes ActiveRecord queries .table_exists? before the table name
         # has even been set which results in catastrophic failure.
@@ -31,6 +33,17 @@ module Globalize
 
       def locale=(locale)
         write_attribute :locale, locale.to_s
+      end
+
+      private
+      def generate_uuid_if_necessary
+        unless self.id &&
+               self.class.column_types[self.class.primary_key].type == :uuid
+          begin
+            uuid = SecureRandom.uuid
+            self.id = uuid
+          end until self.class.where(id: uuid).length == 0
+        end
       end
     end
   end
