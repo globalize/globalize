@@ -217,4 +217,28 @@ class GlobalizeTest < MiniTest::Spec
       end
     end
   end
+
+  describe 'with locale' do
+    def perform_with_locale(locale)
+      Thread.new do
+        Globalize.with_locale(locale) do
+          sleep 1
+          assert_equal locale, Globalize.locale
+        end
+      end
+    end
+
+    it 'succeed in one thread' do
+      thread = perform_with_locale(:end)
+      thread.join
+    end
+
+    it 'succeed multithreading' do
+      thread1 = perform_with_locale(:en)
+      thread2 = perform_with_locale(:fr)
+      thread3 = perform_with_locale(:de)
+
+      thread1.join && thread2.join && thread3.join
+    end
+  end
 end
