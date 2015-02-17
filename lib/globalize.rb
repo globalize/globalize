@@ -5,7 +5,6 @@ require 'patches/active_record/serialization'
 require 'patches/active_record/uniqueness_validator'
 require 'patches/active_record/persistence'
 
-
 module Globalize
   autoload :ActiveRecord, 'globalize/active_record'
   autoload :Interpolation,   'globalize/interpolation'
@@ -52,18 +51,22 @@ module Globalize
       i18n_fallbacks? ? I18n.fallbacks[for_locale] : [for_locale.to_sym]
     end
 
+    def storage
+      Thread.current
+    end
+
   protected
 
     def read_locale
-      @globalize_locale
+      storage[:globalize_locale]
     end
 
     def set_locale(locale)
-      @globalize_locale = locale.try(:to_sym)
+      storage[:globalize_locale] = locale.try(:to_sym)
     end
 
     def read_fallbacks
-      @fallbacks || HashWithIndifferentAccess.new
+      storage[:globalize_fallbacks] || HashWithIndifferentAccess.new
     end
 
     def set_fallbacks(locales)
@@ -73,7 +76,7 @@ module Globalize
         fallback_hash[key] = value.presence || [key]
       end if locales.present?
 
-      @fallbacks = fallback_hash
+      storage[:globalize_fallbacks] = fallback_hash
     end
   end
 end
