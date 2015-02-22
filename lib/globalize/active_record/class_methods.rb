@@ -43,13 +43,10 @@ module Globalize
       def translation_class
         @translation_class ||= begin
           if self.const_defined?(:Translation, false)
-            klass = self.const_get(:Translation, false)
+            self.const_get(:Translation, false)
           else
-            klass = self.const_set(:Translation, Class.new(Globalize::ActiveRecord::Translation))
+            self.const_set(:Translation, Class.new(Globalize::ActiveRecord::Translation))
           end
-
-          klass.belongs_to :globalized_model, :class_name => self.name, :foreign_key => translation_options[:foreign_key]
-          klass
         end
       end
 

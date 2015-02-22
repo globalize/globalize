@@ -68,8 +68,19 @@ module Globalize
                                 :extend      => HasManyExtensions,
                                 :autosave    => true
 
+        save_foreign_key
+        setup_translation_model
+
         before_create :save_translations!
         before_update :save_translations!
+      end
+
+      def save_foreign_key
+        self.translation_options[:foreign_key] = reflect_on_association(:translations).foreign_key
+      end
+
+      def setup_translation_model
+        translation_class.belongs_to :globalized_model, class_name: self.name, foreign_key: translation_options[:foreign_key]
       end
     end
 
