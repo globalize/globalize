@@ -64,11 +64,12 @@ ActiveRecord::Schema.define do
 
   create_table :comments, :force => true do |t|
     t.references :post
+    t.string :type
   end
 
   create_table :comment_translations, :force => true do |t|
     t.string     :locale
-    t.references :comment
+    t.references :translated_comment
     t.string     :title
     t.text       :content
   end
@@ -210,6 +211,7 @@ ActiveRecord::Schema.define do
   end
 
   create_table :medias, :force => true do |t|
+    t.string :type
   end
 
   create_table :media_translations, :force => true do |t|

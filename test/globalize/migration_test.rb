@@ -215,7 +215,7 @@ protected
   end
 
   def assert_migration_table(fields, model = Migrated)
-    index_field = :"#{model.class_name.underscore}_id"
+    index_field = :"#{model.model_name.singular.underscore}_id"
     assert model.translation_class.table_exists?
     assert model.translation_class.index_exists_on?(index_field)
 
