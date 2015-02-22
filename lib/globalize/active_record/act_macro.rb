@@ -13,13 +13,6 @@ module Globalize
         allow_translation_of_attributes(attr_names) if attr_names.present?
       end
 
-      def class_name
-        @class_name ||= begin
-          class_name = table_name[table_name_prefix.length..-(table_name_suffix.length + 1)].downcase.camelize
-          pluralize_table_names ? class_name.singularize : class_name
-        end
-      end
-
       def translates?
         included_modules.include?(InstanceMethods)
       end
@@ -42,7 +35,6 @@ module Globalize
 
       def apply_globalize_options(options)
         options[:table_name] ||= "#{table_name.singularize}_translations"
-        options[:foreign_key] ||= class_name.foreign_key
 
         class_attribute :translated_attribute_names, :translation_options, :fallbacks_for_empty_translations
         self.translated_attribute_names = []
