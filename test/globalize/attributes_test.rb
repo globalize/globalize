@@ -108,6 +108,7 @@ class AttributesTest < MiniTest::Spec
 
       post.title = 'something'
       assert post.translations.all?(&:new_record?)
+      assert_equal 1, post.translations.length
 
       post.save
       assert post.translations.all?(&:persisted?)
