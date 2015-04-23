@@ -31,7 +31,7 @@ ActiveRecord::Validations::UniquenessValidator.class_eval do
 
         sql, params  = mount_sql_and_params(finder_class, table_name, attribute, value)
 
-        relation = table.where(sql, *params).where(:locale => Globalize.locale)
+        relation = table.where(sql, *params).where(:locale => Globalize.locale.to_s)
 
         Array.wrap(options[:scope]).each do |scope_item|
           scope_value = record.send(scope_item)
