@@ -42,7 +42,7 @@ module Globalize
 
           add_translation_fields
           clear_schema_cache!
-          move_data_to_translation_table if options[:migrate_data]
+          move_data_to_translation_table(options[:migration_locale]) if options[:migrate_data]
           remove_source_columns if options[:remove_source_columns]
           clear_schema_cache!
         end
@@ -108,9 +108,10 @@ module Globalize
           connection.remove_index(translations_table_name, :name => translation_index_name)
         end
 
-        def move_data_to_translation_table
+        def move_data_to_translation_table(locale = nil)
+          locale ||= I18n.default_locale
           model.find_each do |record|
-            translation = record.translation_for(I18n.default_locale) || record.translations.build(:locale => I18n.default_locale)
+            translation = record.translation_for(locale) || record.translations.build(:locale => locale)
             fields.each do |attribute_name, attribute_type|
               translation[attribute_name] = record.read_attribute(attribute_name, {:translated => false})
             end
