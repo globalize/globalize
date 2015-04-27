@@ -25,6 +25,8 @@ module Globalize
         end
 
         def create_translation_table!(fields = {}, options = {})
+          verify_options(options)
+
           @fields = fields
           # If we have fields we only want to create the translation table with those fields
           complete_translated_fields if fields.blank?
@@ -52,6 +54,8 @@ module Globalize
         end
 
         def drop_translation_table!(options = {})
+          verify_options(options)
+
           move_data_to_model_table if options[:migrate_data]
           drop_translations_index
           drop_translation_table
@@ -180,6 +184,12 @@ module Globalize
             unless model.column_names.include?(attribute)
               connection.add_column(table_name, attribute, model::Translation.columns_hash[attribute].type)
             end
+          end
+        end
+
+        def verify_options(options)
+          if options[:migration_locale].present? && !I18n.available_locales.include?(options[:migration_locale])
+            raise Exception.new("Missing locale: #{options[:migration_locale]}")
           end
         end
 
