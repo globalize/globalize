@@ -22,17 +22,21 @@ ActiveRecord::Schema.define do
     t.string     :title
     t.text       :content
     t.string     :locale
+    t.string     :name, limit: 60, null: false
   end
 end
 
 class Post < ActiveRecord::Base
-  translates :content, :title
+  translates :content, :title, :name
+  
+  validates_presence_of :name
 end
 
 class BugTest < Minitest::Test
   def test_association_stuff
-    post = Post.create!(title: 'HI')
+    post = Post.create!(title: 'HI', name: 'test_name')
 
     assert_equal 'HI', post.title
+    assert_equal 'test_name', post.name
   end
 end
