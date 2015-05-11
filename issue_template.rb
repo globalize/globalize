@@ -1,5 +1,5 @@
 # Activate the gem you are reporting the issue against.
-gem 'activerecord', '4.2.0'
+gem 'activerecord', '4.2.1'
 gem 'globalize', '5.0.1'
 require 'active_record'
 require 'globalize'
@@ -15,28 +15,25 @@ ActiveRecord::Base.logger = Logger.new(STDOUT)
 
 ActiveRecord::Schema.define do
   create_table :posts, force: true do |t|
+    t.string     :title, limit: 60, null: false
   end
 
   create_table :post_translations, force: true do |t|
     t.references :post
     t.string     :title
-    t.text       :content
     t.string     :locale
-    t.string     :name, limit: 60, null: false
   end
 end
 
 class Post < ActiveRecord::Base
-  translates :content, :title, :name
-  
-  validates_presence_of :name
+  translates :title
 end
 
 class BugTest < Minitest::Test
   def test_association_stuff
-    post = Post.create!(title: 'HI', name: 'test_name')
+    post = Post.create!(title: 'HI')
 
     assert_equal 'HI', post.title
-    assert_equal 'test_name', post.name
   end
+
 end
