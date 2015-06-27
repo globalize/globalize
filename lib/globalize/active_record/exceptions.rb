@@ -11,7 +11,7 @@ module Globalize
 
       class BadFieldType < MigrationError
         def initialize(name, type)
-          super("Bad field type for field #{name.inspect} (#{type.inspect}), should be :string or :text")
+          super("Bad field type for field #{name.inspect} (#{type.inspect}), should be :string, :text, :integer, :float, :decimal, :datetime, :time, :date or :boolean")
         end
       end
     end
