@@ -44,6 +44,12 @@ gem 'globalize', '~> 3.1.0'
 
 The [`3-1-stable` branch](https://github.com/globalize/globalize/tree/3-1-stable) of this repository corresponds to the latest ActiveRecord 3 version of globalize. Note that `globalize3` has been deprecated and you are encouraged to update your Gemfile accordingly.
 
+If you need support for **non char-based column types** (e.g. numeric and date types) you might want to include the feature branch `non_charbased_type_support` (wich is a work in progress) like so:
+
+``` ruby
+gem 'globalize', github: "globalize/globalize', branch: 'feature/non_charbased_type_support'
+```
+
 ## Model translations
 
 Model translations allow you to translate your models' attribute values. E.g.
@@ -175,6 +181,8 @@ translates :title, :author
 Because globalize uses the `:locale` key to specify the locale during
 mass-assignment, you should avoid having a `locale` attribute on the parent
 model.
+
+Also globalize currently only supports **char-based column types** (:string and :text). If you need support for other types you can refer to the feature branch named `non_charbased_type_support` with some work in progress for that.
 
 ## Versioning with Globalize
 
