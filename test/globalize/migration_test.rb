@@ -45,7 +45,7 @@ class MigrationTest < MiniTest::Spec
 
     it 'raises BadFieldName if passed translated field with wrong type' do
       assert_raises BadFieldType do
-        Migrated.create_translation_table!(:name => :integer)
+        Migrated.create_translation_table!(:name => :binary)
       end
     end
 
