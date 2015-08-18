@@ -93,9 +93,11 @@ module Globalize
       end
 
       def translated_attributes
-        translated_attribute_names.inject({}) do |attributes, name|
-          attributes.merge(name.to_s => translation.send(name))
+        attrs = {}
+        translated_attribute_names.each do |name|
+          attrs[name.to_s] = translation.send(name)
         end
+        attrs
       end
 
       # This method is basically the method built into Rails
