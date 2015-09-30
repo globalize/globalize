@@ -93,6 +93,20 @@ class FallbacksTest < MiniTest::Spec
       assert_equal 'foo', post.title
     end
 
+    it 'resolves fallbacks with empty translations' do
+      Globalize.fallbacks_for_empty_translations = true
+      I18n.fallbacks.map :'de-DE' => [ :'en-US' ]
+      post = Post.create :title => 'foo'
+
+      I18n.locale = :'de-DE'
+      assert_equal 'foo', post.title
+
+      post.update_attributes :title => ""
+      assert_equal 'foo', post.title
+
+      Globalize.fallbacks_for_empty_translations = false
+    end
+
     it 'supports fallbacks to each other' do
       I18n.fallbacks.clear
       Globalize.fallbacks = {:en => [:en, :pl], :pl => [:pl, :en]}

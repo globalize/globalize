@@ -51,6 +51,15 @@ module Globalize
     def default_fallbacks(for_locale = self.locale)
       i18n_fallbacks? ? I18n.fallbacks[for_locale] : [for_locale.to_sym]
     end
+    
+    def fallbacks_for_empty_translations=(value = false)
+      return if !!value != value # Only allow booleans
+      storage[:globalize_fallback_empty_translations] = value
+    end
+
+    def fallbacks_for_empty_translations?
+      !!storage[:globalize_fallback_empty_translations]
+    end
 
     # Thread-safe global storage
     def storage
