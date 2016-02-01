@@ -4,6 +4,8 @@ module Globalize
 
       validates :locale, :presence => true
 
+      validate :uniqueness_of_translated_attribute, if: proc { combination_changed? }
+
       class << self
         # Sometimes ActiveRecord queries .table_exists? before the table name
         # has even been set which results in catastrophic failure.
@@ -32,6 +34,27 @@ module Globalize
       def locale=(locale)
         write_attribute :locale, locale.to_s
       end
+
+      private
+
+      def uniqueness_of_translated_attribute
+        if self.class.where(locale: locale, foreign_attribute => send(foreign_attribute)).count != 0
+          errors.add(foreign_attribute)
+        end
+      end
+
+      def combination_changed?
+        locale_changed? || foreign_attribute_changed?
+      end
+
+      def foreign_attribute_changed?
+        send("#{foreign_attribute}_changed?".to_sym)
+      end
+
+      def foreign_attribute
+        self.class.reflections["globalized_model"].options[:foreign_key].to_sym
+      end
+
     end
   end
 end

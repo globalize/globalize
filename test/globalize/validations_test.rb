@@ -145,6 +145,34 @@ class ValidationsTest < MiniTest::Spec
     end
   end
 
+  describe ',duplicated translations' do
+    let(:post) { Post.create(title: 'foo') }
+
+
+    describe 'create new :en translation for same post' do
+      it 'should raise an error' do
+        assert_raises ActiveRecord::RecordInvalid do
+          post.translations.create!(locale: :en, title: 'bar' )
+        end
+      end
+    end
+
+    describe 'create new :de translation for same post' do
+      before do
+        post.translations.create!(locale: :de, title: 'bar' )
+      end
+
+      describe 'and change locale to :en' do
+        it 'should raise an error' do
+          assert_raises ActiveRecord::RecordInvalid do
+            post.translations.find_by(locale: :de).update_attributes!(locale: :en)
+          end
+        end
+      end
+    end
+
+  end
+
   # describe ".validates_associated" do
   # end
 end

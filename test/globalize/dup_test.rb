@@ -32,14 +32,13 @@ class DupTest < MiniTest::Spec
       dupd = original.dup.tap do |new_model|
         new_model.title = "Foo New Model"
       end
-      original.translations.each do |translation|
-        dupd.translations << translation.dup
-      end
+
       dupd.save!
 
       original.reload
       assert_equal "Foo New Model", dupd.title
       assert_equal original_title, original.title
+      assert_equal "שם", dupd.translations.find_by!(locale: 'he').title
     end
 
   end
