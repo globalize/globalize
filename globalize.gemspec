@@ -15,9 +15,9 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.rubyforge_project = '[none]'
 
-  s.add_dependency 'activerecord', '>= 5.0.0.beta.1'
-  s.add_dependency 'activemodel', '>= 5.0.0.beta.1'
-  s.add_dependency 'activemodel-serializers-xml'
+  s.add_dependency 'activerecord', '>= 4.2'
+  s.add_dependency 'activemodel', '>= 4.2'
+  # s.add_dependency 'activemodel-serializers-xml'
   s.add_dependency 'request_store', '~> 1.0'
 
   s.add_development_dependency 'database_cleaner', '~> 1.4.0'
