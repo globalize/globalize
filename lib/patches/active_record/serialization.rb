@@ -18,4 +18,4 @@ module Globalize
   end
 end
 
-ActiveRecord::AttributeMethods::Serialization::ClassMethods.prepend Globalize::AttributeMethods::Serialization
+ActiveRecord::AttributeMethods::Serialization::ClassMethods.send(:prepend, Globalize::AttributeMethods::Serialization)

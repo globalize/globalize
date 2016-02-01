@@ -15,4 +15,4 @@ module Globalize
   end
 end
 
-ActiveRecord::XmlSerializer::Attribute.prepend Globalize::XmlSerializer::Attribute
+ActiveRecord::XmlSerializer::Attribute.send(:prepend, Globalize::XmlSerializer::Attribute)

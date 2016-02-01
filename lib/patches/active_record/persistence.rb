@@ -14,4 +14,4 @@ module Globalize
   end
 end
 
-ActiveRecord::Persistence.prepend Globalize::Persistence
+ActiveRecord::Persistence.send(:prepend, Globalize::Persistence)

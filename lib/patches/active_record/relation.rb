@@ -8,5 +8,5 @@ unless ::ActiveRecord::VERSION::STRING < "5.0.0"
     end
   end
 
-  ActiveRecord::Relation.prepend Globalize::Relation
+  ActiveRecord::Relation.send(:prepend, Globalize::Relation)
 end
