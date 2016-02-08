@@ -28,6 +28,12 @@ When using bundler put this in your Gemfile:
 gem 'globalize', '~> 5.0.0'
 ```
 
+To use globalize with Rails 5 add this in your Gemfile
+
+```ruby
+gem 'activemodel-serializers-xml'
+```
+
 To use the version of globalize for ActiveRecord 4.0 or 4.1, specify:
 
 ```ruby
