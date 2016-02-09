@@ -7,14 +7,15 @@ module Globalize
         klass = record.class
         if klass.translates? && klass.translated?(attribute)
           finder_class = klass.translation_class
-          table = finder_class.arel_table
-          relation = build_relation(finder_class, table, attribute, value).where(locale: Globalize.locale)
+          finder_table = finder_class.arel_table
+          relation = build_relation(finder_class, finder_table, attribute, value).where(locale: Globalize.locale)
           relation = relation.where.not(klass.reflect_on_association(:translations).foreign_key => record.send(:id)) if record.persisted?
-          # relation = relation.and(table[klass.reflect_on_association(:translations).foreign_key].not_eq(record.send(:id))) if record.persisted?
+
 
           translated_scopes = Array(options[:scope]) & klass.translated_attribute_names
           untranslated_scopes = Array(options[:scope]) - translated_scopes
 
+          relation = relation.joins(:globalized_model) if untranslated_scopes.present?
           untranslated_scopes.each do |scope_item|
             scope_value = record.send(scope_item)
             reflection = klass.reflect_on_association(scope_item)
@@ -33,7 +34,9 @@ module Globalize
 
           # if klass.unscoped.with_translations.where(relation).exists?
           if relation.exists?
-            record.errors.add(attribute, :taken, options.except(:case_sensitive, :scope).merge(:value => value))
+            error_options = options.except(:case_sensitive, :scope, :conditions)
+            error_options[:value] = value
+            record.errors.add(attribute, :taken, error_options)
           end
         else
           super(record, attribute, value)
