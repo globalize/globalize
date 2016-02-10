@@ -165,6 +165,10 @@ module Globalize
         [super, translation.cache_key].join("/")
       end
 
+      def changed?
+        changed_attributes.present? || translations.any?(&:changed?)
+      end
+
     protected
 
       def each_locale_and_translated_attribute
