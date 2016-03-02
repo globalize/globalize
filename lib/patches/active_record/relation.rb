@@ -1,4 +1,4 @@
-unless ::ActiveRecord::VERSION::STRING < "5.0.0"
+if ::ActiveRecord::VERSION::STRING >= "5.0.0"
   module Globalize
     module Relation
       def where_values_hash(relation_table_name = table_name)
@@ -8,5 +8,5 @@ unless ::ActiveRecord::VERSION::STRING < "5.0.0"
     end
   end
 
-  ActiveRecord::Relation.send(:prepend, Globalize::Relation)
+  ActiveRecord::Relation.prepend Globalize::Relation
 end
