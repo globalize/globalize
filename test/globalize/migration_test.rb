@@ -80,14 +80,17 @@ class MigrationTest < MiniTest::Spec
 
       # Now add translation support and migrate (also tests .untranslated_attributes)
       model.instance_eval %{ translates :name }
-      model.create_translation_table!({:name => :string}, {:migrate_data => true})
+
+      I18n.with_locale(:fr) do
+        model.create_translation_table!({:name => :string}, {:migrate_data => true})
+      end
       assert model.translation_class.table_exists?
 
       # Reload the untranslated record
       untranslated.reload
 
       # Was it migrated?
-      assert_translated untranslated, :en, :name, 'Untranslated'
+      assert_translated untranslated, :fr, :name, 'Untranslated'
 
       # Cool, now we need to get rid of the non-translated value for the next test
       model.where(:id => untranslated.id).update_all(:name => 'No longer translated')
@@ -95,10 +98,12 @@ class MigrationTest < MiniTest::Spec
 
       # Make sure we didn't harm the translation and that it's been set. (also tests .untranslated_attributes)
       assert_equal 'No longer translated', untranslated.untranslated_attributes['name']
-      assert_translated untranslated, :en, :name, 'Untranslated'
+      assert_translated untranslated, :fr, :name, 'Untranslated'
 
       # Now we need to rollback then undo
-      model.drop_translation_table! :migrate_data => true
+      I18n.with_locale(:fr) do
+        model.drop_translation_table! :migrate_data => true
+      end
       model.reset_column_information
       assert !model.translation_class.table_exists?
       untranslated.reload
@@ -106,7 +111,6 @@ class MigrationTest < MiniTest::Spec
       # Was it restored? (also tests .untranslated_attributes)
       assert_equal 'Untranslated', untranslated.untranslated_attributes['name']
     end
-
   end
 
   describe 'add_translation_fields!' do

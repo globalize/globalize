@@ -151,6 +151,19 @@ end
 
 NOTE: Make sure you drop the translated columns from the parent table after all your data is safely migrated.
 
+In order to use a specific locale for migrated data, you can use `I18n.with_locale`:
+
+```ruby
+    I18n.with_locale(:bo) do
+      Post.create_translation_table!({
+        :title => :string,
+        :text => :text
+      }, {
+        :migrate_data => true
+      })
+    end
+```
+
 ## Adding additional fields to the translation table
 
 In order to add a new field to an existing translation table, you can use `add_translation_fields!`:
