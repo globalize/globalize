@@ -68,7 +68,13 @@ module Globalize
 
       def fetch_attribute(locale, name)
         translation = record.translation_for(locale, false)
-        return translation && translation.send(name)
+        return translation ? translation.send(name) : default_value(name)
+      end
+
+      def default_value(name)
+        column = column_for_attribute(name)
+
+        column.type_cast_from_database(column.default)
       end
 
       def set_metadata(object, metadata)
