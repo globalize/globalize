@@ -29,6 +29,8 @@ module Globalize
         end
 
         def create_translation_table!(fields = {}, options = {})
+          verify_options(options)
+
           @fields = fields
           # If we have fields we only want to create the translation table with those fields
           complete_translated_fields if fields.blank?
@@ -46,7 +48,7 @@ module Globalize
 
           add_translation_fields
           clear_schema_cache!
-          move_data_to_translation_table if options[:migrate_data]
+          move_data_to_translation_table(options[:migration_locale]) if options[:migrate_data]
           remove_source_columns if options[:remove_source_columns]
           clear_schema_cache!
         end
@@ -56,6 +58,8 @@ module Globalize
         end
 
         def drop_translation_table!(options = {})
+          verify_options(options)
+
           move_data_to_model_table if options[:migrate_data]
           drop_translations_index
           drop_translation_table
@@ -112,9 +116,10 @@ module Globalize
           connection.remove_index(translations_table_name, :name => translation_index_name)
         end
 
-        def move_data_to_translation_table
+        def move_data_to_translation_table(locale = nil)
+          locale ||= I18n.default_locale
           model.find_each do |record|
-            translation = record.translation_for(I18n.default_locale) || record.translations.build(:locale => I18n.default_locale)
+            translation = record.translation_for(locale) || record.translations.build(:locale => locale)
             fields.each do |attribute_name, attribute_type|
               translation[attribute_name] = record.read_attribute(attribute_name, {:translated => false})
             end
@@ -183,6 +188,12 @@ module Globalize
             unless model.column_names.include?(attribute)
               connection.add_column(table_name, attribute, model::Translation.columns_hash[attribute].type)
             end
+          end
+        end
+
+        def verify_options(options)
+          if options[:migration_locale].present? && !I18n.available_locales.include?(options[:migration_locale])
+            raise Exception.new("Missing locale: #{options[:migration_locale]}")
           end
         end
 

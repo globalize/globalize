@@ -31,6 +31,12 @@ class MigrationTest < MiniTest::Spec
       end
     end
 
+    it 'can not be called using a non-existing locale parameter' do
+      assert_raises Exception do
+        Migrated.create_translation_table!({:name => :string}, {:migrate_data => true, :migration_locale => :klingon})
+      end
+    end
+
     it 'adds the translations table with options' do
       Migrated.create_translation_table!(:name => {:type => :text, :default => '123'})
       assert_migration_table(:name => :text)
@@ -69,6 +75,8 @@ class MigrationTest < MiniTest::Spec
     # non translated data into the default Globalize locale.
     # We are then testing the ability of drop_translation_table! to migrate the
     # translated data from the default Globalize locale back as untranslated data.
+    # Finally, we are testing the ability to overwrite the default locale in
+    # create_translation_table!
     it 'migrates existing data and correctly rolls back when called with :migrate_data => true' do
       # Ensure we have a "Fresh" version. Can't use reset_schema because it's not a translated model, yet.
       model = Untranslated
@@ -105,6 +113,16 @@ class MigrationTest < MiniTest::Spec
 
       # Was it restored? (also tests .untranslated_attributes)
       assert_equal 'Untranslated', untranslated.untranslated_attributes['name']
+
+      # Create another translation table, this time with a different locale
+      model.create_translation_table!({:name => :string}, {:migrate_data => true, :migration_locale => :de})
+      assert model.translation_class.table_exists?
+
+      # Reload the untranslated record
+      untranslated.reload
+
+      # Was it migrated using :de locale?
+      assert_translated untranslated, :de, :name, 'Untranslated'
     end
 
   end
