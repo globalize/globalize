@@ -213,6 +213,14 @@ class AttributesTest < MiniTest::Spec
     end
   end
 
+  describe 'columns with default array value' do
+    it 'returns the typecasted default value for arrays with empty array as default' do
+      product = Product.new
+
+      assert_equal "--- []\n", product.array_values
+    end
+  end
+
   describe 'translation table with null:false fields without default value ' do
     it 'does not save a record with an empty required field' do
       err = assert_raises ActiveRecord::StatementInvalid do

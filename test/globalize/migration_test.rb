@@ -106,7 +106,6 @@ class MigrationTest < MiniTest::Spec
       # Was it restored? (also tests .untranslated_attributes)
       assert_equal 'Untranslated', untranslated.untranslated_attributes['name']
     end
-
   end
 
   describe 'add_translation_fields!' do

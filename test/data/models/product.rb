@@ -1,3 +1,3 @@
 class Product < ActiveRecord::Base
-  translates :name
+  translates :name, :array_values
 end
