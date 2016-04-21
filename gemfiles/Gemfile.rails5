@@ -1,0 +1,16 @@
+source 'https://rubygems.org'
+
+gemspec path: '../'
+
+gem 'activemodel', '5.0.0.beta3'
+gem 'activerecord', '5.0.0.beta3'
+gem 'activemodel-serializers-xml'
+
+platforms :rbx do
+  gem 'rubysl', '~> 2.0'
+end
+
+group :test do
+  gem 'pry'
+  gem 'pry-nav'
+end

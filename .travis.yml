@@ -4,11 +4,15 @@ script: "bundle exec rake"
 # Per https://github.com/travis-ci/travis-ci/issues/2821
 install:
   - bundle install --retry=3
+gemfile:
+ - Gemfile
+ - gemfiles/Gemfile.rails5
 env:
   - DB=sqlite3
   - DB=postgres
   - DB=mysql
 rvm:
+  - 2.2.2
   - 2.2
   - 2.1
   - 2.0.0
@@ -20,6 +24,16 @@ matrix:
     - env: RAILS_4_2=true DB=sqlite3
     - env: RAILS_4_2=true DB=postgres
     - env: RAILS_4_2=true DB=mysql
+  exclude:
+    - rvm: 2.2
+      gemfile: gemfiles/Gemfile.rails5
+    - rvm: 2.1
+      gemfile: gemfiles/Gemfile.rails5
+    - rvm: 2.0.0
+      gemfile: gemfiles/Gemfile.rails5
+    - rvm: rbx-2
+      gemfile: gemfiles/Gemfile.rails5
+
 notifications:
   webhooks:
     - https://webhooks.gitter.im/e/40dc875af26f64f39090

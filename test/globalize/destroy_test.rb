@@ -13,7 +13,7 @@ class DestroyTest < MiniTest::Spec
 
     describe 'with conditions including translated attributes' do
       it 'destroys translations' do
-        Post.destroy_all(:title => 'title')
+        Post.where(:title => 'title').destroy_all
         assert_equal 0, Post::Translation.count
       end
     end
