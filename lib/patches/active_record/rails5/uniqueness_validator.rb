@@ -15,7 +15,7 @@ module Globalize
           translated_scopes = Array(options[:scope]) & klass.translated_attribute_names
           untranslated_scopes = Array(options[:scope]) - translated_scopes
 
-          relation = relation.joins(:globalized_model) if untranslated_scopes.present?
+          relation = relation.joins(finder_class.globalized_association) if untranslated_scopes.present?
           untranslated_scopes.each do |scope_item|
             scope_value = record.send(scope_item)
             reflection = klass.reflect_on_association(scope_item)

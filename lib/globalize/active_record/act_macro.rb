@@ -72,6 +72,7 @@ module Globalize
 
         has_many :translations, :class_name  => translation_class.name,
                                 :foreign_key => options[:foreign_key],
+                                :inverse_of  => translation_class.globalized_association,
                                 :dependent   => :destroy,
                                 :extend      => HasManyExtensions,
                                 :autosave    => true

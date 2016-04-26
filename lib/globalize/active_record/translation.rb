@@ -1,6 +1,8 @@
 module Globalize
   module ActiveRecord
     class Translation < ::ActiveRecord::Base
+      RESERVED_ASSOCIATION_NAMES = [:locale]
+      class_attribute :globalized_class
 
       validates :locale, :presence => true
 
@@ -21,6 +23,11 @@ module Globalize
 
         def translated_locales
           select('DISTINCT locale').order(:locale).map(&:locale)
+        end
+
+        def globalized_association
+          association = globalized_class.name.demodulize.underscore.to_sym
+          RESERVED_ASSOCIATION_NAMES.include?(association) ? :globalized_model : association
         end
       end
 
