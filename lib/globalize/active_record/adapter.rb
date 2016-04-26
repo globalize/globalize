@@ -68,12 +68,16 @@ module Globalize
 
       def fetch_attribute(locale, name)
         translation = record.translation_for(locale, false)
-        return translation ? translation.send(name) : default_value(name)
-      end
-
-      def default_value(name)
         column = column_for_attribute(name)
 
+        if column.respond_to?(:type_cast_from_database)
+          return translation ? translation.send(name) : default_value(column)
+        else
+          translation && translation.send(name)
+        end
+      end
+
+      def default_value(column)
         column.type_cast_from_database(column.default)
       end
 
