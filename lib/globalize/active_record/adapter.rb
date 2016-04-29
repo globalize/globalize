@@ -68,7 +68,7 @@ module Globalize
 
       def fetch_attribute(locale, name)
         translation = record.translation_for(locale, false)
-        if translation then
+        if translation
           translation.send(name)
         else
           column = column_for_attribute(name)

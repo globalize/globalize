@@ -7,7 +7,7 @@ if ::ActiveRecord::VERSION::STRING >= "5.0.0"
 
         def _quote(value)
           case value
-            when Array      then
+            when Array
               "'#{quote_string(YAML.dump(value))}'"
             else
               super
