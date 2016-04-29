@@ -1,6 +1,7 @@
 require 'request_store'
 require 'active_record'
 require 'patches/active_record/xml_attribute_serializer'
+require 'patches/active_record/quoting'
 require 'patches/active_record/query_method'
 require 'patches/active_record/relation'
 require 'patches/active_record/serialization'
