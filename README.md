@@ -86,21 +86,24 @@ and `drop_translation_table!` inside the `change` instance method.
 
 ### Creating translation tables
 
-***Do not use the `change` method, use `up` and `down`!***
-
 Also note that before you can create a translation table, you have to define the translated attributes via `translates` in your model as shown above.
 
 ```ruby
 class CreatePosts < ActiveRecord::Migration
-  def up
+  def change
     create_table :posts do |t|
       t.timestamps
     end
-    Post.create_translation_table! :title => :string, :text => :text
-  end
-  def down
-    drop_table :posts
-    Post.drop_translation_table!
+
+    reversible do |dir|
+      dir.up do
+        Post.create_translation_table! :title => :string, :text => :text
+      end
+
+      dir.down do 
+        Post.drop_translation_table!
+      end
+    end
   end
 end
 ```
@@ -109,16 +112,21 @@ Also, you can pass options for specific columns. Here’s an example:
 
 ```ruby
 class CreatePosts < ActiveRecord::Migration
-  def up
+  def change
     create_table :posts do |t|
       t.timestamps
     end
-    Post.create_translation_table! :title => :string,
-      :text => {:type => :text, :null => false, :default => 'abc'}
-  end
-  def down
-    drop_table :posts
-    Post.drop_translation_table!
+    
+    reversible do |dir|
+      dir.up do
+        Post.create_translation_table! :title => :string,
+          :text => {:type => :text, :null => false, :default => 'abc'}
+      end
+      
+      dir.down do 
+        Post.drop_translation_table!
+      end
+    end
   end
 end
 ```
@@ -140,17 +148,21 @@ exists):
 
 ```ruby
 class TranslatePosts < ActiveRecord::Migration
-  def self.up
-    Post.create_translation_table!({
-      :title => :string,
-      :text => :text
-    }, {
-      :migrate_data => true
-    })
-  end
-
-  def self.down
-    Post.drop_translation_table! :migrate_data => true
+  def change
+    reversible do |dir|
+      dir.up do
+        Post.create_translation_table!({
+          :title => :string,
+          :text => :text
+        }, {
+          :migrate_data => true
+        })
+      end
+      
+      dir.down do 
+        Post.drop_translation_table! :migrate_data => true
+      end
+    end
   end
 end
 ```
@@ -176,12 +188,16 @@ In order to add a new field to an existing translation table, you can use `add_t
 
 ```ruby
 class AddAuthorToPost < ActiveRecord::Migration
-  def up
-    Post.add_translation_fields! author: :text
-  end
-
-  def down
-    remove_column :post_translations, :author
+  def change
+    reversible do |dir|
+      dir.up do
+        Post.add_translation_fields! author: :text
+      end
+      
+      dir.down do 
+        remove_column :post_translations, :author
+      end
+    end
   end
 end
 ```
