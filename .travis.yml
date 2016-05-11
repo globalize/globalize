@@ -1,9 +1,6 @@
 language: ruby
 sudo: false
 script: "bundle exec rake"
-# Per https://github.com/travis-ci/travis-ci/issues/2821
-install:
-  - bundle install --retry=3
 gemfile:
  - Gemfile
  - gemfiles/Gemfile.rails5
@@ -12,12 +9,11 @@ env:
   - DB=postgres
   - DB=mysql
 rvm:
-  - 2.2.2
+  - 2.3.1
   - 2.2
   - 2.1
   - 2.0.0
   - rbx-2
-  # - jruby-19mode
 matrix:
   allow_failures:
     - rvm: rbx-2
