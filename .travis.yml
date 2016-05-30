@@ -4,10 +4,6 @@ script: "bundle exec rake"
 gemfile:
  - Gemfile
  - gemfiles/Gemfile.rails5
-env:
-  - DB=sqlite3
-  - DB=postgres
-  - DB=mysql
 rvm:
   - 2.3.1
   - 2.2
@@ -17,9 +13,6 @@ rvm:
 matrix:
   allow_failures:
     - rvm: rbx
-    - env: RAILS_4_2=true DB=sqlite3
-    - env: RAILS_4_2=true DB=postgres
-    - env: RAILS_4_2=true DB=mysql
   exclude:
     - rvm: 2.2
       gemfile: gemfiles/Gemfile.rails5
