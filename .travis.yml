@@ -13,10 +13,10 @@ rvm:
   - 2.2
   - 2.1
   - 2.0.0
-  - rbx-2
+  - rbx
 matrix:
   allow_failures:
-    - rvm: rbx-2
+    - rvm: rbx
     - env: RAILS_4_2=true DB=sqlite3
     - env: RAILS_4_2=true DB=postgres
     - env: RAILS_4_2=true DB=mysql
@@ -27,7 +27,7 @@ matrix:
       gemfile: gemfiles/Gemfile.rails5
     - rvm: 2.0.0
       gemfile: gemfiles/Gemfile.rails5
-    - rvm: rbx-2
+    - rvm: rbx
       gemfile: gemfiles/Gemfile.rails5
 
 notifications:
