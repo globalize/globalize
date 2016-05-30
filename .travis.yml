@@ -11,16 +11,10 @@ rvm:
   - 2.0.0
   - rbx
 matrix:
-  allow_failures:
-    - rvm: rbx
   exclude:
-    - rvm: 2.2
-      gemfile: gemfiles/Gemfile.rails5
     - rvm: 2.1
       gemfile: gemfiles/Gemfile.rails5
     - rvm: 2.0.0
-      gemfile: gemfiles/Gemfile.rails5
-    - rvm: rbx
       gemfile: gemfiles/Gemfile.rails5
 
 notifications:
