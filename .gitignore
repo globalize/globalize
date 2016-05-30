@@ -4,7 +4,7 @@ vendor
 NOTES
 .DS_Store
 .bundle
-Gemfile.lock
+Gemfile*.lock
 .rvmrc
 *.sw*
 *.gem

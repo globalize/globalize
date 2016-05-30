@@ -6,7 +6,7 @@ require 'logger'
 Bundler.require(:default, :test)
 
 log = '/tmp/globalize3_test.log'
-FileUtils.touch(log) unless File.exists?(log)
+FileUtils.touch(log) unless File.exist?(log)
 ActiveRecord::Base.logger = Logger.new(log)
 ActiveRecord::LogSubscriber.attach_to(:active_record)
 ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => ':memory:')
