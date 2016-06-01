@@ -213,11 +213,13 @@ class AttributesTest < MiniTest::Spec
     end
   end
 
-  describe 'columns with default array value' do
-    it 'returns the typecasted default value for arrays with empty array as default' do
-      product = Product.new
+  if ::ActiveRecord::VERSION::STRING < "5.0.0"
+    describe 'columns with default array value' do
+      it 'returns the typecasted default value for arrays with empty array as default' do
+        product = Product.new
 
-      assert_equal "--- []\n", product.array_values
+        assert_equal "--- []\n", product.array_values
+      end
     end
   end
 

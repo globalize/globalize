@@ -49,7 +49,9 @@ ActiveRecord::Schema.define do
     t.string     :locale
     t.references :product
     t.string     :name
-    t.string     :array_values, :array => true, :null => false, :default => []
+    if ::ActiveRecord::VERSION::STRING < "5.0.0"
+      t.string     :array_values, :array => true, :null => false, :default => []
+    end
     t.timestamps :null => false
   end
 
