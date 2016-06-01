@@ -45,13 +45,8 @@ module Globalize
         self.dirty = {}
       end
 
-      RESET_METHOD = if defined?(::Rails::VERSION::STRING)
-        ::Rails::VERSION::STRING.split('.').first.to_i > 4 ? :restore_attribute! : :reset_attribute!
-      else
-        :reset_attribute!
-      end
       def _reset_attribute name
-        record.send(RESET_METHOD, name) if record.respond_to? RESET_METHOD, true
+        record.send(:restore_attribute!, name) if record.respond_to? :restore_attribute!, true
       end
 
       def reset_with_dirty
