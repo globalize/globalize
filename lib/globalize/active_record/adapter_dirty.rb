@@ -1,12 +1,7 @@
 module Globalize
   module ActiveRecord
     module AdapterDirty
-      extend ActiveSupport::Concern
-      included do
-        alias_method_chain :write, :dirty
-        alias_method_chain :reset, :dirty
-      end
-      def write_with_dirty locale, name, value
+      def write locale, name, value
         # Dirty tracking, paraphrased from
         # ActiveRecord::AttributeMethods::Dirty#write_attribute.
         name = name.to_s
@@ -25,7 +20,7 @@ module Globalize
           record.send(:attribute_will_change!, name) if old_value != value
         end
 
-        write_without_dirty locale, name, value
+        super locale, name, value
       end
 
       attr_writer :dirty
@@ -49,9 +44,9 @@ module Globalize
         record.send(:restore_attribute!, name) if record.respond_to? :restore_attribute!, true
       end
 
-      def reset_with_dirty
+      def reset
         clear_dirty
-        reset_without_dirty
+        super
       end
     end
   end
