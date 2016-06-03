@@ -330,3 +330,5 @@ end
 * [i18n_multi_locales_validations](http://github.com/ZenCocoon/i18n_multi_locales_validations) - multi-locales attributes validations to validates attributes from globalize2 translations models (Sébastien Grosjean)
 * [migrate_from_globalize1](http://gist.github.com/120867) - migrate model translations from Globalize1 to globalize2 (Tomasz Stachewicz)
 * [batch_translations](http://github.com/rilla/batch_translations) - allow saving multiple globalize2 translations in the same request (Jose Alvarez Rilla)
+
+## Dirty Hack
