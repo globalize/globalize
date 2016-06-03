@@ -47,6 +47,14 @@ module Globalize
 
         if name == :locale
           self.try(:locale).presence || self.translation.locale
+        elsif self.class.translated?(name) && Globalize::ActiveRecord::Attributes::SKIP_TRANSLATION[self.class.name.to_sym]
+          if super(name).nil?
+            if (value = globalize.fetch(options[:locale] || Globalize.locale, name))
+              value
+            end
+          else
+            super(name)  
+          end
         elsif self.class.translated?(name)
           if (value = globalize.fetch(options[:locale] || Globalize.locale, name))
             value
