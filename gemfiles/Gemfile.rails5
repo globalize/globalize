@@ -6,6 +6,8 @@ gem 'activemodel', '>= 5.0.0.rc1'
 gem 'activerecord', '>= 5.0.0.rc1'
 gem 'activemodel-serializers-xml'
 
+gem 'rake', '~> 10.0'
+
 platforms :rbx do
   gem 'rubysl', '~> 2.0'
 end
