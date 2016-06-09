@@ -22,6 +22,7 @@ rvm:
 env:
   - DB=postgres
   - DB=mysql
+  - DB=sqlite3
 
 matrix:
   allow_failures:
