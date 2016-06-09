@@ -1,5 +1,3 @@
-ActiveRecord::Migration.verbose = false
-
 ActiveRecord::Schema.define do
   create_table :authors, :force => true do |t|
     t.string     :name
