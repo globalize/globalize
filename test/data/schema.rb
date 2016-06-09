@@ -1,5 +1,3 @@
-ActiveRecord::Migration.verbose = false
-
 ActiveRecord::Schema.define do
   create_table :authors, :force => true do |t|
     t.string     :name
@@ -49,6 +47,7 @@ ActiveRecord::Schema.define do
     t.string     :locale
     t.references :product
     t.string     :name
+
     t.string     :array_values, :array => true, :null => false, :default => []
     t.timestamps :null => false
   end

@@ -1,15 +1,11 @@
 require 'rubygems'
 require 'bundler/setup'
-require 'fileutils'
-require 'logger'
 
 Bundler.require(:default, :test)
 
-log = '/tmp/globalize3_test.log'
-FileUtils.touch(log) unless File.exist?(log)
-ActiveRecord::Base.logger = Logger.new(log)
-ActiveRecord::LogSubscriber.attach_to(:active_record)
-ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => ':memory:')
+Dir[File.expand_path('../support/**/*.rb', __FILE__)].each { |f| require f }
+
+Globalize::Test::Database.connect
 
 require File.expand_path('../data/schema', __FILE__)
 require File.expand_path('../data/models', __FILE__)
@@ -25,6 +21,7 @@ I18n.available_locales = [ :en, :'en-US', :fr, :de, :'de-DE', :he, :nl, :pl ]
 
 require 'database_cleaner'
 DatabaseCleaner.strategy = :transaction
+
 class MiniTest::Spec
   before :each do
     DatabaseCleaner.start

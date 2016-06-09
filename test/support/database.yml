@@ -1,0 +1,19 @@
+mysql:
+  adapter: mysql2
+  database: globalize_test
+  username: root
+  hostname: localhost
+  encoding: utf8
+
+postgres:
+  adapter: postgresql
+  host: localhost
+  port: 5432
+  username: postgres
+  database: globalize_test
+  encoding: utf8
+
+sqlite3:
+  adapter: sqlite3
+  database: ":memory:"
+  encoding: utf8
