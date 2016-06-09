@@ -1,6 +1,7 @@
 require 'active_record'
 require 'fileutils'
 require 'logger'
+require 'yaml'
 
 module Globalize
   module Test
@@ -22,7 +23,7 @@ module Globalize
         ::ActiveRecord::Base.establish_connection config[driver]
         message = "Using #{engine} #{RUBY_VERSION} AR #{version} with #{driver}"
 
-        puts "-" * 72
+        puts '-' * 72
         if in_memory?
           ::ActiveRecord::Migration.verbose = false
           ::ActiveRecord::Schema.migrate :up
@@ -42,6 +43,41 @@ module Globalize
 
       def in_memory?
         config[driver]['database'] == ':memory:'
+      end
+
+      def create!
+        db_config = config[driver]
+        command = case driver
+        when 'mysql'
+          "mysql -u #{db_config['username']} -e 'create database #{db_config['database']};' >/dev/null"
+        when 'postgres'
+          "psql -c 'create database #{db_config['database']};' -U #{db_config['username']} >/dev/null"
+        end
+
+        puts command
+        puts '-' * 72
+        %x{#{command || true}}
+      end
+
+      def drop!
+        db_config = config[driver]
+        command = case driver
+        when 'mysql'
+          "mysql -u #{db_config['username']} -e 'drop database #{db_config["database"]};' >/dev/null"
+        when 'postgres'
+          "psql -c 'drop database #{db_config['database']};' -U #{db_config['username']} >/dev/null"
+        end
+
+        puts command
+        puts '-' * 72
+        %x{#{command || true}}
+      end
+
+      def migrate!
+        connect
+        require 'data/schema'
+
+        ::ActiveRecord::Schema.migrate :up
       end
     end
   end
