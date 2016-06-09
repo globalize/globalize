@@ -44,9 +44,9 @@ module Globalize
         end
       end
 
-      def attribute_names
-        translated_attribute_names.map(&:to_s) + super
-      end
+      # def attribute_names
+      #   translated_attribute_names.map(&:to_s) + super
+      # end
 
       delegate :translated?, :to => :class
 
