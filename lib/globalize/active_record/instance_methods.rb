@@ -29,6 +29,14 @@ module Globalize
         globalize.write(options[:locale], name, value)
       end
 
+      def [](attr_name)
+        if translated?(attr_name)
+          read_attribute(attr_name)
+        else
+          read_attribute(attr_name) { |n| missing_attribute(n, caller) }
+        end
+      end
+
       def read_attribute(name, options = {})
         options = {:translated => true, :locale => nil}.merge(options)
         return super(name) unless options[:translated]
@@ -44,9 +52,9 @@ module Globalize
         end
       end
 
-      # def attribute_names
-      #   translated_attribute_names.map(&:to_s) + super
-      # end
+      def attribute_names
+        translated_attribute_names.map(&:to_s) + super
+      end
 
       delegate :translated?, :to => :class
 
