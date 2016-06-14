@@ -94,7 +94,7 @@ module Globalize
       def parse_translated_order(opts)
         case opts
         when Hash
-          ordering = opts.map do |column, direction|
+          ordering = opts.symbolize_keys.map do |column, direction|
             klass = translated_column?(column) ? translation_class : self
             klass.arel_table[column].send(direction)
           end

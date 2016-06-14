@@ -193,6 +193,11 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
             assert_match(/ORDER BY "post_translations"."title" DESC/, @order.to_sql)
           end
 
+          it 'returns record in order, column and direction as hash with string keys' do
+            @order = Post.where(:title => 'title').order('title' => :desc)
+            assert_match(/ORDER BY "post_translations"."title" DESC/, @order.to_sql)
+          end
+
           it 'returns record in order, leaving string untouched' do
             @order = Post.where(:title => 'title').order('title ASC')
             assert_equal ['title ASC'], @order.order_values
