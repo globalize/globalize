@@ -5,9 +5,9 @@ class MigrationTest < MiniTest::Spec
 
   before(:each) do
     reset_schema(Migrated, MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters, TwoAttributesMigrated)
-    assert Migrated.translation_class.table_exists? == false
-    assert Migrated.translation_class.index_exists_on?(:migrated_id) == false
-    assert Migrated.translation_class.index_exists_on?(:locale) == false
+    refute Migrated.translation_class.table_exists?
+    refute Migrated.translation_class.index_exists_on?(:migrated_id)
+    refute Migrated.translation_class.index_exists_on?(:locale)
   end
 
   after(:each) do
@@ -157,6 +157,7 @@ class MigrationTest < MiniTest::Spec
       assert Migrated.translation_class.table_exists?
       assert Migrated.translation_class.index_exists_on?(:migrated_id)
       assert Migrated.translation_class.index_exists_on?(:locale)
+      refute Migrated.translation_class.unique_index_exists_on?('migrated_id', 'locale')
 
       Migrated.drop_translation_table!
       assert !Migrated.translation_class.table_exists?
@@ -190,6 +191,13 @@ class MigrationTest < MiniTest::Spec
     end
   end
 
+  describe 'translation :unique_index option' do
+    it 'creates a unique index on the locale and foreign key' do
+      Migrated.create_translation_table!({ :name => :string }, { unique_index: true })
+      assert Migrated.translation_class.unique_index_exists_on?('migrated_id', 'locale')
+    end
+  end
+
   describe 'translation_locale_index_name' do
     it "returns a readable index name if class name is no longer than 64 characters" do
       assert_equal 'index_migrated_translations_on_locale', Migrated.send(:translation_locale_index_name)
@@ -197,6 +205,15 @@ class MigrationTest < MiniTest::Spec
 
     it "returns a hashed index name if class name is longer than 64 characters" do
       assert_match /^index_[a-z0-9]{40}$/, MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters.send(:translation_locale_index_name)
+    end
+  end
+
+  describe 'options validation' do
+    it 'raises an argument error when given unknown options' do
+      e = assert_raises ArgumentError do
+        Migrated.create_translation_table!({ :name => :string }, { migrate_data: true, uniq_index: true })
+      end
+      assert_equal 'Unknown migration option: [:uniq_index]', e.message
     end
   end
 

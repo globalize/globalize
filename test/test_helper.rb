@@ -74,6 +74,10 @@ ActiveRecord::Base.class_eval do
     def index_exists_on?(column_name)
       connection.indexes(table_name).any? { |index| index.columns == [column_name.to_s] }
     end
+
+    def unique_index_exists_on?(*columns)
+      connection.indexes(table_name).any? { |index| index.columns == columns && index.unique }
+    end
   end
 end
 
