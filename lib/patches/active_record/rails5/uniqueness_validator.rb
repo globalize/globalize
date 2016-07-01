@@ -1,5 +1,3 @@
-require 'active_record/validations/uniqueness.rb'
-
 module Globalize
   module Validations
     module UniquenessValidator
