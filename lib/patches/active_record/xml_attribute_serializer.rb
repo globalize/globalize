@@ -1,4 +1,7 @@
-require 'active_record/serializers/xml_serializer'
+begin
+  require 'active_record/serializers/xml_serializer'
+rescue LoadError
+end
 
 module Globalize
   module XmlSerializer
@@ -15,4 +18,6 @@ module Globalize
   end
 end
 
-ActiveRecord::XmlSerializer::Attribute.send(:prepend, Globalize::XmlSerializer::Attribute)
+if defined?(ActiveRecord::XmlSerializer)
+  ActiveRecord::XmlSerializer::Attribute.send(:prepend, Globalize::XmlSerializer::Attribute)
+end
