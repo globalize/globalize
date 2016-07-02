@@ -34,7 +34,9 @@ module Globalize
       end
 
       def save_translations!
-        stash.reject {|locale, attrs| attrs.empty?}.each do |locale, attrs|
+        stash.each do |locale, attrs|
+          next if attrs.empty?
+
           translation = record.translations_by_locale[locale] ||
                         record.translations.build(locale: locale.to_s)
           attrs.each do |name, value|
@@ -68,13 +70,22 @@ module Globalize
 
       def fetch_attribute(locale, name)
         translation = record.translation_for(locale, false)
-        return translation ? translation.send(name) : default_value(name)
-      end
-
-      def default_value(name)
-        column = column_for_attribute(name)
-
-        column.type_cast_from_database(column.default)
+        if translation
+          translation.send(name)
+        else
+          column = column_for_attribute(name)
+          if column.respond_to?(:type_cast_from_database)
+            column.type_cast_from_database(column.default)
+          else
+            type = record.class.translation_class.type_for_attribute(name)
+            default = type.deserialize(column.default)
+            if default.nil?
+              "-> { #{column.default_function.inspect} }" if column.default_function
+            else
+              default
+            end
+          end
+        end
       end
 
       def set_metadata(object, metadata)
@@ -93,7 +104,7 @@ module Globalize
       end
 
       delegate :fallbacks_for_empty_translations?, :to => :record, :prefix => false
-      include AdapterDirty
+      prepend AdapterDirty
     end
   end
 end

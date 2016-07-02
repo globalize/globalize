@@ -3,8 +3,6 @@ require 'digest/sha1'
 module Globalize
   module ActiveRecord
     module Migration
-      attr_reader :globalize_migrator
-
       def globalize_migrator
         @globalize_migrator ||= Migrator.new(self)
       end

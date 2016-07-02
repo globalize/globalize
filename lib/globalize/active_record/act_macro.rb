@@ -31,6 +31,11 @@ module Globalize
           # Detect and apply serialization.
           enable_serializable_attribute(attr_name)
 
+          if ::ActiveRecord::VERSION::STRING >= "5.0.0"
+            # use virtual attribute
+            attribute attr_name, :string
+          end
+
           # Create accessors for the attribute.
           define_translated_attr_accessor(attr_name)
           define_translations_accessor(attr_name)

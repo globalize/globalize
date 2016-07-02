@@ -186,7 +186,7 @@ class MigrationTest < MiniTest::Spec
     end
 
     it "returns a hashed index name if it's longer than 64 characters" do
-      assert_match /^index_[a-z0-9]{40}$/, MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters.send(:translation_index_name)
+      assert_match(/^index_[a-z0-9]{40}$/, MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters.send(:translation_index_name))
     end
   end
 
@@ -196,7 +196,7 @@ class MigrationTest < MiniTest::Spec
     end
 
     it "returns a hashed index name if class name is longer than 64 characters" do
-      assert_match /^index_[a-z0-9]{40}$/, MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters.send(:translation_locale_index_name)
+      assert_match(/^index_[a-z0-9]{40}$/, MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters.send(:translation_locale_index_name))
     end
   end
 

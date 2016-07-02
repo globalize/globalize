@@ -155,18 +155,20 @@ class GlobalizeTest < MiniTest::Spec
       end
     end
 
-    describe '#to_xml' do
-      it "includes translated fields" do
-        post = Post.create(:title => "foo", :content => "bar")
-        post.reload
-        assert post.to_xml =~ %r(<title>foo</title>)
-        assert post.to_xml =~ %r(<content>bar</content>)
-      end
+    if defined?(ActiveRecord::XmlSerializer)
+      describe '#to_xml' do
+        it "includes translated fields" do
+          post = Post.create(:title => "foo", :content => "bar")
+          post.reload
+          assert post.to_xml =~ %r(<title>foo</title>)
+          assert post.to_xml =~ %r(<content>bar</content>)
+        end
 
-      it "doesn't affect untranslated models" do
-        blog = Blog.create(:description => "my blog")
-        blog.reload
-        assert blog.to_xml =~ %r(<description>my blog</description>)
+        it "doesn't affect untranslated models" do
+          blog = Blog.create(:description => "my blog")
+          blog.reload
+          assert blog.to_xml =~ %r(<description>my blog</description>)
+        end
       end
     end
 

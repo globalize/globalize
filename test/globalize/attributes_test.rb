@@ -213,11 +213,13 @@ class AttributesTest < MiniTest::Spec
     end
   end
 
-  describe 'columns with default array value' do
-    it 'returns the typecasted default value for arrays with empty array as default' do
-      product = Product.new
+  if ::ActiveRecord::VERSION::STRING < "5.0.0"
+    describe 'columns with default array value' do
+      it 'returns the typecasted default value for arrays with empty array as default' do
+        product = Product.new
 
-      assert_equal "--- []\n", product.array_values
+        assert_equal "--- []\n", product.array_values
+      end
     end
   end
 
@@ -226,7 +228,7 @@ class AttributesTest < MiniTest::Spec
       err = assert_raises ActiveRecord::StatementInvalid do
         Artwork.create
       end
-      assert_match /SQLite3::ConstraintException/, err.message
+      assert_match(/SQLite3::ConstraintException/, err.message)
     end
 
     it 'saves a record with a filled required field' do
@@ -247,7 +249,7 @@ class AttributesTest < MiniTest::Spec
           "1" => { :locale => 'it' }
         })
       end
-      assert_match /SQLite3::ConstraintException/, err.message
+      assert_match(/SQLite3::ConstraintException/, err.message)
     end
 
     it 'saves a record with a filled required field using nested attributes' do
