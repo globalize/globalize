@@ -4,7 +4,8 @@ sudo: false
 script: "bundle exec rake"
 gemfile:
   - Gemfile
-  - gemfiles/Gemfile.rails5
+  - gemfiles/Gemfile.rails4
+  - gemfiles/Gemfile.activemodel-serializers-xml
 rvm:
   - 2.3.1
   - 2.2.5
@@ -14,11 +15,18 @@ rvm:
 matrix:
   allow_failures:
     - rvm: rbx
+      gemfile: Gemfile
+    - rvm: rbx
+      gemfile: gemfiles/Gemfile.activemodel-serializers-xml
   exclude:
     - rvm: 2.1
-      gemfile: gemfiles/Gemfile.rails5
+      gemfile: Gemfile
     - rvm: 2.0.0
-      gemfile: gemfiles/Gemfile.rails5
+      gemfile: Gemfile
+    - rvm: 2.1
+      gemfile: gemfiles/Gemfile.activemodel-serializers-xml
+    - rvm: 2.0.0
+      gemfile: gemfiles/Gemfile.activemodel-serializers-xml
 notifications:
   webhooks:
     - https://webhooks.gitter.im/e/40dc875af26f64f39090
