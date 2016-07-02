@@ -11,12 +11,13 @@ rvm:
   - 2.0.0
   - rbx
 matrix:
+  allow_failures:
+    - rvm: rbx
   exclude:
     - rvm: 2.1
       gemfile: gemfiles/Gemfile.rails5
     - rvm: 2.0.0
       gemfile: gemfiles/Gemfile.rails5
-
 notifications:
   webhooks:
     - https://webhooks.gitter.im/e/40dc875af26f64f39090
