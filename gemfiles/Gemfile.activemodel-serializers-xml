@@ -1,0 +1,17 @@
+source 'https://rubygems.org'
+
+gemspec path: '../'
+
+gem 'activemodel-serializers-xml'
+
+gem 'rake', '~> 10.0'
+
+gem 'rake', '~> 10.0'
+
+platforms :rbx do
+  gem 'rubysl', '~> 2.0'
+end
+
+group :test do
+  gem 'pry'
+end
