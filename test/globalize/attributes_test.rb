@@ -228,7 +228,7 @@ class AttributesTest < MiniTest::Spec
       err = assert_raises ActiveRecord::StatementInvalid do
         Artwork.create
       end
-      assert_match /SQLite3::ConstraintException/, err.message
+      assert_match(/SQLite3::ConstraintException/, err.message)
     end
 
     it 'saves a record with a filled required field' do
@@ -249,7 +249,7 @@ class AttributesTest < MiniTest::Spec
           "1" => { :locale => 'it' }
         })
       end
-      assert_match /SQLite3::ConstraintException/, err.message
+      assert_match(/SQLite3::ConstraintException/, err.message)
     end
 
     it 'saves a record with a filled required field using nested attributes' do

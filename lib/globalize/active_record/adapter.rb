@@ -34,7 +34,9 @@ module Globalize
       end
 
       def save_translations!
-        stash.reject {|locale, attrs| attrs.empty?}.each do |locale, attrs|
+        stash.each do |locale, attrs|
+          next if attrs.empty?
+
           translation = record.translations_by_locale[locale] ||
                         record.translations.build(locale: locale.to_s)
           attrs.each do |name, value|

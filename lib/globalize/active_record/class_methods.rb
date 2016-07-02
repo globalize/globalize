@@ -105,8 +105,8 @@ module Globalize
 
       def define_translations_writer(name)
         define_method(:"#{name}_translations=") do |value|
-          value.each do |(locale, value)|
-            write_attribute name, value, :locale => locale
+          value.each do |(locale, _value)|
+            write_attribute name, _value, :locale => locale
           end
         end
       end
