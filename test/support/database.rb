@@ -48,9 +48,9 @@ module Globalize
       def create!
         db_config = config[driver]
         command = case driver
-        when 'mysql'
+        when "mysql"
           "mysql -u #{db_config['username']} -e 'create database #{db_config['database']};' >/dev/null"
-        when 'postgres'
+        when "postgres", "postgresql"
           "psql -c 'create database #{db_config['database']};' -U #{db_config['username']} >/dev/null"
         end
 
@@ -62,9 +62,9 @@ module Globalize
       def drop!
         db_config = config[driver]
         command = case driver
-        when 'mysql'
+        when "mysql"
           "mysql -u #{db_config['username']} -e 'drop database #{db_config["database"]};' >/dev/null"
-        when 'postgres'
+        when "postgres", "postgresql"
           "psql -c 'drop database #{db_config['database']};' -U #{db_config['username']} >/dev/null"
         end
 

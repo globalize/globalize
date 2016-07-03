@@ -1,13 +1,12 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
 gemspec
 
-gem 'sqlite3'
+gem "pry"
+
+eval File.read(File.expand_path("../gemfiles/.gemfile.database-config.rb", __FILE__))
 
 platforms :rbx do
-  gem 'rubysl', '~> 2.0'
-end
-
-group :test do
-  gem 'pry'
+  gem "rubysl", "~> 2.0"
+  gem "rubinius-developer_tools"
 end

@@ -1,25 +1,13 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gemspec path: '../'
+gemspec path: "../"
 
-gem 'activemodel-serializers-xml'
+gem "activemodel-serializers-xml"
+gem "pry"
 
-group :development, :test do
-  gem 'pry'
+eval File.read(File.expand_path("../.gemfile.database-config.rb", __FILE__))
 
-  platforms :jruby do
-    gem 'activerecord-jdbcmysql-adapter', '~> 1.3.14'
-    gem 'activerecord-jdbcpostgresql-adapter', '~> 1.3.14'
-  end
-
-  platforms :ruby, :rbx do
-    gem 'sqlite3'
-    gem 'mysql2'
-    gem 'pg'
-  end
-
-  platforms :rbx do
-    gem 'rubysl', '~> 2.0'
-    gem 'rubinius-developer_tools'
-  end
+platforms :rbx do
+  gem "rubysl", "~> 2.0"
+  gem "rubinius-developer_tools"
 end
