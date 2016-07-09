@@ -1,6 +1,6 @@
 ActiveRecord::Schema.define do
   create_table :authors, :force => true do |t|
-    t.string     :name
+    t.string :name
   end
 
   create_table :articles, :force => true do |t|
@@ -148,14 +148,14 @@ ActiveRecord::Schema.define do
     t.string     :name
   end
 
-  create_table 'UPPERCASE_TABLE_NAME', :force => true do |t|
+  create_table :UPPERCASE_TABLE_NAME, :force => true do |t|
     t.string :name
   end
 
   create_table :UPPERCASE_TABLE_NAME_translations, :force => true do |t|
-    t.integer  'uppercase_table_name_id'
-    t.string     :locale
-    t.string     :name
+    t.integer :uppercase_table_name_id
+    t.string  :locale
+    t.string  :name
   end
 
   create_table :news, :force => true do |t|
@@ -163,44 +163,44 @@ ActiveRecord::Schema.define do
   end
 
   create_table :news_translations, :force => true do |t|
-    t.integer  'news_id'
-    t.string     :locale
-    t.string     :title
+    t.integer :news_id
+    t.string  :locale
+    t.string  :title
   end
 
   create_table :pages, :force => true do |t|
   end
 
   create_table :page_translations, :force => true do |t|
-    t.integer    :page_id
-    t.string     :locale
-    t.string     :title
-    t.string     :body
+    t.integer :page_id
+    t.string  :locale
+    t.string  :title
+    t.string  :body
   end
 
   create_table :serialized_attrs, :force => true do |t|
-    t.text       :meta
+    t.text :meta
   end
 
   create_table :serialized_attr_translations, :force => true do |t|
-    t.integer    :serialized_attr_id
-    t.string     :locale
-    t.text       :meta
+    t.integer :serialized_attr_id
+    t.string  :locale
+    t.text    :meta
   end
 
   create_table :serialized_hashes, :force => true do |t|
-    t.text       :meta
+    t.text :meta
   end
 
   create_table :serialized_hash_translations, :force => true do |t|
-    t.integer    :serialized_hash_id
-    t.string     :locale
-    t.text       :meta
+    t.integer :serialized_hash_id
+    t.string  :locale
+    t.text    :meta
   end
 
   create_table :accounts, :force => true do |t|
-    t.string     :business_name,  :null => false, :default => ""
-    t.string     :notes, :null => false, :default => ""
+    t.string :business_name,  :null => false, :default => ""
+    t.string :notes, :null => false, :default => ""
   end
 
   create_table :account_translations, :force => true do |t|
@@ -225,8 +225,8 @@ ActiveRecord::Schema.define do
 
   create_table :mctn_translations, :force => true do |t|
     t.references :model_with_custom_table_name
-    t.string :locale
-    t.string :name
+    t.string     :locale
+    t.string     :name
   end
 
   create_table :locales, :force => true do |t|
@@ -238,12 +238,12 @@ ActiveRecord::Schema.define do
     t.string  :name
   end
 
-  create_table "attachments" do |t|
+  create_table :attachments, :force => true do |t|
     t.references :post
-    t.string :file_type
+    t.string     :file_type
   end
 
-  create_table "foo_bar_bazs" do |t|
+  create_table :foo_bar_bazs, :force => true do |t|
     t.string :bumm
   end
 
@@ -264,5 +264,4 @@ ActiveRecord::Schema.define do
     t.references :question
     t.string     :title, null: false
   end
-
 end

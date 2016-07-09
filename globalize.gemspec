@@ -22,8 +22,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'database_cleaner', '~> 1.5.3'
   s.add_development_dependency 'minitest'
   s.add_development_dependency 'minitest-reporters'
-
   s.add_development_dependency 'rdoc'
-
   s.add_development_dependency 'rake'
 end
