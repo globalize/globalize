@@ -87,7 +87,11 @@ module Globalize
       end
 
       def native_array_support?
-        %w(postgres postgresql).include?(driver)
+        %w(postgres).include?(driver)
+      end
+
+      def mysql?
+        driver == 'mysql'
       end
     end
   end
