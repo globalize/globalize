@@ -1,5 +1,4 @@
 # encoding: utf-8
-
 require File.expand_path('../../test_helper', __FILE__)
 
 class AttributesTest < MiniTest::Spec
@@ -221,7 +220,11 @@ class AttributesTest < MiniTest::Spec
       it 'returns the typecasted default value for arrays with empty array as default' do
         product = Product.new
 
-        assert_equal "--- []\n", product.array_values
+        if Globalize::Test::Database.native_array_support?
+          assert_equal [], product.array_values
+        else
+          assert_equal "--- []\n", product.array_values
+        end
       end
     end
   end
@@ -231,7 +234,13 @@ class AttributesTest < MiniTest::Spec
       err = assert_raises ActiveRecord::StatementInvalid do
         Artwork.create
       end
-      assert_match(/SQLite3::ConstraintException/, err.message)
+
+      case Globalize::Test::Database.driver
+      when 'sqlite3'
+        assert_match(/SQLite3::ConstraintException/, err.message)
+      else
+        assert_match(/PG::NotNullViolation/, err.message)
+      end
     end
 
     it 'saves a record with a filled required field' do
@@ -244,7 +253,6 @@ class AttributesTest < MiniTest::Spec
       assert_equal 'foo', artwork.title
     end
 
-
     it 'does not save a record with an empty required field using nested attributes' do
       err = assert_raises ActiveRecord::StatementInvalid do
         Artwork.create(:translations_attributes => {
@@ -252,7 +260,13 @@ class AttributesTest < MiniTest::Spec
           "1" => { :locale => 'it' }
         })
       end
-      assert_match(/SQLite3::ConstraintException/, err.message)
+
+      case Globalize::Test::Database.driver
+      when 'sqlite3'
+        assert_match(/SQLite3::ConstraintException/, err.message)
+      else
+        assert_match(/PG::NotNullViolation/, err.message)
+      end
     end
 
     it 'saves a record with a filled required field using nested attributes' do

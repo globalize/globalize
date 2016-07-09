@@ -84,6 +84,10 @@ module Globalize
         load_schema
         ::ActiveRecord::Schema.migrate :up
       end
+
+      def native_array_support?
+        %w(postgres postgresql).include?(driver)
+      end
     end
   end
 end

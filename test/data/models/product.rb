@@ -4,6 +4,4 @@ class Product < ActiveRecord::Base
   else
     translates :name
   end
-
 end
-
