@@ -227,7 +227,7 @@ class GlobalizeTest < MiniTest::Spec
         Post.create(:title => 'title 2')
 
         assert Post.with_translations.first.translations.loaded?
-        assert_equal ['title 1', 'title 2'], Post.with_translations.map(&:title)
+        assert_equal ['title 1', 'title 2'], Post.with_translations.map(&:title).sort
       end
     end
 

@@ -80,6 +80,7 @@ module Globalize
 
       def migrate!
         return if in_memory?
+        ::ActiveRecord::Migration.verbose = true
         connect
         load_schema
         ::ActiveRecord::Schema.migrate :up

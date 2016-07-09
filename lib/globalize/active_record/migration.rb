@@ -7,9 +7,9 @@ module Globalize
         @globalize_migrator ||= Migrator.new(self)
       end
 
-      delegate :create_translation_table!, :add_translation_fields!, :drop_translation_table!,
-        :translation_index_name, :translation_locale_index_name,
-        :to => :globalize_migrator
+      delegate :create_translation_table!, :add_translation_fields!,
+        :drop_translation_table!, :translation_index_name,
+        :translation_locale_index_name, :to => :globalize_migrator
 
       class Migrator
         include Globalize::ActiveRecord::Exceptions
@@ -107,7 +107,9 @@ module Globalize
         end
 
         def drop_translations_index
-          connection.remove_index(translations_table_name, :name => translation_index_name)
+          if connection.indexes(translations_table_name).map(&:name).include?(translation_index_name)
+            connection.remove_index(translations_table_name, :name => translation_index_name)
+          end
         end
 
         def move_data_to_translation_table
@@ -184,7 +186,6 @@ module Globalize
             end
           end
         end
-
       end
     end
   end

@@ -1,7 +1,6 @@
 module Globalize
   module ActiveRecord
     module QueryMethods
-
       class WhereChain < ::ActiveRecord::QueryMethods::WhereChain
         def not(opts, *rest)
           if parsed = @scope.parse_translated_conditions(opts)
