@@ -11,6 +11,10 @@ module Globalize
       DATABASE_PATH = File.expand_path('../database.yml', __FILE__)
       GLOBALIZE_LOG = File.expand_path('../../globalize_test.log', __FILE__)
 
+      def load_schema
+        require File.expand_path('../../data/schema', __FILE__)
+      end
+
       def connect
         version = ::ActiveRecord::VERSION::STRING
         driver  = Globalize::Test::Database.driver
@@ -26,6 +30,7 @@ module Globalize
         puts '-' * 72
         if in_memory?
           ::ActiveRecord::Migration.verbose = false
+          load_schema
           ::ActiveRecord::Schema.migrate :up
           puts "#{message} (in-memory)"
         else
@@ -74,9 +79,9 @@ module Globalize
       end
 
       def migrate!
+        return if in_memory?
         connect
-        require 'data/schema'
-
+        load_schema
         ::ActiveRecord::Schema.migrate :up
       end
     end

@@ -2,7 +2,7 @@ language: ruby
 cache: bundler
 sudo: false
 before_install: gem install bundler
-before_script: bundle exec rake db:create
+before_script: bundle exec rake db:create db:migrate
 script: bundle exec rake
 
 gemfile:

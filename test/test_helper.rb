@@ -7,9 +7,7 @@ Dir[File.expand_path('../support/**/*.rb', __FILE__)].each { |f| require f }
 
 Globalize::Test::Database.connect
 
-require File.expand_path('../data/schema', __FILE__)
 require File.expand_path('../data/models', __FILE__)
-
 require 'minitest/autorun'
 require 'minitest/reporters'
 Minitest::Reporters.use!
