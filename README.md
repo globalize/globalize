@@ -157,6 +157,27 @@ end
 
 NOTE: Make sure you drop the translated columns from the parent table after all your data is safely migrated.
 
+To automatically remove the translated columns from the parent table after the data migration, please use option `remove_source_columns`.
+
+```ruby
+class TranslatePosts < ActiveRecord::Migration
+  def self.up
+    Post.create_translation_table!({
+      :title => :string,
+      :text => :text
+    }, {
+      :migrate_data => true,
+      :remove_source_columns => true
+    })
+  end
+
+  def self.down
+    Post.drop_translation_table! :migrate_data => true
+  end
+end
+```
+
+
 In order to use a specific locale for migrated data, you can use `I18n.with_locale`:
 
 ```ruby
