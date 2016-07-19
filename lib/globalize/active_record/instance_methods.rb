@@ -46,7 +46,7 @@ module Globalize
         return super(name) unless options[:translated]
 
         if translated?(name)
-          if (value = globalize.fetch(options[:locale] || Globalize.locale, name))
+          if !(value = globalize.fetch(options[:locale] || Globalize.locale, name)).nil?
             value
           else
             super(name)
