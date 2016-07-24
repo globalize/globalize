@@ -64,10 +64,14 @@ ActiveRecord::Base.class_eval do
   class << self
     def index_exists?(index_name)
       connection.indexes(table_name).any? { |index| index.name == index_name.to_s }
+    rescue ActiveRecord::StatementInvalid => e
+      false
     end
 
     def index_exists_on?(column_name)
       connection.indexes(table_name).any? { |index| index.columns == [column_name.to_s] }
+    rescue ActiveRecord::StatementInvalid => e
+      false
     end
   end
 end
