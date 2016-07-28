@@ -73,18 +73,7 @@ module Globalize
         if translation
           translation.send(name)
         else
-          column = column_for_attribute(name)
-          if column.respond_to?(:type_cast_from_database)
-            column.type_cast_from_database(column.default)
-          else
-            type = record.class.translation_class.type_for_attribute(name)
-            default = type.deserialize(column.default)
-            if default.nil?
-              "-> { #{column.default_function.inspect} }" if column.default_function
-            else
-              default
-            end
-          end
+          record.class.translation_class.new.send(name)
         end
       end
 
