@@ -70,7 +70,7 @@ module Globalize
 
         def create_translation_table
           connection.create_table(translations_table_name) do |t|
-            t.references table_name.sub(/^#{table_name_prefix}/, '').singularize, :null => false, :index => false
+            t.references table_name.sub(/^#{table_name_prefix}/, '').singularize, :null => false, :index => false, :type => column_type(model.primary_key).to_sym
             t.string :locale, :null => false
             t.timestamps :null => false
           end
@@ -124,7 +124,7 @@ module Globalize
           add_missing_columns
 
           # Find all of the translated attributes for all records in the model.
-          all_translated_attributes = @model.all.collect{|m| m.attributes}
+          all_translated_attributes = model.all.collect{|m| m.attributes}
           all_translated_attributes.each do |translated_record|
             # Create a hash containing the translated column names and their values.
             translated_attribute_names.inject(fields_to_update={}) do |f, name|
@@ -132,7 +132,7 @@ module Globalize
             end
 
             # Now, update the actual model's record with the hash.
-            @model.where(:id => translated_record['id']).update_all(fields_to_update)
+            model.where(model.primary_key.to_sym => translated_record[model.primary_key]).update_all(fields_to_update)
           end
         end
 
