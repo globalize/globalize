@@ -12,11 +12,11 @@ module Globalize
       end
 
       def attributes=(attributes, *args)
-        with_given_locale(attributes) { super }
+        with_given_locale(attributes) { super(attributes_without_locale(attributes)) }
       end
 
       def assign_attributes(attributes, *args)
-        with_given_locale(attributes) { super }
+        with_given_locale(attributes) { super(attributes_without_locale(attributes)) }
       end
 
 
@@ -172,6 +172,10 @@ module Globalize
 
     protected
 
+      def attributes_without_locale(attributes)
+        attributes.try(:except, :locale)
+      end
+
       def each_locale_and_translated_attribute
         used_locales.each do |locale|
           translated_attribute_names.each do |name|
@@ -192,7 +196,7 @@ module Globalize
       end
 
       def with_given_locale(attributes, &block)
-        symbolized_attributes = attributes.symbolize_keys if attributes.respond_to?(:symbolize_keys!)
+        symbolized_attributes = attributes.symbolize_keys if attributes.respond_to?(:symbolize_keys)
 
         if locale = symbolized_attributes.try(:delete, :locale)
           Globalize.with_locale(locale, &block)
