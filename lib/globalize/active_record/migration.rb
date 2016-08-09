@@ -153,7 +153,7 @@ module Globalize
         end
 
         def valid_field_type?(name, type)
-          !translated_attribute_names.include?(name) || [:string, :text].include?(type)
+          !translated_attribute_names.include?(name) || [:string, :text, :citext].include?(type)
         end
 
         def translation_index_name
