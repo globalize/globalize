@@ -238,8 +238,12 @@ class AttributesTest < MiniTest::Spec
       case Globalize::Test::Database.driver
       when 'sqlite3'
         assert_match(/SQLite3::ConstraintException/, err.message)
-      else
+      when 'postgres'
         assert_match(/PG::NotNullViolation/, err.message)
+      when 'mysql'
+        assert_match(/Mysql2::Error/, err.message)
+      else
+        raise 'Missing assertion'
       end
     end
 
@@ -264,8 +268,12 @@ class AttributesTest < MiniTest::Spec
       case Globalize::Test::Database.driver
       when 'sqlite3'
         assert_match(/SQLite3::ConstraintException/, err.message)
-      else
+      when 'postgres'
         assert_match(/PG::NotNullViolation/, err.message)
+      when 'mysql'
+        assert_match(/Mysql2::Error/, err.message)
+      else
+        raise 'Missing assertion'
       end
     end
 
