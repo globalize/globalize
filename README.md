@@ -234,6 +234,18 @@ Because globalize uses the `:locale` key to specify the locale during
 mass-assignment, you should avoid having a `locale` attribute on the parent
 model.
 
+## Known Issues
+
+If you're getting the `ActiveRecord::StatementInvalid: PG::NotNullViolation: ERROR: null value in column "column_name" violates not-null constraint` error, the only known way to deal with it as of now is to remove not-null constraint for the globalized columns:
+
+```ruby
+class RemoveNullConstraintsFromResources < ActiveRecord::Migration
+  def change
+    change_column_null :resources, :column_name, true
+  end
+end
+```
+
 ## Versioning with Globalize
 
 See the [globalize-versioning](https://github.com/globalize/globalize-versioning) gem.
