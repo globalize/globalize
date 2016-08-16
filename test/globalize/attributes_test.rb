@@ -10,12 +10,15 @@ class AttributesTest < MiniTest::Spec
     end
 
     it 'returns the correct translation for a saved record after locale switching' do
-      post = Post.create(:title => 'title')
-      post.update_attributes(:title => 'Titel', :locale => :de)
+      post = Post.create(:title => 'title', published: false)
+      post.update_attributes(:title => 'Titel', :locale => :de, published: true)
       post.reload
 
       assert_translated post, :en, :title, 'title'
       assert_translated post, :de, :title, 'Titel'
+
+      assert_translated post, :en, :published, false
+      assert_translated post, :de, :published, true
     end
 
     # TODO: maybe move this somewhere else?
