@@ -1,13 +1,15 @@
 # encoding: utf-8
-
 require File.expand_path('../../test_helper', __FILE__)
 
 class CacheKeyTest < MiniTest::Spec
-
   describe '#cache_key' do
     it "changes when the translation is updated" do
       product = with_locale(:en) { Product.create(:name => 'first') }
       original_cache_key = product.cache_key
+
+      # If the test is too fast the new cache_key (based on the `updated_at`
+      # column) will be equal, causing a failing test.
+      sleep(1)
 
       product_translation = product.translation_for(:en)
       product_translation.name = "second"
