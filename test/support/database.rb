@@ -10,6 +10,7 @@ module Globalize
 
       DATABASE_PATH = File.expand_path('../database.yml', __FILE__)
       GLOBALIZE_LOG = File.expand_path('../../globalize_test.log', __FILE__)
+      DEFAULT_STRATEGY = :transaction
 
       def load_schema
         require File.expand_path('../../data/schema', __FILE__)
@@ -92,6 +93,13 @@ module Globalize
 
       def mysql?
         driver == 'mysql'
+      end
+
+      def cleaning_strategy(strategy, &block)
+        DatabaseCleaner.clean
+        DatabaseCleaner.strategy = strategy
+        DatabaseCleaner.cleaning(&block)
+        DatabaseCleaner.strategy = DEFAULT_STRATEGY
       end
     end
   end
