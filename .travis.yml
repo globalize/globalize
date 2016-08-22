@@ -9,6 +9,7 @@ gemfile:
   - Gemfile
   - gemfiles/Gemfile.activemodel-serializers-xml.rb
   - gemfiles/Gemfile.rails-4.2.rb
+
 rvm:
   - 2.3.1
   - 2.2.5

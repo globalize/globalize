@@ -230,21 +230,19 @@ class AttributesTest < MiniTest::Spec
   end
 
   describe 'translation table with null:false fields without default value ' do
+    DB_EXCEPTIONS = %w(
+      SQLite3::ConstraintException
+      PG::NotNullViolation
+      Mysql2::Error
+      ActiveRecord::JDBCError
+    )
+
     it 'does not save a record with an empty required field' do
       err = assert_raises ActiveRecord::StatementInvalid do
         Artwork.create
       end
 
-      case Globalize::Test::Database.driver
-      when 'sqlite3'
-        assert_match(/SQLite3::ConstraintException/, err.message)
-      when 'postgres'
-        assert_match(/PG::NotNullViolation/, err.message)
-      when 'mysql'
-        assert_match(/Mysql2::Error/, err.message)
-      else
-        raise 'Missing assertion'
-      end
+      assert_match(/#{DB_EXCEPTIONS.join('|')}/, err.message)
     end
 
     it 'saves a record with a filled required field' do
@@ -265,16 +263,7 @@ class AttributesTest < MiniTest::Spec
         })
       end
 
-      case Globalize::Test::Database.driver
-      when 'sqlite3'
-        assert_match(/SQLite3::ConstraintException/, err.message)
-      when 'postgres'
-        assert_match(/PG::NotNullViolation/, err.message)
-      when 'mysql'
-        assert_match(/Mysql2::Error/, err.message)
-      else
-        raise 'Missing assertion'
-      end
+      assert_match(/#{DB_EXCEPTIONS.join('|')}/, err.message)
     end
 
     it 'saves a record with a filled required field using nested attributes' do
