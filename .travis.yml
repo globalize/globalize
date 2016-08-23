@@ -38,6 +38,7 @@ matrix:
       gemfile: gemfiles/Gemfile.activemodel-serializers-xml.rb
     - rvm: 2.0.0
       gemfile: gemfiles/Gemfile.activemodel-serializers-xml.rb
+
 notifications:
   webhooks:
     - https://webhooks.gitter.im/e/40dc875af26f64f39090
