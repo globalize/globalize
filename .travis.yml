@@ -29,6 +29,11 @@ matrix:
       gemfile: Gemfile
     - rvm: rbx
       gemfile: gemfiles/Gemfile.activemodel-serializers-xml.rb
+    - rvm: jruby-9.1.2.0
+      gemfile: Gemfile
+    - rvm: jruby-9.1.2.0
+      gemfile: gemfiles/Gemfile.activemodel-serializers-xml.rb
+
   exclude:
     - rvm: 2.1
       gemfile: Gemfile
