@@ -215,16 +215,11 @@ class AttributesTest < MiniTest::Spec
     end
   end
 
-  if ::ActiveRecord::VERSION::STRING < "5.0.0"
+  if Globalize::Test::Database.native_array_support?
     describe 'columns with default array value' do
       it 'returns the typecasted default value for arrays with empty array as default' do
         product = Product.new
-
-        if Globalize::Test::Database.native_array_support?
-          assert_equal [], product.array_values
-        else
-          assert_equal "--- []\n", product.array_values
-        end
+        assert_equal [], product.array_values
       end
     end
   end
