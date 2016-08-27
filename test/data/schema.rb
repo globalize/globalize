@@ -81,8 +81,8 @@ ActiveRecord::Schema.define do
     t.string :untranslated
   end
 
-  unless Globalize::Test::Database.mysql?
-    # Maximum length of a table name in MySQL is 64 characters
+  if Globalize::Test::Database.long_table_name_support?
+    # Maximum length of a table name in MySQL and PostgreSQL are 64 characters
     create_table :migrated_with_mega_ultra_super_long_model_name_with_more_then_sixty_characters, :force => true do |t|
       t.string :name
     end

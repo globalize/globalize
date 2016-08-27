@@ -4,14 +4,20 @@ class MigrationTest < MiniTest::Spec
   include Globalize::ActiveRecord::Exceptions
 
   before(:each) do
-    reset_schema(Migrated, MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters, TwoAttributesMigrated)
+    reset_schema(Migrated, TwoAttributesMigrated)
+    if Globalize::Test::Database.long_table_name_support?
+      reset_schema(MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters)
+    end
     assert Migrated.translation_class.table_exists? == false
     assert Migrated.translation_class.index_exists_on?(:migrated_id) == false
     assert Migrated.translation_class.index_exists_on?(:locale) == false
   end
 
   after(:each) do
-    reset_schema(Migrated, MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters, TwoAttributesMigrated)
+    reset_schema(Migrated, TwoAttributesMigrated)
+    if Globalize::Test::Database.long_table_name_support?
+      reset_schema(MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters)
+    end
   end
 
   describe 'create_translation_table!' do
@@ -58,14 +64,13 @@ class MigrationTest < MiniTest::Spec
     end
 
     it 'handles ultra-long table names' do
-      unless Globalize::Test::Database.mysql?
-        model = MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters
-        model.create_translation_table!(:name => :string)
+      return unless Globalize::Test::Database.long_table_name_support?
+      model = MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters
+      model.create_translation_table!(:name => :string)
 
-        assert model.translation_class.table_exists?
-        assert model.translation_class.index_exists?(model.send(:translation_index_name))
-        assert model.translation_class.index_exists?(model.send(:translation_locale_index_name))
-      end
+      assert model.translation_class.table_exists?
+      assert model.translation_class.index_exists?(model.send(:translation_index_name))
+      assert model.translation_class.index_exists?(model.send(:translation_locale_index_name))
     end
 
     # This test is relatively exhaustive in that it tests the full stack of
@@ -182,14 +187,13 @@ class MigrationTest < MiniTest::Spec
     end
 
     it 'handles ultra-long table names' do
-      unless Globalize::Test::Database.mysql?
-        model = MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters
-        model.create_translation_table!(:name => :string)
-        model.drop_translation_table!
+      return unless Globalize::Test::Database.long_table_name_support?
+      model = MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters
+      model.create_translation_table!(:name => :string)
+      model.drop_translation_table!
 
-        assert !model.translation_class.table_exists?
-        assert !model.translation_class.index_exists?(:ultra_long_model_name_without_proper_id)
-      end
+      assert !model.translation_class.table_exists?
+      assert !model.translation_class.index_exists?(:ultra_long_model_name_without_proper_id)
     end
   end
 
@@ -218,7 +222,7 @@ protected
   def drop_model_translation_table!(model)
     table_name = "#{model.name.underscore}_translations"
 
-    if ActiveRecord::Base.connection.table_exists? table_name
+    if ActiveRecord::Base.connection.data_source_exists? table_name
       ActiveRecord::Migration.drop_table table_name
     end
   end

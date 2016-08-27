@@ -87,12 +87,25 @@ module Globalize
         ::ActiveRecord::Schema.migrate :up
       end
 
-      def native_array_support?
-        %w(postgres).include?(driver)
-      end
-
       def mysql?
         driver == 'mysql'
+      end
+
+      def postgres?
+        driver == 'postgres'
+      end
+
+      def sqlite?
+        driver == 'sqlite3'
+      end
+
+      def native_array_support?
+        postgres?
+      end
+
+      # PostgreSQL and MySql doen't support table names longer than 63 chars
+      def long_table_name_support?
+        sqlite?
       end
 
       def cleaning_strategy(strategy, &block)
