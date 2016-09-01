@@ -195,10 +195,11 @@ module Globalize
         translation_caches.clear
       end
 
-      def with_given_locale(attributes, &block)
-        symbolized_attributes = attributes.symbolize_keys if attributes.respond_to?(:symbolize_keys)
+      def with_given_locale(_attributes, &block)
+        attributes = _attributes.dup
+        attributes.symbolize_keys! if attributes.respond_to?(:symbolize_keys)
 
-        if locale = symbolized_attributes.try(:delete, :locale)
+        if locale = attributes.try(:delete, :locale)
           Globalize.with_locale(locale, &block)
         else
           yield
