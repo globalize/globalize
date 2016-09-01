@@ -1,10 +1,11 @@
-  source "https://rubygems.org"
+source "https://rubygems.org"
 
-gemspec
+gemspec path: "../"
 
+gem "activemodel-serializers-xml"
 gem "pry"
 
-eval File.read(File.expand_path("../gemfiles/.gemfile.database-config.rb", __FILE__))
+eval File.read(File.expand_path("../.gemfile.database-config.rb", __FILE__))
 
 platforms :rbx do
   gem "rubysl", "~> 2.0"

@@ -10,3 +10,4 @@ Gemfile*.lock
 *.gem
 .rbx
 .ruby-version
+test/globalize_test.log

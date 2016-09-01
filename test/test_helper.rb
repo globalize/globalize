@@ -1,19 +1,13 @@
 require 'rubygems'
 require 'bundler/setup'
-require 'fileutils'
-require 'logger'
 
 Bundler.require(:default, :test)
 
-log = '/tmp/globalize3_test.log'
-FileUtils.touch(log) unless File.exist?(log)
-ActiveRecord::Base.logger = Logger.new(log)
-ActiveRecord::LogSubscriber.attach_to(:active_record)
-ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => ':memory:')
+Dir[File.expand_path('../support/**/*.rb', __FILE__)].each { |f| require f }
 
-require File.expand_path('../data/schema', __FILE__)
+Globalize::Test::Database.connect
+
 require File.expand_path('../data/models', __FILE__)
-
 require 'minitest/autorun'
 require 'minitest/reporters'
 Minitest::Reporters.use!
@@ -25,6 +19,7 @@ I18n.available_locales = [ :en, :'en-US', :fr, :de, :'de-DE', :he, :nl, :pl ]
 
 require 'database_cleaner'
 DatabaseCleaner.strategy = :transaction
+
 class MiniTest::Spec
   before :each do
     DatabaseCleaner.start
@@ -69,10 +64,14 @@ ActiveRecord::Base.class_eval do
   class << self
     def index_exists?(index_name)
       connection.indexes(table_name).any? { |index| index.name == index_name.to_s }
+    rescue ActiveRecord::StatementInvalid => e
+      false
     end
 
     def index_exists_on?(column_name)
       connection.indexes(table_name).any? { |index| index.columns == [column_name.to_s] }
+    rescue ActiveRecord::StatementInvalid => e
+      false
     end
   end
 end

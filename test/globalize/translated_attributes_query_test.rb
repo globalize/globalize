@@ -190,7 +190,13 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
 
           it 'returns record in order, column and direction as hash' do
             @order = Post.where(:title => 'title').order(title: :desc)
-            assert_match(/ORDER BY "post_translations"."title" DESC/, @order.to_sql)
+
+            case Globalize::Test::Database.driver
+            when 'mysql'
+              assert_match(/ORDER BY `post_translations`.`title` DESC/, @order.to_sql)
+            else
+              assert_match(/ORDER BY "post_translations"."title" DESC/, @order.to_sql)
+            end
           end
 
           it 'returns record in order, leaving string untouched' do
@@ -212,12 +218,24 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
         describe 'for non-translated columns' do
           it 'returns record in order, column as symbol' do
             @order = Post.where(:title => 'title').order(:id)
-            assert_match(/ORDER BY "posts"."id" ASC/, @order.to_sql)
+
+            case Globalize::Test::Database.driver
+            when 'mysql'
+              assert_match(/ORDER BY `posts`.`id` ASC/, @order.to_sql)
+            else
+              assert_match(/ORDER BY "posts"."id" ASC/, @order.to_sql)
+            end
           end
 
           it 'returns record in order, column and direction as hash' do
             @order = Post.where(:title => 'title').order(id: :desc)
-            assert_match(/ORDER BY "posts"."id" DESC/, @order.to_sql)
+
+            case Globalize::Test::Database.driver
+            when 'mysql'
+              assert_match(/ORDER BY `posts`.`id` DESC/, @order.to_sql)
+            else
+              assert_match(/ORDER BY "posts"."id" DESC/, @order.to_sql)
+            end
           end
 
           it 'returns record in order, leaving string untouched' do
@@ -239,8 +257,15 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
         describe 'for mixed columns' do
           it 'returns record in order, column and direction as hash' do
             @order = Post.where(:title => 'title').order(title: :desc, id: :asc)
-            assert_match(/ORDER BY "post_translations"."title" DESC/, @order.to_sql)
-            assert_match(/"id" ASC/, @order.to_sql)
+
+            case Globalize::Test::Database.driver
+            when 'mysql'
+              assert_match(/ORDER BY `post_translations`.`title` DESC/, @order.to_sql)
+              assert_match(/`id` ASC/, @order.to_sql)
+            else
+              assert_match(/ORDER BY "post_translations"."title" DESC/, @order.to_sql)
+              assert_match(/"id" ASC/, @order.to_sql)
+            end
           end
 
           it 'returns record in order, leaving string untouched' do

@@ -13,7 +13,9 @@ module Globalize
 
       def with_translations(*locales)
         locales = translated_locales if locales.empty?
-        preload(:translations).joins(:translations).readonly(false).with_locales(locales).distinct
+        preload(:translations).joins(:translations).readonly(false).with_locales(locales).tap do |query|
+          query.distinct! unless locales.flatten.one?
+        end
       end
 
       def with_required_attributes
