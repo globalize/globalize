@@ -197,7 +197,7 @@ module Globalize
 
       def with_given_locale(_attributes, &block)
         attributes = _attributes.dup
-        attributes.symbolize_keys! if attributes.respond_to?(:symbolize_keys)
+        attributes.symbolize_keys! if attributes.respond_to?(:symbolize_keys!)
 
         if locale = attributes.try(:delete, :locale)
           Globalize.with_locale(locale, &block)
