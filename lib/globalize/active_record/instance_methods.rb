@@ -79,6 +79,7 @@ module Globalize
 
           options[locale].each do |key, value|
             translation.send :"#{key}=", value
+            translation.globalized_model.send :"#{key}=", value
           end
           translation.save
         end
