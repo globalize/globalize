@@ -2,7 +2,9 @@ language: ruby
 cache: bundler
 sudo: required
 dist: trusty
-before_install: gem install bundler
+before_install:
+  - gem install bundler
+  - mysql -u root -e 'create database globalize_test character set utf8;' >/dev/null
 addons:
   apt:
     packages:
