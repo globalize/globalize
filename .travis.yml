@@ -28,9 +28,12 @@ rvm:
   - jruby-9.1.2.0
 
 env:
+  matrix:
   - DB=sqlite3
   - DB=postgres
   - DB=mysql
+  global:
+    - "JRUBY_OPTS='--client -J-XX:+TieredCompilation -J-XX:TieredStopAtLevel=1 -Xcext.enabled=false -J-Xss2m -Xcompile.invokedynamic=false'"
 
 matrix:
   allow_failures:
