@@ -4,6 +4,7 @@ mysql:
   username: root
   hostname: localhost
   encoding: utf8
+  collation: utf8_general_ci
 
 postgres:
   adapter: postgresql
