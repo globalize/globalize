@@ -15,7 +15,7 @@ rvm:
   - 2.2.5
   - 2.1
   - 2.0.0
-  - rbx-3.60
+  - rbx-3.40
   - jruby-9.1.2.0
 
 env:
@@ -25,9 +25,9 @@ env:
 
 matrix:
   allow_failures:
-    - rvm: rbx-3.60
+    - rvm: rbx-3.40
       gemfile: Gemfile
-    - rvm: rbx-3.60
+    - rvm: rbx-3.40
       gemfile: gemfiles/Gemfile.activemodel-serializers-xml.rb
     - rvm: jruby-9.1.2.0
       gemfile: Gemfile
