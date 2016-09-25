@@ -5,6 +5,8 @@ dist: trusty
 before_install:
   - gem install bundler
   - mysql -u root -e 'create database globalize_test character set utf8;' >/dev/null
+install:
+  - bundle install --retry=3
 addons:
   apt:
     packages:
