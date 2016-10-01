@@ -49,7 +49,7 @@ module Globalize
       def check_columns!(attr_names)
         if (overlap = attr_names.map(&:to_s) & column_names).present?
           ActiveSupport::Deprecation.warn(
-            ["These columns are present in both model and translation tables: #{overlap.join(', ')}\n",
+            ["These columns are present in both model and translation tables of #{model_name}: #{overlap.join(', ')}\n",
              "Globalize does not support this configuration, expect problems."].join
           )
         end
