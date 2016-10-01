@@ -53,6 +53,8 @@ module Globalize
              "Globalize does not support this configuration, expect problems."].join
           )
         end
+      rescue ::ActiveRecord::StatementInvalid
+        warn "Model missing a table: #{model_name}"
       end
 
       def apply_globalize_options(options)
