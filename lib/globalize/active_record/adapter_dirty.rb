@@ -41,7 +41,8 @@ module Globalize
       end
 
       def _reset_attribute name
-        record.send(:restore_attribute!, name) if record.respond_to? :restore_attribute!, true
+        record.send("#{name}=", record.changed_attributes[name])
+        record.send(:attributes_changed_by_setter).send(:except!, name)
       end
 
       def reset
