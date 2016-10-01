@@ -19,8 +19,6 @@ module Globalize
         with_given_locale(attributes) { super(attributes_without_locale(attributes)) }
       end
 
-
-
       def write_attribute(name, value, options = {})
         return super(name, value) unless translated?(name)
 
