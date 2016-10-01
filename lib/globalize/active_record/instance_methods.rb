@@ -171,6 +171,12 @@ module Globalize
         changed_attributes.present? || translations.any?(&:changed?)
       end
 
+      # need to access instance variable directly since changed_attributes
+      # is frozen as of Rails 4.2
+      def original_changed_attributes
+        @changed_attributes
+      end
+
     protected
 
       def attributes_without_locale(attributes)
