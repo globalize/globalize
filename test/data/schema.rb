@@ -250,4 +250,14 @@ ActiveRecord::Schema.define do
     t.references :question
     t.string     :title, null: false
   end
+
+  create_table :bad_configurations, :force => true do |t|
+    t.string  :name
+  end
+
+  create_table :bad_configuration_translations, :force => true do |t|
+    t.integer :bad_configuration_id
+    t.string  :name
+    t.string  :locale
+  end
 end

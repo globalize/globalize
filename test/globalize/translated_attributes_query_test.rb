@@ -72,6 +72,11 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
       User.find_by(args = { :name => 'foo' })
       assert_equal args, { :name => 'foo' }
     end
+
+    it 'handles case where translated attribute is in model table' do
+      bad_configuration = BadConfiguration.create(:name => "foo")
+      assert_equal bad_configuration, BadConfiguration.find_by(:name => "foo")
+    end
   end
 
   describe '.find_or_create_by' do
