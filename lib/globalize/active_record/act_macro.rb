@@ -53,7 +53,7 @@ module Globalize
         if (overlap = attr_names.map(&:to_s) & column_names).present?
           ActiveSupport::Deprecation.warn(
             ["You have defined translated attributes with names that conflict with columns on the model table. ",
-             "Globalize does not support this configuration, remove or rename these columns.\n",
+             "Globalize does not support this configuration anymore, remove or rename these columns.\n",
              "Model name (table name): #{model_name} (#{table_name})\n",
              "Attribute name(s): #{overlap.join(', ')}\n"].join
           )
