@@ -110,6 +110,9 @@ module Globalize
           if connection.indexes(translations_table_name).map(&:name).include?(translation_index_name)
             connection.remove_index(translations_table_name, :name => translation_index_name)
           end
+          if connection.indexes(translations_table_name).map(&:name).include?(translation_locale_index_name)
+            connection.remove_index(translations_table_name, :name => translation_locale_index_name)
+          end
         end
 
         def move_data_to_translation_table
