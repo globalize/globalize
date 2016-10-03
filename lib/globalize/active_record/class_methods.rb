@@ -7,10 +7,6 @@ module Globalize
         all.merge translation_class.with_locales(*locales)
       end
 
-      def with_where(opts = {})
-        all.merge translation_class.where(opts)
-      end
-
       def with_translations(*locales)
         locales = translated_locales if locales.empty?
         preload(:translations).joins(:translations).readonly(false).with_locales(locales).tap do |query|
