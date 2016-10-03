@@ -3,8 +3,10 @@ module Globalize
     module ClassMethods
       delegate :translated_locales, :set_translations_table_name, :to => :translation_class
 
-      def columns_hash
-        super.except(*translated_attribute_names.map(&:to_s))
+      if ::ActiveRecord::VERSION::STRING < "5.0.0"
+        def columns_hash
+          super.except(*translated_attribute_names.map(&:to_s))
+        end
       end
 
       def with_locales(*locales)
