@@ -5,6 +5,7 @@ module Globalize
         options = attr_names.extract_options!
         # Bypass setup_translates! if the initial bootstrapping is done already.
         setup_translates!(options) unless translates?
+        check_columns!(attr_names)
 
         # Add any extra translatable attributes.
         attr_names = attr_names.map(&:to_sym)
@@ -37,6 +38,20 @@ module Globalize
 
           # Add attribute to the list.
           self.translated_attribute_names << attr_name
+        end
+      end
+
+      def check_columns!(attr_names)
+        # If tables do not exist, do not warn about conflicting columns
+        return unless table_exists? && translation_class.table_exists?
+
+        if (overlap = attr_names.map(&:to_s) & column_names).present?
+          ActiveSupport::Deprecation.warn(
+            ["You have defined translated attributes with names that conflict with columns on the model table. ",
+             "Globalize does not support this configuration anymore, remove or rename these columns.\n",
+             "Model name (table name): #{model_name} (#{table_name})\n",
+             "Attribute name(s): #{overlap.join(', ')}\n"].join
+          )
         end
       end
 

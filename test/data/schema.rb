@@ -27,7 +27,6 @@ ActiveRecord::Schema.define do
 
   create_table :posts, :force => true do |t|
     t.references :blog
-    t.boolean    :published
   end
 
   create_table :post_translations, :force => true do |t|
@@ -143,7 +142,6 @@ ActiveRecord::Schema.define do
   end
 
   create_table :tasks, :force => true do |t|
-    t.string   :name
     t.datetime :created_at
   end
 
@@ -154,7 +152,6 @@ ActiveRecord::Schema.define do
   end
 
   create_table :UPPERCASE_TABLE_NAME, :force => true do |t|
-    t.string :name
   end
 
   create_table :UPPERCASE_TABLE_NAME_translations, :force => true do |t|
@@ -164,7 +161,6 @@ ActiveRecord::Schema.define do
   end
 
   create_table :news, :force => true do |t|
-    t.string :title
   end
 
   create_table :news_translations, :force => true do |t|
@@ -184,7 +180,6 @@ ActiveRecord::Schema.define do
   end
 
   create_table :serialized_attrs, :force => true do |t|
-    t.text :meta
   end
 
   create_table :serialized_attr_translations, :force => true do |t|
@@ -194,25 +189,12 @@ ActiveRecord::Schema.define do
   end
 
   create_table :serialized_hashes, :force => true do |t|
-    t.text :meta
   end
 
   create_table :serialized_hash_translations, :force => true do |t|
     t.integer :serialized_hash_id
     t.string  :locale
     t.text    :meta
-  end
-
-  create_table :accounts, :force => true do |t|
-    t.string :business_name,  :null => false, :default => ""
-    t.string :notes, :null => false, :default => ""
-  end
-
-  create_table :account_translations, :force => true do |t|
-    t.references :account
-    t.string     :locale
-    t.string     :business_name
-    t.string     :notes
   end
 
   create_table :medias, :force => true do |t|
@@ -225,7 +207,6 @@ ActiveRecord::Schema.define do
   end
 
   create_table :model_with_custom_table_names, :force => true do |t|
-    t.string  :name
   end
 
   create_table :mctn_translations, :force => true do |t|
@@ -268,5 +249,15 @@ ActiveRecord::Schema.define do
     t.string     :locale
     t.references :question
     t.string     :title, null: false
+  end
+
+  create_table :bad_configurations, :force => true do |t|
+    t.string  :name
+  end
+
+  create_table :bad_configuration_translations, :force => true do |t|
+    t.integer :bad_configuration_id
+    t.string  :name
+    t.string  :locale
   end
 end
