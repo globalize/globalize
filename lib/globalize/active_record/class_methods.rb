@@ -3,6 +3,10 @@ module Globalize
     module ClassMethods
       delegate :translated_locales, :set_translations_table_name, :to => :translation_class
 
+      def columns_hash
+        super.except(*translated_attribute_names.map(&:to_s))
+      end
+
       def with_locales(*locales)
         all.merge translation_class.with_locales(*locales)
       end
