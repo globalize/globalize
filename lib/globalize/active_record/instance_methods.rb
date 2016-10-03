@@ -19,8 +19,6 @@ module Globalize
         with_given_locale(attributes) { super(attributes_without_locale(attributes)) }
       end
 
-
-
       def write_attribute(name, value, options = {})
         return super(name, value) unless translated?(name)
 
@@ -169,6 +167,12 @@ module Globalize
 
       def changed?
         changed_attributes.present? || translations.any?(&:changed?)
+      end
+
+      # need to access instance variable directly since changed_attributes
+      # is frozen as of Rails 4.2
+      def original_changed_attributes
+        @changed_attributes
       end
 
     protected
