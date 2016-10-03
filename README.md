@@ -28,9 +28,12 @@ When using bundler put this in your Gemfile:
 gem 'globalize', '~> 5.0.0'
 ```
 
-To use globalize with Rails 5 add this in your Gemfile
+You have to use branch **master** to work with Rails 5.
+
+Put in your Gemfile
 
 ```ruby
+gem 'globalize', github: 'globalize/globalize'
 gem 'activemodel-serializers-xml'
 ```
 
