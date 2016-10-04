@@ -368,5 +368,11 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
       assert_equal attachment, post.attachments.where(file_type: "image").first
       assert_equal attachment, blog.attachments.where(file_type: "image").first
     end
+
+    it 'creates record from relation' do
+      post = Post.create(:title => "title")
+      comment = post.translated_comments.where(content: "content").create
+      assert_equal 1, Comment.count
+    end
   end
 end
