@@ -152,6 +152,27 @@ class AttributesTest < MiniTest::Spec
     end
   end
 
+  describe '#attributes=' do
+    it 'assigns translated attributes' do
+      post = Post.create(:title => 'title')
+      post.attributes = { :title => 'newtitle' }
+      assert_equal post.title, 'newtitle'
+      with_locale(:de) do
+        post.attributes = { :title => 'title in de' }
+        assert_equal post.title, 'title in de'
+      end
+      assert_equal post.title, 'newtitle'
+    end
+
+    it 'does not modify arguments passed in' do
+      post = Post.create(:title => 'title')
+      params = {'id' => 1, 'title' => 'newtitle', 'locale' => 'de'}
+      post.attributes = params
+      assert_equal params, {'id' => 1, 'title' => 'newtitle', 'locale' => 'de'}
+      with_locale(:de) { assert_equal post.title, 'newtitle' }
+    end
+  end
+
   describe '#assign_attributes' do
     it 'assigns translated attributes' do
       post = Post.create(:title => 'title')
