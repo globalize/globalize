@@ -164,6 +164,14 @@ class AttributesTest < MiniTest::Spec
       assert_equal post.title, 'newtitle'
     end
 
+    it 'does nothing if attributes is not a hash' do
+      post = Post.create(:title => 'title')
+      post.attributes = nil
+      assert_equal 'title', post.title
+      post.attributes = []
+      assert_equal 'title', post.title
+    end
+
     it 'does not modify arguments passed in' do
       post = Post.create(:title => 'title')
       params = {'id' => 1, 'title' => 'newtitle', 'locale' => 'de'}
@@ -183,6 +191,12 @@ class AttributesTest < MiniTest::Spec
         assert_equal post.title, 'title in de'
       end
       assert_equal post.title, 'newtitle'
+    end
+
+    it 'does nothing if attributes is nil' do
+      post = Post.create(:title => 'title')
+      post.assign_attributes(nil)
+      assert_equal 'title', post.title
     end
 
     it 'does not modify arguments passed in' do
