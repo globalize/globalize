@@ -11,12 +11,13 @@ module Globalize
         super.merge(translated_attributes)
       end
 
-      def attributes=(attributes, *args)
-        with_given_locale(attributes) { super(attributes_without_locale(attributes)) }
+      def attributes=(*args)
+        assign_attributes(*args)
       end
 
-      def assign_attributes(attributes, *args)
-        with_given_locale(attributes) { super(attributes_without_locale(attributes)) }
+      def assign_attributes(_attributes, *args)
+        attributes = _attributes.dup.symbolize_keys
+        with_given_locale(attributes) { super(attributes.except(:locale), *args) }
       end
 
       def write_attribute(name, value, options = {})
@@ -176,10 +177,6 @@ module Globalize
       end
 
     protected
-
-      def attributes_without_locale(attributes)
-        attributes.try(:except, :locale)
-      end
 
       def each_locale_and_translated_attribute
         used_locales.each do |locale|
