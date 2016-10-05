@@ -152,6 +152,62 @@ class AttributesTest < MiniTest::Spec
     end
   end
 
+  describe '#attributes=' do
+    it 'assigns translated attributes' do
+      post = Post.create(:title => 'title')
+      post.attributes = { :title => 'newtitle' }
+      assert_equal post.title, 'newtitle'
+      with_locale(:de) do
+        post.attributes = { :title => 'title in de' }
+        assert_equal post.title, 'title in de'
+      end
+      assert_equal post.title, 'newtitle'
+    end
+
+    it 'does nothing if attributes is not a hash' do
+      post = Post.create(:title => 'title')
+      post.attributes = nil
+      assert_equal 'title', post.title
+      post.attributes = []
+      assert_equal 'title', post.title
+    end
+
+    it 'does not modify arguments passed in' do
+      post = Post.create(:title => 'title')
+      params = {'id' => 1, 'title' => 'newtitle', 'locale' => 'de'}
+      post.attributes = params
+      assert_equal params, {'id' => 1, 'title' => 'newtitle', 'locale' => 'de'}
+      with_locale(:de) { assert_equal post.title, 'newtitle' }
+    end
+  end
+
+  describe '#assign_attributes' do
+    it 'assigns translated attributes' do
+      post = Post.create(:title => 'title')
+      post.assign_attributes(:title => 'newtitle')
+      assert_equal post.title, 'newtitle'
+      with_locale(:de) do
+        post.assign_attributes(:title => 'title in de')
+        assert_equal post.title, 'title in de'
+      end
+      assert_equal post.title, 'newtitle'
+    end
+
+    it 'does nothing if attributes is nil' do
+      post = Post.create(:title => 'title')
+      post.assign_attributes(nil)
+      assert_equal 'title', post.title
+    end
+
+    it 'does not modify arguments passed in' do
+      post = Post.create(:title => 'title')
+      params = {'id' => 1, 'title' => 'newtitle', 'locale' => 'de'}
+      post.assign_attributes(params)
+      assert_equal params, {'id' => 1, 'title' => 'newtitle', 'locale' => 'de'}
+      with_locale(:de) { assert_equal post.title, 'newtitle' }
+    end
+  end
+
   describe '#write_attribute' do
     it 'returns the value for non-translated attributes' do
       user = User.create(:name => 'Max Mustermann', :email => 'max@mustermann.de')
@@ -274,5 +330,4 @@ class AttributesTest < MiniTest::Spec
       assert_equal 'titolo', artwork.title(:it)
     end
   end
-
 end
