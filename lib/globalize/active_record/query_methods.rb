@@ -14,13 +14,10 @@ module Globalize
       def where(opts = :chain, *rest)
         if opts == :chain
           WhereChain.new(spawn)
+        elsif parsed = parse_translated_conditions(opts)
+          join_translations(super(parsed, *rest))
         else
-          translated, normal = translated_vs_normal(opts)
-          if not translated.empty?
-            join_translations(super(normal, *rest), translated)
-          else
-            super
-          end
+          super
         end
       end
 
@@ -38,17 +35,6 @@ module Globalize
         else
           super
         end
-      end
-
-      def translated_vs_normal(opts)
-        translated = {}
-        if opts.is_a?(Hash) && respond_to?(:translated_attribute_names) && (opts.symbolize_keys.keys & translated_attribute_names).present?
-          opts = opts.dup
-          opts.each do |k,v|
-              translated[k] = opts.delete(k) || opts.delete(key.to_s) if translated_column? k.to_sym
-          end
-        end
-        return translated, opts
       end
 
       def with_translations_in_fallbacks
@@ -79,13 +65,12 @@ module Globalize
         end
       end
 
-      def join_translations(relation = self, opts = {})
+      def join_translations(relation = self)
         if relation.joins_values.include?(:translations)
-          rel = relation
+          relation
         else
-          rel = relation.with_translations_in_fallbacks
+          relation.with_translations_in_fallbacks
         end
-        rel.with_where(opts)
       end
 
       private

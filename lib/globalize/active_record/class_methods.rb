@@ -3,12 +3,14 @@ module Globalize
     module ClassMethods
       delegate :translated_locales, :set_translations_table_name, :to => :translation_class
 
-      def with_locales(*locales)
-        all.merge translation_class.with_locales(*locales)
+      if ::ActiveRecord::VERSION::STRING < "5.0.0"
+        def columns_hash
+          super.except(*translated_attribute_names.map(&:to_s))
+        end
       end
 
-      def with_where(opts = {})
-        all.merge translation_class.where(opts)
+      def with_locales(*locales)
+        all.merge translation_class.with_locales(*locales)
       end
 
       def with_translations(*locales)
