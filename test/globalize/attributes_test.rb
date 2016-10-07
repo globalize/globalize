@@ -164,12 +164,10 @@ class AttributesTest < MiniTest::Spec
       assert_equal post.title, 'newtitle'
     end
 
-    it 'does nothing if attributes is not a hash' do
+    it 'raises ArgumentError if attributes is blank' do
       post = Post.create(:title => 'title')
-      post.attributes = nil
-      assert_equal 'title', post.title
-      post.attributes = []
-      assert_equal 'title', post.title
+      assert_raises(ArgumentError) { post.attributes = nil }
+      assert_raises(ArgumentError) { post.attributes = [] }
     end
 
     it 'does not modify arguments passed in' do
@@ -193,10 +191,10 @@ class AttributesTest < MiniTest::Spec
       assert_equal post.title, 'newtitle'
     end
 
-    it 'does nothing if attributes is nil' do
+    it 'raises ArgumentError if attributes is blank' do
       post = Post.create(:title => 'title')
-      post.assign_attributes(nil)
-      assert_equal 'title', post.title
+      assert_raises(ArgumentError) { post.assign_attributes(nil) }
+      assert_raises(ArgumentError) { post.assign_attributes([]) }
     end
 
     it 'does not modify arguments passed in' do

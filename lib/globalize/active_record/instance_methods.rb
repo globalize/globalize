@@ -12,14 +12,15 @@ module Globalize
       end
 
       def attributes=(new_attributes, *options)
-        return unless new_attributes.is_a?(Hash)
-        assign_attributes(new_attributes, *options)
+        super unless new_attributes.respond_to?(:stringify_keys) && new_attributes.present?
+        attributes = new_attributes.stringify_keys
+        with_given_locale(attributes) { super(attributes.except("locale"), *options) }
       end
 
       def assign_attributes(new_attributes, *options)
-        return unless new_attributes
-        attributes = new_attributes.symbolize_keys
-        with_given_locale(attributes) { super(attributes.except(:locale), *options) }
+        super unless new_attributes.respond_to?(:stringify_keys) && new_attributes.present?
+        attributes = new_attributes.stringify_keys
+        with_given_locale(attributes) { super(attributes.except("locale"), *options) }
       end
 
       def write_attribute(name, value, options = {})
@@ -200,9 +201,9 @@ module Globalize
       end
 
       def with_given_locale(_attributes, &block)
-        attributes = _attributes.symbolize_keys
+        attributes = _attributes.stringify_keys
 
-        if locale = attributes.try(:delete, :locale)
+        if locale = attributes.try(:delete, "locale")
           Globalize.with_locale(locale, &block)
         else
           yield
@@ -216,7 +217,6 @@ module Globalize
       ensure
         self.fallbacks_for_empty_translations = before
       end
-
     end
   end
 end
