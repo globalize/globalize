@@ -23,10 +23,10 @@ module Globalize
         with_given_locale(attributes) { super(attributes.except("locale"), *options) }
       end
 
-      def write_attribute(name, value, options = {})
-        return super(name, value) unless translated?(name)
+      def write_attribute(name, value, *args, &block)
+        return super(name, value, *args, &block) unless translated?(name)
 
-        options = {:locale => Globalize.locale}.merge(options)
+        options = {:locale => Globalize.locale}.merge(args.first || {})
 
         globalize.write(options[:locale], name, value)
       end
@@ -39,18 +39,18 @@ module Globalize
         end
       end
 
-      def read_attribute(name, options = {})
+      def read_attribute(name, options = {}, &block)
         options = {:translated => true, :locale => nil}.merge(options)
-        return super(name) unless options[:translated]
+        return super(name, &block) unless options[:translated]
 
         if translated?(name)
           if !(value = globalize.fetch(options[:locale] || Globalize.locale, name)).nil?
             value
           else
-            super(name)
+            super(name, &block)
           end
         else
-          super(name)
+          super(name, &block)
         end
       end
 
