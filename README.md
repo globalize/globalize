@@ -33,7 +33,7 @@ You have to use branch **master** to work with Rails 5.
 Put in your Gemfile
 
 ```ruby
-gem 'globalize', github: 'globalize/globalize'
+gem 'globalize', git: 'https://github.com/globalize/globalize'
 gem 'activemodel-serializers-xml'
 ```
 
@@ -103,7 +103,7 @@ class CreatePosts < ActiveRecord::Migration
         Post.create_translation_table! :title => :string, :text => :text
       end
 
-      dir.down do 
+      dir.down do
         Post.drop_translation_table!
       end
     end
@@ -119,14 +119,14 @@ class CreatePosts < ActiveRecord::Migration
     create_table :posts do |t|
       t.timestamps
     end
-    
+
     reversible do |dir|
       dir.up do
         Post.create_translation_table! :title => :string,
           :text => {:type => :text, :null => false, :default => 'abc'}
       end
-      
-      dir.down do 
+
+      dir.down do
         Post.drop_translation_table!
       end
     end
@@ -161,8 +161,8 @@ class TranslatePosts < ActiveRecord::Migration
           :migrate_data => true
         })
       end
-      
-      dir.down do 
+
+      dir.down do
         Post.drop_translation_table! :migrate_data => true
       end
     end
@@ -217,8 +217,8 @@ class AddAuthorToPost < ActiveRecord::Migration
       dir.up do
         Post.add_translation_fields! author: :text
       end
-      
-      dir.down do 
+
+      dir.down do
         remove_column :post_translations, :author
       end
     end
