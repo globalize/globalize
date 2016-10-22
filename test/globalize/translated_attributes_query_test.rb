@@ -185,7 +185,13 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
         describe 'for translated columns' do
           it 'returns record in order, column as symbol' do
             @order = Post.where(:title => 'title').order(:title)
-            assert_equal ['post_translations.title'], @order.order_values
+
+            case Globalize::Test::Database.driver
+            when 'mysql'
+              assert_match(/ORDER BY `post_translations`.`title` ASC/, @order.to_sql)
+            else
+              assert_match(/ORDER BY "post_translations"."title" ASC/, @order.to_sql)
+            end
           end
 
           it 'returns record in order, column and direction as hash' do
