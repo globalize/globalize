@@ -51,12 +51,6 @@ class MigrationTest < MiniTest::Spec
       end
     end
 
-    it 'raises BadFieldName if passed translated field with wrong type' do
-      assert_raises BadFieldType do
-        Migrated.create_translation_table!(:name => :integer)
-      end
-    end
-
     it 'avoids creating all translated attributes if translated attributes specified' do
       TwoAttributesMigrated.create_translation_table!(:name => :string)
       assert_migration_table({:name => :string}, TwoAttributesMigrated)
