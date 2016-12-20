@@ -76,7 +76,7 @@ class DirtyTrackingTest < MiniTest::Spec
       post.save
 
       I18n.locale = :de
-      assert_equal nil, post.title
+      assert_nil post.title
 
       post.title = 'Titel'
       assert_equal({ 'title' => [nil, 'Titel'] }, post.changes)
