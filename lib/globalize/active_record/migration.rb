@@ -144,8 +144,6 @@ module Globalize
         def validate_translated_fields
           fields.each do |name, options|
             raise BadFieldName.new(name) unless valid_field_name?(name)
-            type = (options.is_a? Hash) ? options[:type] : options
-            raise BadFieldType.new(name, type) unless valid_field_type?(name, type)
           end
         end
 
@@ -155,10 +153,6 @@ module Globalize
 
         def valid_field_name?(name)
           translated_attribute_names.include?(name)
-        end
-
-        def valid_field_type?(name, type)
-          !translated_attribute_names.include?(name) || [:string, :text, :citext].include?(type)
         end
 
         def translation_index_name
