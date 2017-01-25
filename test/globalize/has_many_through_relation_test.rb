@@ -11,9 +11,9 @@ class InitializingModelViaHasManyThroughRelationTest < MiniTest::Spec
   describe 'assigning has many through associations' do
     it "correctly assigns to association" do
       product = Product.create
-      product.categories = [Category.create]
+      product.categories = [Category.create, Category.create]
       product.save!
-      expect(product.reload.categories.count).to eq(1)
+      assert_equal product.reload.categories.count, 2
     end
   end
 end

@@ -18,6 +18,7 @@ ActiveRecord::Schema.define do
   create_table :category_translations, :force => true do |t|
     t.references :category
     t.string :title
+    t.string :locale
   end
 
   create_table :categories_products, :force => true do |t|
