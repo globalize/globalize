@@ -9,6 +9,8 @@ You can chat with us using Gitter:
 Globalize builds on the [I18n API in Ruby on Rails](http://guides.rubyonrails.org/i18n.html)
 to add model translations to ActiveRecord models.
 
+In other words, a way to translate actual user-generated content, for example; a single blog post with multiple translations.
+
 ## Requirements
 
 * ActiveRecord >= 4.2.0 (see below for installation with ActiveRecord 3.x)
