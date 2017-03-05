@@ -142,10 +142,6 @@ module Globalize
         Globalize.fallbacks(locale)
       end
 
-      def rollback
-        translation_caches[::Globalize.locale] = translation.previous_version
-      end
-
       def save(*)
         result = Globalize.with_locale(translation.locale || I18n.default_locale) do
           without_fallbacks do
