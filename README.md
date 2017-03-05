@@ -420,7 +420,9 @@ If you're not using Rails, you may need to consult a RequestStore's [README](htt
 ## Alternative solutions
 
 * [Traco](https://github.com/barsoom/traco) - use multiple columns in the same model (Barsoom)
-* [hstore_translate](http://github.com/robworley/hstore_translate) - use PostgreSQL's hstore datatype to store translations, instead of separate translation tables (Rob Worley)
+* [Mobility](https://github.com/shioyama/mobility) - pluggable translation framework supporting many strategies, including translatable columns, translation tables and hstore/jsonb (Chris Salzberg)
+* [hstore_translate](https://github.com/robworley/hstore_translate) - use PostgreSQL's hstore datatype to store translations, instead of separate translation tables (Rob Worley)
+* [json_translate](https://github.com/cfabianski/json_translate) - use PostgreSQL's json/jsonb datatype to store translations, instead of separate translation tables (Cédric Fabiansci)
 * [Trasto](https://github.com/yabawock/trasto) - store translations directly in the model in a Postgres Hstore column
 
 ## Related solutions
