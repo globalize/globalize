@@ -83,7 +83,7 @@ module Globalize
             translation.send :"#{key}=", value
             translation.globalized_model.send :"#{key}=", value
           end
-          translation.save
+          translation.save if persisted?
         end
         globalize.reset
       end
