@@ -27,6 +27,10 @@ module Globalize
         end
 
         def create_translation_table!(fields = {}, options = {})
+          extra = options.keys - [:migrate_data, :remove_source_columns, :unique_index]
+          if extra.any?
+            raise ArgumentError, "Unknown migration #{'option'.pluralize(extra.size)}: #{extra}"
+          end
           @fields = fields
           # If we have fields we only want to create the translation table with those fields
           complete_translated_fields if fields.blank?
@@ -34,14 +38,13 @@ module Globalize
 
           create_translation_table
           add_translation_fields!(fields, options)
-          create_translations_index
+          create_translations_index(options)
           clear_schema_cache!
         end
 
         def add_translation_fields!(fields, options = {})
           @fields = fields
           validate_translated_fields
-
           add_translation_fields
           clear_schema_cache!
           move_data_to_translation_table if options[:migrate_data]
@@ -88,10 +91,11 @@ module Globalize
           end
         end
 
-        def create_translations_index
+        def create_translations_index(options)
+          foreign_key = "#{table_name.sub(/^#{table_name_prefix}/, "").singularize}_id".to_sym
           connection.add_index(
             translations_table_name,
-            "#{table_name.sub(/^#{table_name_prefix}/, "").singularize}_id",
+            foreign_key,
             :name => translation_index_name
           )
           # index for select('DISTINCT locale') call in translation.rb
@@ -100,6 +104,15 @@ module Globalize
             :locale,
             :name => translation_locale_index_name
           )
+
+          if options[:unique_index]
+            connection.add_index(
+              translations_table_name,
+              [foreign_key, :locale],
+              :name => translation_unique_index_name,
+              unique: true
+            )
+          end
         end
 
         def drop_translation_table
@@ -156,15 +169,15 @@ module Globalize
         end
 
         def translation_index_name
-          index_name = "index_#{translations_table_name}_on_#{table_name.singularize}_id"
-          index_name.size < connection.index_name_length ? index_name :
-            "index_#{Digest::SHA1.hexdigest(index_name)}"[0, connection.index_name_length]
+          truncate_index_name "index_#{translations_table_name}_on_#{table_name.singularize}_id"
         end
 
         def translation_locale_index_name
-          index_name = "index_#{translations_table_name}_on_locale"
-          index_name.size < connection.index_name_length ? index_name :
-            "index_#{Digest::SHA1.hexdigest(index_name)}"[0, connection.index_name_length]
+          truncate_index_name "index_#{translations_table_name}_on_locale"
+        end
+
+        def translation_unique_index_name
+          truncate_index_name "index_#{translations_table_name}_on_#{table_name.singularize}_id_and_locale"
         end
 
         def clear_schema_cache!
@@ -174,6 +187,14 @@ module Globalize
         end
 
         private
+
+        def truncate_index_name(index_name)
+          if index_name.size < connection.index_name_length
+            index_name
+          else
+            "index_#{Digest::SHA1.hexdigest(index_name)}"[0, connection.index_name_length]
+          end
+        end
 
         def add_missing_columns
           clear_schema_cache!

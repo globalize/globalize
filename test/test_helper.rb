@@ -73,6 +73,10 @@ ActiveRecord::Base.class_eval do
     rescue ActiveRecord::StatementInvalid
       false
     end
+
+    def unique_index_exists_on?(*columns)
+      connection.indexes(table_name).any? { |index| index.columns == columns && index.unique }
+    end
   end
 end
 
