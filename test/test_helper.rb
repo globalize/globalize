@@ -5,6 +5,14 @@ Bundler.require(:default, :test)
 
 Dir[File.expand_path('../support/**/*.rb', __FILE__)].each { |f| require f }
 
+require "mobility"
+Mobility.configure do |config|
+  config.default_backend = :globalize
+end
+
+I18n.enforce_available_locales = true
+I18n.available_locales = [ :en, :'en-US', :fr, :de, :'de-DE', :he, :nl, :pl, :ja ]
+
 Globalize::Test::Database.connect
 
 require File.expand_path('../data/models', __FILE__)
@@ -13,9 +21,6 @@ require 'minitest/reporters'
 Minitest::Reporters.use!
 
 require 'minitest/spec'
-
-I18n.enforce_available_locales = true
-I18n.available_locales = [ :en, :'en-US', :fr, :de, :'de-DE', :he, :nl, :pl ]
 
 require 'database_cleaner'
 DatabaseCleaner.strategy = :transaction
@@ -56,7 +61,7 @@ class MiniTest::Spec
   end
 
   def assert_translated(record, locale, attributes, translations)
-    assert_equal Array.wrap(translations), Array.wrap(attributes).map { |name| record.send(name, locale) }
+    assert_equal Array.wrap(translations), Array.wrap(attributes).map { |name| record.send(name, locale: locale) }
   end
 end
 

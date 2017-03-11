@@ -91,7 +91,7 @@ class AttributesTest < MiniTest::Spec
       post = with_locale(:de) do
         Post.create!(:title => 'Titel', :content => 'Inhalt')
       end
-      assert_equal 'Titel', post.title(:de)
+      assert_equal 'Titel', post.title(locale: :de)
     end
   end
 
@@ -134,7 +134,9 @@ class AttributesTest < MiniTest::Spec
       end
       post.save!
       saved_locales = post.translations.map(&:locale)
-      assert saved_locales.include? :it
+      translation = post.translations.first
+      translation.locale
+      assert saved_locales.include? "it"
     end
   end
 
@@ -216,7 +218,7 @@ class AttributesTest < MiniTest::Spec
 
   describe '#translated_attribute_names' do
     it 'returns translated attribute names' do
-      assert_equal [:title, :content], Post.translated_attribute_names & [:title, :content]
+      assert_equal ["title", "content"], Post.translated_attribute_names & ["title", "content"]
     end
   end
 
@@ -246,26 +248,29 @@ class AttributesTest < MiniTest::Spec
 
   describe 'serializable attribute' do
     it 'works with default marshalling, without data' do
+      skip "removing support for serialized attributes"
       model = SerializedAttr.create
       assert_equal nil, model.meta
     end
 
     it 'works with default marshalling, with data' do
+      skip "removing support for serialized attributes"
       data = {:foo => "bar", :whats => "up"}
       model = SerializedAttr.create(:meta => data)
       assert_equal data, model.meta
     end
 
     it 'works with specified marshalling, without data, rails 3.1+' do
+      skip "removing support for serialized attributes"
       model = SerializedHash.new
       assert_equal Hash.new, model.meta
     end
   end
 
   describe '#column_for_attribute' do
-    it 'delegates to translations adapter' do
+    it 'delegates to translations class' do
       post = Post.new
-      assert_equal post.globalize.send(:column_for_attribute, :title), post.column_for_attribute(:title)
+      assert_equal Post::Translation.column_for_attribute(:title), post.column_for_attribute(:title)
     end
   end
 
@@ -287,6 +292,7 @@ class AttributesTest < MiniTest::Spec
     )
 
     it 'does not save a record with an empty required field' do
+      skip "does not create any translation, so test is irrelevant"
       err = assert_raises ActiveRecord::StatementInvalid do
         Artwork.create
       end
@@ -325,7 +331,7 @@ class AttributesTest < MiniTest::Spec
 
       assert_equal 2, artwork.translations.length
       assert_equal 'title', artwork.title
-      assert_equal 'titolo', artwork.title(:it)
+      assert_equal 'titolo', artwork.title(locale: :it)
     end
   end
 end

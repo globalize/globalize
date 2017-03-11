@@ -8,21 +8,20 @@ class DirtyTrackingTest < MiniTest::Spec
       assert_equal [], post.changed
 
       post.title = 'changed title'
-      assert_equal ['title'], post.changed
+      assert_equal ['title_en'], post.changed
 
       post.content = 'changed content'
-      assert_includes post.changed, 'title'
-      assert_includes post.changed, 'content'
+      assert_includes post.changed, 'title_en'
+      assert_includes post.changed, 'content_en'
     end
 
-    # ummm ... is this actually desired behaviour? probably depends on how we use it
     it 'lists attribute changed in other locale after locale switching' do
       post = Post.create(:title => 'title', :content => 'content')
       assert_equal [], post.changed
 
       post.title = 'changed title'
       I18n.locale = :de
-      assert_equal ['title'], post.changed
+      assert_equal ['title_en'], post.changed
     end
 
     it 'does not track fields with identical values' do
@@ -30,13 +29,14 @@ class DirtyTrackingTest < MiniTest::Spec
       assert_equal [], post.changed
 
       post.title = 'title'
+      binding.pry
       assert_equal [], post.changed
 
       post.title = 'changed title'
-      assert_equal({ 'title' => ['title', 'changed title'] }, post.changes)
+      assert_equal({ 'title_en' => ['title', 'changed title'] }, post.changes)
 
       post.title = 'doubly changed title'
-      assert_equal({ 'title' => ['title', 'doubly changed title'] }, post.changes)
+      assert_equal({ 'title_en' => ['title', 'doubly changed title'] }, post.changes)
 
       post.title = 'title'
       assert_equal [], post.changed
@@ -48,10 +48,10 @@ class DirtyTrackingTest < MiniTest::Spec
         assert_equal [], child.changed
 
         child.content = 'bar'
-        assert_equal ['content'], child.changed
+        assert_equal ['content_en'], child.changed
 
         child.content = 'baz'
-        assert_includes child.changed, 'content'
+        assert_includes child.changed, 'content_en'
       end
 
       it 'works with translated attributes after locale switching' do
@@ -61,7 +61,7 @@ class DirtyTrackingTest < MiniTest::Spec
         child.content = 'bar'
         I18n.locale = :de
 
-        assert_equal ['content'], child.changed
+        assert_equal ['content_en'], child.changed
       end
     end
   end
@@ -72,22 +72,23 @@ class DirtyTrackingTest < MiniTest::Spec
       assert_equal [], post.changed
 
       post.title = 'changed title'
-      assert_equal({ 'title' => ['title', 'changed title'] }, post.changes)
+      assert_equal({ 'title_en' => ['title', 'changed title'] }, post.changes)
       post.save
 
       I18n.locale = :de
       assert_equal nil, post.title
 
       post.title = 'Titel'
-      assert_equal({ 'title' => [nil, 'Titel'] }, post.changes)
+      assert_equal({ 'title_de' => [nil, 'Titel'] }, post.changes)
     end
 
     it 'works for blank assignment' do
       post = Post.create(:title => 'title', :content => 'content')
       assert_equal [], post.changed
 
+      # note: Mobility converts blanks to nil
       post.title = ''
-      assert_equal({ 'title' => ['title', ''] }, post.changes)
+      assert_equal({ 'title_en' => ['title', nil] }, post.changes)
       post.save
     end
 
@@ -96,7 +97,7 @@ class DirtyTrackingTest < MiniTest::Spec
       assert_equal [], post.changed
 
       post.title = nil
-      assert_equal({ 'title' => ['title', nil] }, post.changes)
+      assert_equal({ 'title_en' => ['title', nil] }, post.changes)
       post.save
     end
     
@@ -105,11 +106,11 @@ class DirtyTrackingTest < MiniTest::Spec
       # assert_equal [], post.changed
 
       post.title = 'english title'
-      assert_equal ['content', 'title'], post.changed
+      assert_equal ['content_en', 'title_en'].sort, post.changed.sort
 
       I18n.locale = :de
       post.title  = nil
-      assert_equal ['content', 'title'], post.changed
+      assert_equal ['content_en', 'title_en', 'title_de'].sort, post.changed.sort
     end
 
     it 'works for restore changed state of other locale' do
@@ -117,19 +118,19 @@ class DirtyTrackingTest < MiniTest::Spec
       # assert_equal [], post.changed
 
       post.title = 'english title'
-      assert_equal ['content', 'title'], post.changed
+      assert_equal ['content_en', 'title_en'].sort, post.changed.sort
 
       I18n.locale = :de
       post.title  = 'title de'
-      assert_equal ['content', 'title'], post.changed
+      assert_equal ['content_en', 'title_en', 'title_de'].sort, post.changed.sort
 
       I18n.locale = :en
       post.title  = nil
-      assert_equal ['content', 'title'], post.changed
+      assert_equal ['content_en', 'title_de'].sort, post.changed.sort
 
       I18n.locale = :de
       post.title  = nil
-      assert_equal ['content'], post.changed
+      assert_equal ['content_en'], post.changed
     end
   end
 end

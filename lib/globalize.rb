@@ -1,34 +1,26 @@
 require 'request_store'
 require 'active_record'
-require 'patches/active_record/xml_attribute_serializer'
-require 'patches/active_record/query_method'
-require 'patches/active_record/relation'
-require 'patches/active_record/serialization'
+require 'mobility'
+require 'mobility/backend/globalize'
+#require 'patches/active_record/xml_attribute_serializer'
+#require 'patches/active_record/query_method'
+#require 'patches/active_record/relation'
+#require 'patches/active_record/serialization'
 require 'patches/active_record/uniqueness_validator'
-require 'patches/active_record/persistence'
+#require 'patches/active_record/persistence'
 
 module Globalize
-  autoload :ActiveRecord, 'globalize/active_record'
-  autoload :Interpolation,   'globalize/interpolation'
+  autoload :ActiveRecord,  'globalize/active_record'
+  autoload :Interpolation, 'globalize/interpolation'
 
   class << self
-    def locale
-      read_locale || I18n.locale
-    end
+    delegate :locale, :locale=, :with_locale, to: Mobility
 
-    def locale=(locale)
-      set_locale(locale)
-    end
-
-    def with_locale(locale, &block)
-      previous_locale = read_locale
-      begin
-        set_locale(locale)
-        result = yield(locale)
-      ensure
-        set_locale(previous_locale)
-      end
-      result
+    Mobility.configure do |config|
+      # need to disable default :translates method to avoid
+      # conflict with our "translates".
+      # TODO: rename "translates" to "globalize"
+      config.accessor_method = false
     end
 
     def with_locales(*locales, &block)
@@ -84,7 +76,7 @@ module Globalize
   end
 end
 
-ActiveRecord::Base.mattr_accessor :globalize_serialized_attributes, instance_writer: false
-ActiveRecord::Base.globalize_serialized_attributes = {}
+#ActiveRecord::Base.mattr_accessor :globalize_serialized_attributes, instance_writer: false
+#ActiveRecord::Base.globalize_serialized_attributes = {}
 
 ActiveRecord::Base.extend(Globalize::ActiveRecord::ActMacro)
