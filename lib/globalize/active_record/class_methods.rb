@@ -56,10 +56,10 @@ module Globalize
             klass = self.const_set(:Translation, Class.new(Globalize::ActiveRecord::Translation))
           end
 
-          klass.belongs_to :globalized_model, 
-            :class_name => self.name, 
-            :foreign_key => translation_options[:foreign_key], 
-            inverse_of: :translations, 
+          klass.belongs_to :globalized_model,
+            class_name: self.name,
+            foreign_key: translation_options[:foreign_key],
+            inverse_of: :translations,
             touch: translation_options.fetch(:touch, false)
           klass
         end
