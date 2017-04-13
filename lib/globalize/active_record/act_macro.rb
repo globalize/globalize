@@ -47,9 +47,8 @@ module Globalize
       end
 
       def check_columns!(attr_names)
-        # If tables do not exist, do not warn about conflicting columns
-        return unless connected? && table_exists? && translation_class.table_exists?
-
+        # If tables do not exist or Rails version is greater than 5, do not warn about conflicting columns
+        return unless ::ActiveRecord::VERSION::STRING < "5.0" && connected? && table_exists? && translation_class.table_exists?
         if (overlap = attr_names.map(&:to_s) & column_names).present?
           ActiveSupport::Deprecation.warn(
             ["You have defined one or more translated attributes with names that conflict with column(s) on the model table. ",
