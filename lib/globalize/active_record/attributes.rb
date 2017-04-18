@@ -4,6 +4,9 @@
 module Globalize
   module ActiveRecord
     class Attributes < Hash # TODO: Think about using HashWithIndifferentAccess ?
+      
+      SKIP_TRANSLATION = {}
+
       def [](locale)
         locale = locale.to_sym
         self[locale] = {} unless has_key?(locale)
