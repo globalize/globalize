@@ -54,7 +54,7 @@ module Globalize
     end
     
     def fallbacks_for_empty_translations=(value = false)
-      return if !!value != value # Only allow booleans
+      return if [true, false].include? value
       storage[:globalize_fallback_empty_translations] = value
     end
 

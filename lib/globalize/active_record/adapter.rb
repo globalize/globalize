@@ -98,7 +98,7 @@ module Globalize
       end
 
       def fallbacks_for?(object)
-        object.nil? || (Globalize.fallbacks_for_empty_translations? && object.blank?) || (fallbacks_for_empty_translations? && object.blank?)
+        object.blank? && (Globalize.fallbacks_for_empty_translations? || fallbacks_for_empty_translations?)
       end
 
       delegate :fallbacks_for_empty_translations?, :to => :record, :prefix => false
