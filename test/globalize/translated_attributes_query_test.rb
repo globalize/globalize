@@ -139,9 +139,9 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
     end
 
     it 'handles nil case' do
-      assert_equal nil, Post.where(:title => 'foo').first
-      assert_equal nil, Post.where(:title => 'foo').last
-      assert_equal nil, Post.where(:title => 'foo').take
+      assert_nil Post.where(:title => 'foo').first
+      assert_nil Post.where(:title => 'foo').last
+      assert_nil Post.where(:title => 'foo').take
     end
 
     describe '.first' do
@@ -333,7 +333,7 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
 
       # find_by
       assert_equal post, Post.find_by(:title  => 'タイトル')
-      assert_equal nil, Post.find_by(:title => 'titre')
+      assert_nil Post.find_by(:title => 'titre')
 
       # exists
       assert Post.exists?(:title => 'タイトル')
@@ -372,7 +372,7 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
 
     it 'creates record from relation' do
       post = Post.create(:title => "title")
-      comment = post.translated_comments.where(content: "content").create
+      post.translated_comments.where(content: "content").create
       assert_equal 1, Comment.count
     end
   end

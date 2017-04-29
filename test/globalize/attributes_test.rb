@@ -118,9 +118,8 @@ class AttributesTest < MiniTest::Spec
 
     it 'does not change untranslated value' do
       post = Post.create(:title => 'title')
-      before = post.untranslated_attributes['title']
       post.title = 'changed title'
-      assert_equal post.untranslated_attributes['title'], before
+      assert_nil post.untranslated_attributes['title']
     end
 
     it 'does not remove secondary unsaved translations' do
@@ -247,7 +246,7 @@ class AttributesTest < MiniTest::Spec
   describe 'serializable attribute' do
     it 'works with default marshalling, without data' do
       model = SerializedAttr.create
-      assert_equal nil, model.meta
+      assert_nil model.meta
     end
 
     it 'works with default marshalling, with data' do
