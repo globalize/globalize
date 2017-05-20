@@ -29,7 +29,6 @@ module Globalize
           end
           relation = relation.merge(options[:conditions]) if options[:conditions]
 
-          # if klass.unscoped.with_translations.where(relation).exists?
           if relation.exists?
             error_options = options.except(:case_sensitive, :scope, :conditions)
             error_options[:value] = value
