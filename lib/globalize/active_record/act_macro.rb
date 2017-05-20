@@ -46,6 +46,7 @@ module Globalize
             reset_column_information
           end
         rescue ::ActiveRecord::NoDatabaseError
+          warn 'Unable to connect to a database. Globalize skipped ignoring columns of translated attributes.'
         end
       end
 
@@ -61,6 +62,7 @@ module Globalize
           )
         end
       rescue ::ActiveRecord::NoDatabaseError
+        warn 'Unable to connect to a database. Globalize skipped checking attributes with conflicting column names.'
       end
 
       def apply_globalize_options(options)
