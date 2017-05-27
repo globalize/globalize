@@ -6,7 +6,11 @@ module Globalize
         if klass.translates? && klass.translated?(attribute)
           finder_class = klass.translation_class
           finder_table = finder_class.arel_table
-          relation = build_relation(finder_class, finder_table, attribute, value).where(locale: Globalize.locale)
+          if ::ActiveRecord::VERSION::STRING > "5.1"
+            relation = build_relation(finder_class, attribute, value).where(locale: Globalize.locale)
+          else
+            relation = build_relation(finder_class, finder_table, attribute, value).where(locale: Globalize.locale)
+          end
           relation = relation.where.not(klass.reflect_on_association(:translations).foreign_key => record.send(:id)) if record.persisted?
 
 
