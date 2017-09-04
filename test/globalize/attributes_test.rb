@@ -248,6 +248,7 @@ class AttributesTest < MiniTest::Spec
     it 'keeps track of serialized attributes between classes' do
       assert_equal UnserializedAttr.globalize_serialized_attributes, {}
       assert_equal SerializedAttr.globalize_serialized_attributes[:meta].class, ActiveRecord::Coders::YAMLColumn
+      assert_equal ArraySerializedAttr.globalize_serialized_attributes[:meta].class, ActiveRecord::Coders::YAMLColumn
       assert_equal JSONSerializedAttr.globalize_serialized_attributes[:meta], ActiveRecord::Coders::JSON
     end
 
@@ -262,13 +263,14 @@ class AttributesTest < MiniTest::Spec
       assert_equal data, model.meta
     end
 
-    it 'works with specified marshalling, without data, rails 5.0+' do
+    it 'works with Hash marshalling, without data' do
       model = SerializedHash.new
-      if ::ActiveRecord::VERSION::STRING < "5.0"
-        assert_equal Hash.new, model.meta
-      else
-        assert_equal nil, model.meta
-      end
+      assert_equal Hash.new, model.meta
+    end
+
+    it 'works with Array marshalling, without data' do
+      model = ArraySerializedAttr.new
+      assert_equal Array.new, model.meta
     end
   end
 
