@@ -434,3 +434,5 @@ If you're not using Rails, you may need to consult a RequestStore's [README](htt
 ## Related solutions
 
 * [friendly_id-globalize](https://github.com/norman/friendly_id-globalize) - lets you use Globalize to translate slugs (Norman Clarke)
+
+* [Vulgata](https://github.com/kaipule-tech/vulgata) - A Rails engine that creates a fully functional translation center for your data (using Globalize) and I18n keys.
