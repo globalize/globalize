@@ -11,8 +11,9 @@ gemfile:
   - gemfiles/Gemfile.rails-4.2.rb
 
 rvm:
-  - 2.3.1
-  - 2.2.5
+  - 2.4.2
+  - 2.3.5
+  - 2.2.8
   - 2.1
   - 2.0.0
   - rbx
