@@ -250,9 +250,9 @@ If you like your translated model to update if a translation changes, use the `t
 If you're getting the `ActiveRecord::StatementInvalid: PG::NotNullViolation: ERROR: null value in column "column_name" violates not-null constraint` error, the only known way to deal with it as of now is to remove not-null constraint for the globalized columns:
 
 ```ruby
-class RemoveNullConstraintsFromResources < ActiveRecord::Migration
+class RemoveNullConstraintsFromResourceTranslations < ActiveRecord::Migration
   def change
-    change_column_null :resources, :column_name, true
+    change_column_null :resource_translations, :column_name, true
   end
 end
 ```
