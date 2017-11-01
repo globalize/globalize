@@ -76,7 +76,7 @@ class DirtyTrackingTest < MiniTest::Spec
       post.save
 
       I18n.locale = :de
-      assert_equal nil, post.title
+      assert_nil post.title
 
       post.title = 'Titel'
       assert_equal({ 'title' => [nil, 'Titel'] }, post.changes)
@@ -99,7 +99,7 @@ class DirtyTrackingTest < MiniTest::Spec
       assert_equal({ 'title' => ['title', nil] }, post.changes)
       post.save
     end
-    
+
     it 'works for assigning new value == old value of other locale' do
       post = Post.create(:title => nil, :content => 'content')
       # assert_equal [], post.changed

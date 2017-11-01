@@ -254,7 +254,7 @@ class AttributesTest < MiniTest::Spec
 
     it 'works with default marshalling, without data' do
       model = SerializedAttr.create
-      assert_equal nil, model.meta
+      assert_nil model.meta
     end
 
     it 'works with default marshalling, with data' do
