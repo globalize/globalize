@@ -118,9 +118,9 @@ class AttributesTest < MiniTest::Spec
 
     it 'does not change untranslated value' do
       post = Post.create(:title => 'title')
-      before = post.untranslated_attributes['title']
+      assert_nil post.untranslated_attributes['title']
       post.title = 'changed title'
-      assert_equal post.untranslated_attributes['title'], before
+      assert_nil post.untranslated_attributes['title']
     end
 
     it 'does not remove secondary unsaved translations' do
