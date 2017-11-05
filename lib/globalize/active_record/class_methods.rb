@@ -49,19 +49,20 @@ module Globalize
       end
 
       def translation_class
-        @translation_class ||= begin
-          if self.const_defined?(:Translation, false)
-            klass = self.const_get(:Translation, false)
-          else
-            klass = self.const_set(:Translation, Class.new(Globalize::ActiveRecord::Translation))
-          end
-
+        @translation_class ||= translation_constant.tap do |klass|
           klass.belongs_to :globalized_model,
             class_name: self.name,
             foreign_key: translation_options[:foreign_key],
             inverse_of: :translations,
             touch: translation_options.fetch(:touch, false)
-          klass
+        end
+      end
+
+      def translation_constant
+        if self.const_defined?(:Translation, false)
+          klass = self.const_get(:Translation, false)
+        else
+          klass = self.const_set(:Translation, Class.new(Globalize::ActiveRecord::Translation))
         end
       end
 
