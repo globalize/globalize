@@ -3,7 +3,7 @@ require 'rake/testtask'
 require 'rdoc/task'
 
 desc 'Default: run unit tests.'
-task :default => :test
+task :default => ['db:drop', 'db:create', 'db:migrate', :test]
 
 desc 'Run all tests.'
 Rake::TestTask.new(:test) do |t|
