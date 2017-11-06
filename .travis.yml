@@ -1,7 +1,12 @@
 language: ruby
 cache: bundler
-sudo: false
-before_install: gem install bundler
+sudo: true
+services:
+  - docker
+before_install:
+  - gem install bundler
+  - sudo service mysql stop || sudo service mysql-5.6 stop || sudo stop mysql-5.6 || sudo stop mysql || echo "failed to stop mysql"
+  - sudo docker run -d -p 3306:3306 mysql:5.7
 before_script: bundle exec rake db:create db:migrate
 script: bundle exec rake
 
