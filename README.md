@@ -30,13 +30,12 @@ When using bundler put this in your Gemfile:
 gem 'globalize', '~> 5.0.0'
 ```
 
-You have to use branch **master** to work with Rails 5.
+You have to use version 5.1 or greater to work with Rails 5. (only pre-release)
 
 Put in your Gemfile
 
 ```ruby
-gem 'globalize', git: 'https://github.com/globalize/globalize'
-gem 'activemodel-serializers-xml'
+gem 'globalize', '~> 5.1.0.beta2'
 ```
 
 To use the version of globalize for ActiveRecord 4.0 or 4.1, specify:
