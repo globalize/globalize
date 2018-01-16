@@ -166,7 +166,7 @@ module Globalize
       end
 
       def changed?
-        changed_attributes.present? || translations.any?(&:changed?)
+        saved_changes.transform_values(&:first).present? || translations.any?(&:changed?)
       end
 
       # need to access instance variable directly since changed_attributes

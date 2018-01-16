@@ -114,6 +114,7 @@ class AttributesTest < MiniTest::Spec
       post.save
       assert post.translations.all?(&:persisted?)
       assert_equal 1, post.translations.length
+      assert post.changed?
     end
 
     it 'does not change untranslated value' do
