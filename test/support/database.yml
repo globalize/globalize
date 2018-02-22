@@ -5,6 +5,7 @@ mysql:
   database: globalize_test
   username: root
   encoding: utf8
+  collation: utf8_general_ci
 
 postgres:
   adapter: postgresql

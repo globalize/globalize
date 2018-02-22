@@ -1,7 +1,18 @@
 language: ruby
 cache: bundler
-sudo: false
-before_install: gem install bundler
+sudo: required
+dist: trusty
+before_install:
+  - gem install bundler
+  - mysql -u root -e 'create database globalize_test character set utf8;' >/dev/null
+install:
+  - bundle install --retry=3
+addons:
+  apt:
+    packages:
+    - mysql-server-5.6
+    - mysql-client-core-5.6
+    - mysql-client-5.6
 before_script: bundle exec rake db:create db:migrate
 script: bundle exec rake
 
@@ -20,9 +31,12 @@ rvm:
   - jruby-9.1.2.0
 
 env:
+  matrix:
   - DB=sqlite3
   - DB=postgres
   - DB=mysql
+  global:
+    - "JRUBY_OPTS='--client -J-XX:+TieredCompilation -J-XX:TieredStopAtLevel=1 -Xcext.enabled=false -J-Xss2m -Xcompile.invokedynamic=false'"
 
 matrix:
   allow_failures:
