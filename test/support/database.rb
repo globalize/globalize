@@ -55,7 +55,7 @@ module Globalize
         db_config = config[driver]
         command = case driver
         when "mysql"
-          "mysql -u #{db_config['username']} -e 'create database #{db_config['database']};' >/dev/null"
+          "mysql -u #{db_config['username']} -e 'create database #{db_config['database']} character set utf8 collate utf8_general_ci;' >/dev/null"
         when "postgres", "postgresql"
           "psql -c 'create database #{db_config['database']};' -U #{db_config['username']} >/dev/null"
         end
