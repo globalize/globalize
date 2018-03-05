@@ -11,6 +11,6 @@ end
 
 if !ENV['TRAVIS'] || %w(postgres postgresql).include?(ENV['DB'])
   group :postgres, :postgresql do
-    gem 'pg', platforms: [:ruby, :rbx]
+    gem 'pg', '< 1.0', platforms: [:ruby, :rbx]
   end
 end
