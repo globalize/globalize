@@ -97,8 +97,8 @@ module Globalize
         end
       end
 
-      def define_translated_attr_accessor(name)
-        attribute(name)
+      def define_translated_attr_accessor(name, cast_type = ::ActiveRecord::Type::String.new)
+        attribute(name, cast_type)
         define_translated_attr_reader(name)
         define_translated_attr_writer(name)
       end
