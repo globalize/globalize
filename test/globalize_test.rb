@@ -105,6 +105,13 @@ class GlobalizeTest < MiniTest::Spec
         assert_translated post, :en, :title, 'title'
         assert_translated post, :de, :title, 'Titel'
       end
+
+      it "does not add tralations if no words changed" do
+        product = with_locale(:en) { Product.create(:name => 'name') }
+        with_locale(:de) { product.update_attributes(:updated_at => Time.now) }
+
+        assert_equal 1, product.reload.translations.size
+      end
     end
 
     describe '#write_attribute' do
