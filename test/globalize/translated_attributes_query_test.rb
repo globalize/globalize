@@ -147,7 +147,7 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
     describe '.first' do
       it 'returns record with all translations' do
         @first = Post.where(:title => 'title').first
-        assert_equal @posts[0].translations, @first.translations
+        assert_equal @posts[0].translations.sort, @first.translations.sort
       end
 
       it 'accepts limit argument' do
@@ -159,7 +159,7 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
     describe '.last' do
       it 'returns record with all translations' do
         @last = Post.where(:title => 'title').last
-        assert_equal @posts[2].translations, @last.translations
+        assert_equal @posts[2].translations.sort, @last.translations.sort
       end
 
       it 'accepts limit argument' do
@@ -171,7 +171,7 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
     describe '.take' do
       it 'returns record with all translations' do
         Globalize.with_locale(:ja) { @take = Post.where(:title => 'タイトル2').take }
-        assert_equal @take.translations, @posts[1].translations
+        assert_equal @take.translations.sort, @posts[1].translations.sort
       end
 
       it 'accepts limit argument' do
