@@ -1,6 +1,8 @@
 module Globalize
   module ActiveRecord
     module ClassMethods
+      DEFAULT_CAST_TYPE = ::ActiveRecord::Type::String.new
+
       delegate :translated_locales, :set_translations_table_name, :to => :translation_class
 
       if ::ActiveRecord::VERSION::STRING < "5.0.0"
@@ -97,8 +99,8 @@ module Globalize
         end
       end
 
-      def define_translated_attr_accessor(name)
-        attribute(name, ::ActiveRecord::Type::Value.new)
+      def define_translated_attr_accessor(name, cast_type = nil)
+        attribute(name, cast_type || DEFAULT_CAST_TYPE)
         define_translated_attr_reader(name)
         define_translated_attr_writer(name)
       end

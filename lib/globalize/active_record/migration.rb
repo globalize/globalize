@@ -9,7 +9,7 @@ module Globalize
 
       delegate :create_translation_table!, :add_translation_fields!,
         :drop_translation_table!, :translation_index_name,
-        :translation_locale_index_name, :to => :globalize_migrator
+      :translation_locale_index_name, :to => :globalize_migrator
 
       class Migrator
         include Globalize::ActiveRecord::Exceptions
@@ -23,27 +23,33 @@ module Globalize
         end
 
         def fields
-          @fields ||= complete_translated_fields
+          return @fields if @fields
+          @fields = {}
+          complete_translated_fields
+          @fields
         end
 
-        def create_translation_table!(fields = {}, options = {})
+        def create_translation_table!(table_fields = {}, options = {})
           extra = options.keys - [:migrate_data, :remove_source_columns, :unique_index]
           if extra.any?
             raise ArgumentError, "Unknown migration #{'option'.pluralize(extra.size)}: #{extra}"
           end
-          @fields = fields
-          # If we have fields we only want to create the translation table with those fields
-          complete_translated_fields if fields.blank?
+
+          @fields = table_fields
+
+          # If we have table_fields we only want to create the translation table
+          # with those fields
+          complete_translated_fields if table_fields.blank?
           validate_translated_fields
 
           create_translation_table
-          add_translation_fields!(fields, options)
+          add_translation_fields!(table_fields, options)
           create_translations_index(options)
           clear_schema_cache!
         end
 
-        def add_translation_fields!(fields, options = {})
-          @fields = fields
+        def add_translation_fields!(new_fields, options = {})
+          @fields = new_fields
           validate_translated_fields
           add_translation_fields
           clear_schema_cache!
@@ -53,8 +59,7 @@ module Globalize
         end
 
         def remove_source_columns
-          column_names = *fields.keys
-          column_names.each do |column|
+          fields.keys.each do |column|
             if connection.column_exists?(table_name, column)
               connection.remove_column(table_name, column)
             end
@@ -69,10 +74,11 @@ module Globalize
         end
 
         # This adds all the current translated attributes of the model
-        # It's a problem because in early migrations would add all the translated attributes
+        # It's a problem because in early migrations would add all the
+        # translated attributes
         def complete_translated_fields
           translated_attribute_names.each do |name|
-            @fields[name] ||= column_type(name)
+            fields[name] ||= column_type(name) || :string
           end
         end
 

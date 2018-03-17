@@ -5,9 +5,11 @@ class MigrationTest < MiniTest::Spec
 
   before(:each) do
     reset_schema(Migrated, TwoAttributesMigrated)
+
     if Globalize::Test::Database.long_table_name_support?
       reset_schema(MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters)
     end
+
     refute Migrated.translation_class.table_exists?
     refute Migrated.translation_class.index_exists_on?(:migrated_id)
     refute Migrated.translation_class.index_exists_on?(:locale)
@@ -15,6 +17,7 @@ class MigrationTest < MiniTest::Spec
 
   after(:each) do
     reset_schema(Migrated, TwoAttributesMigrated)
+
     if Globalize::Test::Database.long_table_name_support?
       reset_schema(MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters)
     end
@@ -124,7 +127,11 @@ class MigrationTest < MiniTest::Spec
     it 'adds fields to translate after creating the translation table' do
       TwoAttributesMigrated.create_translation_table!(:name => :string)
       TwoAttributesMigrated.add_translation_fields!(:body => :text)
-      assert_migration_table({:name => :string, :body => :text}, TwoAttributesMigrated)
+
+      assert_migration_table(
+        { :name => :string, :body => :text },
+        TwoAttributesMigrated
+      )
     end
 
     # Here we test that adding translation fields we can use the migrate data and remouve source column options.
@@ -151,12 +158,15 @@ class MigrationTest < MiniTest::Spec
         model.where(:id => untranslated_record.id).update_all(:name => 'No longer translated')
         untranslated_record.reload
 
-        model.add_translation_fields!({:body => :text}, {:migrate_data => true, :remove_source_columns => true})
+        model.add_translation_fields!(
+          { :body => :text },
+          { :migrate_data => true, :remove_source_columns => true }
+        )
         untranslated_record.reload
 
         assert_translated untranslated_record, :en, :name, 'Untranslated'
         assert_translated untranslated_record, :en, :body, 'Untranslated body'
-        assert_nil model.columns.detect { |c| c.name == "body" }
+        assert_nil model.columns_hash['body']
       end
     end
   end

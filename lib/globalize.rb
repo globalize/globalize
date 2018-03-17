@@ -9,7 +9,7 @@ require 'patches/active_record/persistence'
 
 module Globalize
   autoload :ActiveRecord, 'globalize/active_record'
-  autoload :Interpolation,   'globalize/interpolation'
+  autoload :Interpolation, 'globalize/interpolation'
 
   class << self
     def locale
