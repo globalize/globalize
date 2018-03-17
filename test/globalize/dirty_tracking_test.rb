@@ -105,11 +105,11 @@ class DirtyTrackingTest < MiniTest::Spec
       # assert_equal [], post.changed
 
       post.title = 'english title'
-      assert_equal ['content', 'title'], post.changed
+      assert_equal ['content', 'title'], post.changed.sort
 
       I18n.locale = :de
       post.title  = nil
-      assert_equal ['content', 'title'], post.changed
+      assert_equal ['content', 'title'], post.changed.sort
     end
 
     it 'works for restore changed state of other locale' do
@@ -117,15 +117,15 @@ class DirtyTrackingTest < MiniTest::Spec
       # assert_equal [], post.changed
 
       post.title = 'english title'
-      assert_equal ['content', 'title'], post.changed
+      assert_equal ['content', 'title'], post.changed.sort
 
       I18n.locale = :de
       post.title  = 'title de'
-      assert_equal ['content', 'title'], post.changed
+      assert_equal ['content', 'title'], post.changed.sort
 
       I18n.locale = :en
       post.title  = nil
-      assert_equal ['content', 'title'], post.changed
+      assert_equal ['content', 'title'], post.changed.sort
 
       I18n.locale = :de
       post.title  = nil
