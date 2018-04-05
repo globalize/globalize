@@ -205,6 +205,17 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
             end
           end
 
+          it 'returns record in order, columns in an array' do
+            @order = Post.where(title: 'title').order([:title, :content])
+
+            case Globalize::Test::Database.driver
+            when 'mysql'
+              assert_match(/ORDER BY `post_translations`.`title` ASC/, @order.to_sql)
+            else
+              assert_match(/ORDER BY "post_translations"."title" ASC/, @order.to_sql)
+            end
+          end
+
           it 'returns record in order, leaving string untouched' do
             @order = Post.where(:title => 'title').order('title ASC')
             assert_equal ['title ASC'], @order.order_values
