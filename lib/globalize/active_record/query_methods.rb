@@ -110,6 +110,8 @@ module Globalize
           order(ordering).order_values
         when Symbol
           parse_translated_order({ opts => :asc })
+        when Array
+          parse_translated_order(Hash[opts.collect { |opt| [opt, :asc] } ])
         else # failsafe returns nothing
           nil
         end
