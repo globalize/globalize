@@ -35,3 +35,18 @@ Have a bug fix, code improvement or proposed feature? Do the following:
 For pull requests to Rails/ActiveRecord 4 version of Globalize (v3.x), post to the `master` branch. For pull requests to the Rails/ActiveRecord 3.x version of Globalize (3.x), post to the `3-0-stable` branch.
 
 When you submit the pull request, Travis CI will run the [test suite](https://travis-ci.org/globalize/globalize) against your branch and will highlight any failures. Unless there is a good reason for it, we do not generally accept pull requests that take Globalize from green to red.
+
+## Testing
+
+### Requirements
+
+- Ruby
+- Bundler
+- SQLite
+    - You can switch the database by adding an environment variable. See `test/support/database.rb`.
+    - You can also configure your database configurations. See `test/support/database.yml`.
+
+### Run tests on your local machine
+
+- `bundle install`
+- `bundle exec rake`
