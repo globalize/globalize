@@ -11,14 +11,12 @@ gemfile:
   - gemfiles/Gemfile.rails-4.2.rb
 
 rvm:
-  - 2.4.3
-  - 2.3.6
-  - 2.2.9
-  - 2.1
-  - 2.0.0
   - rbx
   - jruby-9.1.2.0
-  - 2.5.0
+  - 2.2.10
+  - 2.3.7
+  - 2.4.4
+  - 2.5.1
   - ruby-head
 
 env:
@@ -28,27 +26,12 @@ env:
 
 matrix:
   allow_failures:
-    - rvm: rbx
-      gemfile: Gemfile
-    - rvm: rbx
-      gemfile: gemfiles/Gemfile.activemodel-serializers-xml.rb
-    - rvm: rbx
-      gemfile: gemfiles/Gemfile.rails-4.2.rb
     - rvm: jruby-9.1.2.0
       gemfile: Gemfile
     - rvm: jruby-9.1.2.0
       gemfile: gemfiles/Gemfile.activemodel-serializers-xml.rb
+    - rvm: rbx
     - rvm: ruby-head
-
-  exclude:
-    - rvm: 2.1
-      gemfile: Gemfile
-    - rvm: 2.0.0
-      gemfile: Gemfile
-    - rvm: 2.1
-      gemfile: gemfiles/Gemfile.activemodel-serializers-xml.rb
-    - rvm: 2.0.0
-      gemfile: gemfiles/Gemfile.activemodel-serializers-xml.rb
 
 notifications:
   webhooks:
