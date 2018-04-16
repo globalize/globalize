@@ -5,7 +5,7 @@ end
 
 if !ENV['TRAVIS'] || ENV['DB'] == 'mysql'
   group :mysql do
-    gem 'mysql2', platforms: [:ruby, :rbx]
+    gem 'mysql2', '< 0.5', platforms: [:ruby, :rbx]
   end
 end
 
