@@ -1,11 +1,11 @@
 # encoding: utf-8
+
 require File.expand_path('../../test_helper', __FILE__)
 
 class AttributesTest < MiniTest::Spec
-
   describe 'translated attribute reader' do
     it 'is defined for translated attributes' do
-      assert Post.new.respond_to?(:title)
+      assert Post.new.respond_to_without_attributes?(:title)
     end
 
     it 'returns the correct translation for a saved record after locale switching' do

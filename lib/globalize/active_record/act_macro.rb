@@ -27,13 +27,26 @@ module Globalize
 
       protected
 
+      def translation_table_exist?
+        ::ActiveRecord::Base.connection.table_exists? \
+          self::Translation.table_name
+      end
+
+      def find_translation_column(attr_name)
+        return nil unless translation_table_exist?
+        self::Translation.columns.detect do |c|
+          c.name == attr_name.to_s
+        end
+      end
+
       def allow_translation_of_attributes(attr_names)
         attr_names.each do |attr_name|
           # Detect and apply serialization.
           enable_serializable_attribute(attr_name)
 
           # Create accessors for the attribute.
-          define_translated_attr_accessor(attr_name)
+          column = find_translation_column(attr_name)
+          define_translated_attr_accessor(attr_name, column.try(:cast_type))
           define_translations_accessor(attr_name)
 
           # Add attribute to the list.
