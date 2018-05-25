@@ -21,15 +21,6 @@ env:
   - DB=postgres
   - DB=mysql
 
-matrix:
-  allow_failures:
-    - rvm: jruby-9.1.2.0
-      gemfile: Gemfile
-    - rvm: jruby-9.1.2.0
-      gemfile: gemfiles/Gemfile.activemodel-serializers-xml.rb
-    - rvm: rbx
-    - rvm: ruby-head
-
 notifications:
   webhooks:
     - https://webhooks.gitter.im/e/40dc875af26f64f39090
