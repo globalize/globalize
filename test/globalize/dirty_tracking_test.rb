@@ -102,7 +102,7 @@ class DirtyTrackingTest < MiniTest::Spec
 
     it 'works for assigning new value == old value of other locale' do
       post = Post.create(:title => nil, :content => 'content')
-      # assert_equal [], post.changed
+      assert_equal ['content'], post.changed
 
       post.title = 'english title'
       assert_equal ['content', 'title'], post.changed
@@ -114,7 +114,7 @@ class DirtyTrackingTest < MiniTest::Spec
 
     it 'works for restore changed state of other locale' do
       post = Post.create(:title => nil, :content => 'content')
-      # assert_equal [], post.changed
+      assert_equal ['content'], post.changed
 
       post.title = 'english title'
       assert_equal ['content', 'title'], post.changed

@@ -5,7 +5,11 @@ class AttributesTest < MiniTest::Spec
 
   describe 'translated attribute reader' do
     it 'is defined for translated attributes' do
-      assert Post.new.respond_to?(:title)
+      if ::ActiveRecord::VERSION::STRING < "5.0"
+        assert_equal Post.new.respond_to?(:title), false
+      else
+        assert_equal Post.new.respond_to?(:title), true
+      end
     end
 
     it 'returns the correct translation for a saved record after locale switching' do
