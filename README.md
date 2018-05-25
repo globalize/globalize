@@ -28,13 +28,7 @@ gem install globalize
 When using bundler put this in your Gemfile:
 
 ```ruby
-gem 'globalize', '~> 5.0.0'
-```
-
-You have to use the **master** branch to work with Rails 5, or you can use a pre-release gem:
-
-```ruby
-gem 'globalize', '~> 5.1.0.beta2'
+gem 'globalize', '~> 5.1.0'
 ```
 
 Please help us by letting us know what works, and what doesn't, when using pre-release code.
