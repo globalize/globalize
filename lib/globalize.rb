@@ -58,6 +58,10 @@ module Globalize
       RequestStore.store
     end
 
+    def rails_5?
+      ::ActiveRecord.version >= Gem::Version.new('5.1.0')
+    end
+
   protected
 
     def read_locale
