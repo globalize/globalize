@@ -166,7 +166,7 @@ module Globalize
         end
 
         def column_type(name)
-          columns.detect { |c| c.name == name.to_s }.try(:type)
+          columns.detect { |c| c.name == name.to_s }.try(:type) || :string
         end
 
         def valid_field_name?(name)
