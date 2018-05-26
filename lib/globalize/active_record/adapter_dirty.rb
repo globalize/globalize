@@ -36,6 +36,7 @@ module Globalize
           dirty[name][locale] = old
         end
       end
+
       def clear_dirty
         self.dirty = {}
       end
@@ -49,6 +50,7 @@ module Globalize
         clear_dirty
         super
       end
+
     end
   end
 end
