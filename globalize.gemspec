@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'appraisal'
   s.add_development_dependency 'database_cleaner'
+  s.add_development_dependency 'm'
   s.add_development_dependency 'minitest'
   s.add_development_dependency 'minitest-reporters'
   s.add_development_dependency 'pry'
