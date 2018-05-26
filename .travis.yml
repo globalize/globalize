@@ -3,7 +3,6 @@ cache: bundler
 sudo: false
 before_install: gem install bundler
 before_script: bundle exec rake db:create db:migrate
-script: bundle exec rake
 
 gemfile:
   - gemfiles/rails_4.2.10.gemfile
@@ -11,7 +10,6 @@ gemfile:
   - gemfiles/rails_5.2.0.gemfile
 
 rvm:
-  - 2.2.10
   - 2.3.7
   - 2.4.4
   - 2.5.1
