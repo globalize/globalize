@@ -17,10 +17,24 @@ module Globalize
         with_given_locale(attributes) { super(attributes.except("locale"), *options) }
       end
 
-      def assign_attributes(new_attributes, *options)
-        super unless new_attributes.respond_to?(:stringify_keys) && new_attributes.present?
-        attributes = new_attributes.stringify_keys
-        with_given_locale(attributes) { super(attributes.except("locale"), *options) }
+      if Globalize.rails_52?
+
+        # In Rails 5.2 we need to override *_assign_attributes* as it's called earlier
+        # in the stack (before *assign_attributes*)
+        # See https://github.com/rails/rails/blob/master/activerecord/lib/active_record/attribute_assignment.rb#L11
+        def _assign_attributes(new_attributes)
+          attributes = new_attributes.stringify_keys
+          with_given_locale(attributes) { super(attributes.except("locale")) }
+        end
+
+      else
+
+        def assign_attributes(new_attributes, *options)
+          super unless new_attributes.respond_to?(:stringify_keys) && new_attributes.present?
+          attributes = new_attributes.stringify_keys
+          with_given_locale(attributes) { super(attributes.except("locale"), *options) }
+        end
+
       end
 
       def write_attribute(name, value, *args, &block)
