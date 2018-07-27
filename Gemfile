@@ -3,6 +3,7 @@
 gemspec
 
 gem "pry"
+gem "pry-byebug"
 
 eval File.read(File.expand_path("../gemfiles/.gemfile.database-config.rb", __FILE__))
 
