@@ -225,6 +225,7 @@ class FallbacksTest < MiniTest::Spec
     it 'does not use fallbacks' do
       I18n.fallbacks.clear
       I18n.fallbacks.map :en => [ :de ]
+      I18n.fallbacks.map :de => [ :en ]
       I18n.locale = :en
 
       user = User.create(:name => 'John', :email => 'mad@max.com')
