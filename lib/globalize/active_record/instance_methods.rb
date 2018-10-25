@@ -234,7 +234,7 @@ module Globalize
         return nil unless translated?(name)
 
         value = globalize.fetch(options[:locale] || Globalize.locale, name)
-        return nil unless value
+        return nil if value.nil?
 
         block_given? ? yield(value) : value
       end
