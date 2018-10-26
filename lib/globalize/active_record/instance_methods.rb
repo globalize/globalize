@@ -54,15 +54,18 @@ module Globalize
       end
 
       def read_attribute(attr_name, options = {}, &block)
-        @globalize_read_attribute_options = options
-        ret = super(attr_name, &block)
-        @globalize_read_attribute_options = {}
-        ret
+        name = if self.class.attribute_alias?(attr_name)
+                 self.class.attribute_alias(attr_name).to_s
+               else
+                 attr_name.to_s
+               end
+
+        name = self.class.primary_key if name == "id".freeze && self.class.primary_key
+
+        _read_attribute(name, options, &block)
       end
 
       def _read_attribute(attr_name, options = {}, &block)
-        options = @globalize_read_attribute_options.merge(options) if defined?(@globalize_read_attribute_options)
-
         translated_value = read_translated_attribute(attr_name, options, &block)
         translated_value.nil? ? super(attr_name, &block) : translated_value
       end
