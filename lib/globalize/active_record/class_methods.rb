@@ -76,10 +76,10 @@ module Globalize
       private
 
       # Override the default relation method in order to return a subclass
-      # of ActiveRecord::Relation with custom finder methods for translated
-      # attributes.
+      # of ActiveRecord::Relation with custom finder and calculation methods
+      # for translated attributes.
       def relation
-        super.extending!(QueryMethods)
+        super.extending!(TranslatedAttributesQuery)
       end
 
       protected
