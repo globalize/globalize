@@ -2,8 +2,8 @@
 
 source "https://rubygems.org"
 
-gem "activemodel", "5.2.0"
-gem "activerecord", "5.2.0"
+gem "activemodel", "5.2.1"
+gem "activerecord", "5.2.1"
 
 # Database Configuration
 if !ENV['TRAVIS'] || ENV['DB'] == 'sqlite3'
