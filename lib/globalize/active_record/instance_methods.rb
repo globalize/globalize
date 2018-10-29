@@ -53,19 +53,21 @@ module Globalize
         end
       end
 
-      def read_attribute(name, options = {}, &block)
-        options = {:translated => true, :locale => nil}.merge(options)
-        return super(name, &block) unless options[:translated]
+      def read_attribute(attr_name, options = {}, &block)
+        name = if self.class.attribute_alias?(attr_name)
+                 self.class.attribute_alias(attr_name).to_s
+               else
+                 attr_name.to_s
+               end
 
-        if translated?(name)
-          if !(value = globalize.fetch(options[:locale] || Globalize.locale, name)).nil?
-            value
-          else
-            super(name, &block)
-          end
-        else
-          super(name, &block)
-        end
+        name = self.class.primary_key if name == "id".freeze && self.class.primary_key
+
+        _read_attribute(name, options, &block)
+      end
+
+      def _read_attribute(attr_name, options = {}, &block)
+        translated_value = read_translated_attribute(attr_name, options, &block)
+        translated_value.nil? ? super(attr_name, &block) : translated_value
       end
 
       def attribute_names
@@ -226,6 +228,18 @@ module Globalize
         yield
       ensure
         self.fallbacks_for_empty_translations = before
+      end
+
+      # nil or value
+      def read_translated_attribute(name, options)
+        options = {:translated => true, :locale => nil}.merge(options)
+        return nil unless options[:translated]
+        return nil unless translated?(name)
+
+        value = globalize.fetch(options[:locale] || Globalize.locale, name)
+        return nil if value.nil?
+
+        block_given? ? yield(value) : value
       end
     end
   end

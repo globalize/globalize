@@ -225,6 +225,7 @@ class FallbacksTest < MiniTest::Spec
     it 'does not use fallbacks' do
       I18n.fallbacks.clear
       I18n.fallbacks.map :en => [ :de ]
+      I18n.fallbacks.map :de => [ :en ]
       I18n.locale = :en
 
       user = User.create(:name => 'John', :email => 'mad@max.com')
@@ -241,6 +242,7 @@ class FallbacksTest < MiniTest::Spec
     it 'does not result in duplicated records' do
       I18n.fallbacks.clear
       I18n.fallbacks.map :en => [ :de, :fr ]
+      I18n.fallbacks.map :fr => [ :en ]
       I18n.locale = :en
       
       product = Product.create(:name => 'foooooooo')
