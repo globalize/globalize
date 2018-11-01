@@ -1,6 +1,6 @@
 # Globalize Changelog
 
-## 5.1.0 (unreleased)
+## 5.1.0 (2018-01-15)
 
 * Replaced `after_` callbacks with `before_` callbacks and set `autosave: true` by default. [#341](https://github.com/globalize/globalize/pull/341) by [Andrew Volozhanin](https://github.com/scarfacedeb)
 * Add [RequestStore](https://github.com/steveklabnik/request_store) to make Globalize thread-safe again [#420](https://github.com/globalize/globalize/pull/420)

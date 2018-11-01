@@ -3,49 +3,21 @@ cache: bundler
 sudo: false
 before_install: gem install bundler
 before_script: bundle exec rake db:create db:migrate
-script: bundle exec rake
 
 gemfile:
-  - Gemfile
-  - gemfiles/Gemfile.activemodel-serializers-xml.rb
-  - gemfiles/Gemfile.rails-4.2.rb
+  - gemfiles/rails_4.2.10.gemfile
+  - gemfiles/rails_5.1.6.gemfile
+  - gemfiles/rails_5.2.1.gemfile
 
 rvm:
-  - 2.4.2
-  - 2.3.5
-  - 2.2.8
-  - 2.1
-  - 2.0.0
-  - rbx
-  - jruby-9.1.2.0
+  - 2.3.8
+  - 2.4.5
+  - 2.5.3
 
 env:
   - DB=sqlite3
   - DB=postgres
   - DB=mysql
-
-matrix:
-  allow_failures:
-    - rvm: rbx
-      gemfile: Gemfile
-    - rvm: rbx
-      gemfile: gemfiles/Gemfile.activemodel-serializers-xml.rb
-    - rvm: rbx
-      gemfile: gemfiles/Gemfile.rails-4.2.rb
-    - rvm: jruby-9.1.2.0
-      gemfile: Gemfile
-    - rvm: jruby-9.1.2.0
-      gemfile: gemfiles/Gemfile.activemodel-serializers-xml.rb
-
-  exclude:
-    - rvm: 2.1
-      gemfile: Gemfile
-    - rvm: 2.0.0
-      gemfile: Gemfile
-    - rvm: 2.1
-      gemfile: gemfiles/Gemfile.activemodel-serializers-xml.rb
-    - rvm: 2.0.0
-      gemfile: gemfiles/Gemfile.activemodel-serializers-xml.rb
 
 notifications:
   webhooks:

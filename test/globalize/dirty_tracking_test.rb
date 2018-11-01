@@ -102,30 +102,53 @@ class DirtyTrackingTest < MiniTest::Spec
 
     it 'works for assigning new value == old value of other locale' do
       post = Post.create(:title => nil, :content => 'content')
-      # assert_equal [], post.changed
+      assert_equal ['content'], post.changed
 
       post.title = 'english title'
-      assert_equal ['content', 'title'], post.changed
+
+      if Globalize.rails_5?
+        assert_equal ['title', 'content'], post.changed
+      else
+        assert_equal ['content', 'title'], post.changed
+      end
 
       I18n.locale = :de
       post.title  = nil
-      assert_equal ['content', 'title'], post.changed
+
+      if Globalize.rails_5?
+        assert_equal ['title', 'content'], post.changed
+      else
+        assert_equal ['content', 'title'], post.changed
+      end
     end
 
     it 'works for restore changed state of other locale' do
       post = Post.create(:title => nil, :content => 'content')
-      # assert_equal [], post.changed
+      assert_equal ['content'], post.changed
 
       post.title = 'english title'
-      assert_equal ['content', 'title'], post.changed
+      if Globalize.rails_5?
+        assert_equal ['title', 'content'], post.changed
+      else
+        assert_equal ['content', 'title'], post.changed
+      end
 
       I18n.locale = :de
       post.title  = 'title de'
-      assert_equal ['content', 'title'], post.changed
+
+      if Globalize.rails_5?
+        assert_equal ['title', 'content'], post.changed
+      else
+        assert_equal ['content', 'title'], post.changed
+      end
 
       I18n.locale = :en
       post.title  = nil
-      assert_equal ['content', 'title'], post.changed
+      if Globalize.rails_5?
+        assert_equal ['title', 'content'], post.changed
+      else
+        assert_equal ['content', 'title'], post.changed
+      end
 
       I18n.locale = :de
       post.title  = nil

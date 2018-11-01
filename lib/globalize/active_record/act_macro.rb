@@ -41,7 +41,7 @@ module Globalize
         end
 
         begin
-          if ::ActiveRecord::VERSION::STRING > "5.0" && table_exists? &&translation_class.table_exists?
+          if ::ActiveRecord::VERSION::STRING > "5.0" && table_exists? && translation_class.table_exists?
             self.ignored_columns += translated_attribute_names.map(&:to_s)
             reset_column_information
           end
@@ -99,11 +99,11 @@ module Globalize
                                 :foreign_key => options[:foreign_key],
                                 :dependent   => :destroy,
                                 :extend      => HasManyExtensions,
-                                :autosave    => true,
+                                :autosave    => false,
                                 :inverse_of  => :globalized_model
 
-        before_create :save_translations!
-        before_update :save_translations!
+        after_create :save_translations!
+        after_update :save_translations!
       end
     end
 

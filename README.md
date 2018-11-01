@@ -1,6 +1,7 @@
 ![Globalize](http://globalize.github.io/globalize/images/globalize.png)
 
 [![Build Status](https://travis-ci.org/globalize/globalize.svg?branch=master)](https://travis-ci.org/globalize/globalize) [![Code Climate](https://codeclimate.com/github/globalize/globalize.svg)](https://codeclimate.com/github/globalize/globalize)
+[![Open Source Helpers](https://www.codetriage.com/globalize/globalize/badges/users.svg)](https://www.codetriage.com/globalize/globalize)
 
 You can chat with us using Gitter:
 
@@ -27,13 +28,7 @@ gem install globalize
 When using bundler put this in your Gemfile:
 
 ```ruby
-gem 'globalize', '~> 5.0.0'
-```
-
-You have to use the **master** branch to work with Rails 5, or you can use a pre-release gem:
-
-```ruby
-gem 'globalize', '~> 5.1.0.beta2'
+gem 'globalize', '~> 5.1.0'
 ```
 
 Please help us by letting us know what works, and what doesn't, when using pre-release code.

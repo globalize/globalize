@@ -17,10 +17,24 @@ module Globalize
         with_given_locale(attributes) { super(attributes.except("locale"), *options) }
       end
 
-      def assign_attributes(new_attributes, *options)
-        super unless new_attributes.respond_to?(:stringify_keys) && new_attributes.present?
-        attributes = new_attributes.stringify_keys
-        with_given_locale(attributes) { super(attributes.except("locale"), *options) }
+      if Globalize.rails_52?
+
+        # In Rails 5.2 we need to override *_assign_attributes* as it's called earlier
+        # in the stack (before *assign_attributes*)
+        # See https://github.com/rails/rails/blob/master/activerecord/lib/active_record/attribute_assignment.rb#L11
+        def _assign_attributes(new_attributes)
+          attributes = new_attributes.stringify_keys
+          with_given_locale(attributes) { super(attributes.except("locale")) }
+        end
+
+      else
+
+        def assign_attributes(new_attributes, *options)
+          super unless new_attributes.respond_to?(:stringify_keys) && new_attributes.present?
+          attributes = new_attributes.stringify_keys
+          with_given_locale(attributes) { super(attributes.except("locale"), *options) }
+        end
+
       end
 
       def write_attribute(name, value, *args, &block)
@@ -39,19 +53,21 @@ module Globalize
         end
       end
 
-      def read_attribute(name, options = {}, &block)
-        options = {:translated => true, :locale => nil}.merge(options)
-        return super(name, &block) unless options[:translated]
+      def read_attribute(attr_name, options = {}, &block)
+        name = if self.class.attribute_alias?(attr_name)
+                 self.class.attribute_alias(attr_name).to_s
+               else
+                 attr_name.to_s
+               end
 
-        if translated?(name)
-          if !(value = globalize.fetch(options[:locale] || Globalize.locale, name)).nil?
-            value
-          else
-            super(name, &block)
-          end
-        else
-          super(name, &block)
-        end
+        name = self.class.primary_key if name == "id".freeze && self.class.primary_key
+
+        _read_attribute(name, options, &block)
+      end
+
+      def _read_attribute(attr_name, options = {}, &block)
+        translated_value = read_translated_attribute(attr_name, options, &block)
+        translated_value.nil? ? super(attr_name, &block) : translated_value
       end
 
       def attribute_names
@@ -212,6 +228,18 @@ module Globalize
         yield
       ensure
         self.fallbacks_for_empty_translations = before
+      end
+
+      # nil or value
+      def read_translated_attribute(name, options)
+        options = {:translated => true, :locale => nil}.merge(options)
+        return nil unless options[:translated]
+        return nil unless translated?(name)
+
+        value = globalize.fetch(options[:locale] || Globalize.locale, name)
+        return nil if value.nil?
+
+        block_given? ? yield(value) : value
       end
     end
   end

@@ -1,6 +1,6 @@
 module Globalize
   module ActiveRecord
-    module QueryMethods
+    module TranslatedAttributesQuery
       class WhereChain < ::ActiveRecord::QueryMethods::WhereChain
         def not(opts, *rest)
           if parsed = @scope.clone.parse_translated_conditions(opts)
@@ -21,8 +21,40 @@ module Globalize
         end
       end
 
+      def having(opts, *rest)
+        if parsed = parse_translated_conditions(opts)
+          join_translations(super(parsed, *rest))
+        else
+          super
+        end
+      end
+
       def order(opts, *rest)
         if respond_to?(:translated_attribute_names) && parsed = parse_translated_order(opts)
+          join_translations super(parsed)
+        else
+          super
+        end
+      end
+
+      def reorder(opts, *rest)
+        if respond_to?(:translated_attribute_names) && parsed = parse_translated_order(opts)
+          join_translations super(parsed)
+        else
+          super
+        end
+      end
+
+      def group(*columns)
+        if respond_to?(:translated_attribute_names) && parsed = parse_translated_columns(columns)
+          join_translations super(parsed)
+        else
+          super
+        end
+      end
+
+      def select(*columns)
+        if respond_to?(:translated_attribute_names) && parsed = parse_translated_columns(columns)
           join_translations super(parsed)
         else
           super
@@ -32,6 +64,24 @@ module Globalize
       def exists?(conditions = :none)
         if parsed = parse_translated_conditions(conditions)
           with_translations_in_fallbacks.exists?(parsed)
+        else
+          super
+        end
+      end
+
+      def calculate(*args)
+        column_name = args[1]
+        if respond_to?(:translated_attribute_names) && translated_column?(column_name)
+          args[1] = translated_column_name(column_name)
+          join_translations.calculate(*args)
+        else
+          super
+        end
+      end
+
+      def pluck(*column_names)
+        if respond_to?(:translated_attribute_names) && parsed = parse_translated_columns(column_names)
+          join_translations.pluck(*parsed)
         else
           super
         end
@@ -100,8 +150,16 @@ module Globalize
           order(ordering).order_values
         when Symbol
           parse_translated_order({ opts => :asc })
+        when Array
+          parse_translated_order(Hash[opts.collect { |opt| [opt, :asc] } ])
         else # failsafe returns nothing
           nil
+        end
+      end
+
+      def parse_translated_columns(columns)
+        if columns.is_a?(Array) && (columns.flatten & translated_attribute_names).present?
+          columns.flatten.map { |column| translated_column?(column) ? translated_column_name(column) : column }
         end
       end
 
