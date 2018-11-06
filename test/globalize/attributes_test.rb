@@ -5,11 +5,11 @@ class AttributesTest < MiniTest::Spec
 
   describe 'translated attribute reader' do
     it 'is defined for translated attributes' do
-      if ::ActiveRecord::VERSION::STRING < "5.0"
-        assert_equal Post.new.respond_to?(:title), false
-      else
-        assert_equal Post.new.respond_to?(:title), true
-      end
+      assert Post.new.respond_to?(:title)
+    end
+
+    it 'Post#columns does not include translated attributes' do
+      assert (Post.column_names.map(&:to_sym) & Post.translated_attribute_names.map(&:to_sym)).empty?
     end
 
     it 'returns the correct translation for a saved record after locale switching' do

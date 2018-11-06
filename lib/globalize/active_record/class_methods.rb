@@ -98,7 +98,6 @@ module Globalize
       end
 
       def define_translated_attr_accessor(name)
-        attribute(name, ::ActiveRecord::Type::Value.new)
         define_translated_attr_reader(name)
         define_translated_attr_writer(name)
       end
@@ -121,6 +120,7 @@ module Globalize
       end
 
       def define_translations_accessor(name)
+        attribute(name, ::ActiveRecord::Type::Value.new) if ::ActiveRecord::VERSION::STRING >= "5.0"
         define_translations_reader(name)
         define_translations_writer(name)
       end
