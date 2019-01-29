@@ -62,6 +62,7 @@ module Globalize
         end
 
         def drop_translation_table!(options = {})
+          add_missing_columns if options[:create_source_columns]
           move_data_to_model_table if options[:migrate_data]
           drop_translations_index
           drop_translation_table
@@ -144,8 +145,6 @@ module Globalize
         end
 
         def move_data_to_model_table
-          add_missing_columns
-
           # Find all of the translated attributes for all records in the model.
           all_translated_attributes = model.all.collect{|m| m.attributes}
           all_translated_attributes.each do |translated_record|
