@@ -45,7 +45,7 @@ module Globalize
             self.ignored_columns += translated_attribute_names.map(&:to_s)
             reset_column_information
           end
-        rescue ::ActiveRecord::NoDatabaseError
+        rescue ::ActiveRecord::NoDatabaseError, PG::ConnectionBad
           warn 'Unable to connect to a database. Globalize skipped ignoring columns of translated attributes.'
         end
       end
@@ -61,7 +61,7 @@ module Globalize
              "Attribute name(s): #{overlap.join(', ')}\n"].join
           )
         end
-      rescue ::ActiveRecord::NoDatabaseError
+      rescue ::ActiveRecord::NoDatabaseError, PG::ConnectionBad
         warn 'Unable to connect to a database. Globalize skipped checking attributes with conflicting column names.'
       end
 
