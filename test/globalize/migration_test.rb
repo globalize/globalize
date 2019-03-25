@@ -4,7 +4,7 @@ class MigrationTest < MiniTest::Spec
   include Globalize::ActiveRecord::Exceptions
 
   before(:each) do
-    reset_schema(Migrated, TwoAttributesMigrated)
+    reset_schema(Migrated, TwoAttributesMigrated, MigratedBigint)
     if Globalize::Test::Database.long_table_name_support?
       reset_schema(MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters)
     end
@@ -14,7 +14,7 @@ class MigrationTest < MiniTest::Spec
   end
 
   after(:each) do
-    reset_schema(Migrated, TwoAttributesMigrated)
+    reset_schema(Migrated, TwoAttributesMigrated, MigratedBigint)
     if Globalize::Test::Database.long_table_name_support?
       reset_schema(MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters)
     end
@@ -117,6 +117,11 @@ class MigrationTest < MiniTest::Spec
         # Was it restored? (also tests .untranslated_attributes)
         assert_equal 'Untranslated', untranslated.untranslated_attributes['name']
       end
+    end
+
+    it 'creates a proper types for FK ids' do
+      MigratedBigint.create_translation_table!(:name => :text)
+      assert_migration_table({}, MigratedBigint)
     end
   end
 
@@ -263,7 +268,7 @@ protected
     assert model.translation_class.index_exists_on?(index_field)
 
     assert_equal :string,   column_type(:locale, model)
-    assert_equal :integer,  column_type(index_field, model)
+    assert_equal model.type_for_attribute(model.primary_key), model.translation_class.type_for_attribute(index_field.to_s)
     assert_equal :datetime, column_type(:created_at, model)
     assert_equal :datetime, column_type(:updated_at, model)
 
