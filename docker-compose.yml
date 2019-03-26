@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:11
+    volumes:
+      - ./tmp/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: ""
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - ./tmp/mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: ""
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
