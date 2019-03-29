@@ -80,6 +80,13 @@ ActiveRecord::Schema.define do
     t.string :untranslated
   end
 
+  create_table :migrated_bigints, :force => true, :id => false do |t|
+    # supposed to create a bigint value for id
+    t.integer :id, :limit => 8, :primary_key => true
+    t.string :name
+    t.string :untranslated
+  end
+
   if Globalize::Test::Database.long_table_name_support?
     # Maximum length of a table name in MySQL and PostgreSQL are 64 characters
     create_table :migrated_with_mega_ultra_super_long_model_name_with_more_then_sixty_characters, :force => true do |t|

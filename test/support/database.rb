@@ -55,9 +55,9 @@ module Globalize
         db_config = config[driver]
         command = case driver
         when "mysql"
-          "mysql -u #{db_config['username']} -e 'create database #{db_config['database']} character set utf8 collate utf8_general_ci;' >/dev/null"
+          "mysql -u #{db_config['username']} --protocol tcp -e 'create database #{db_config['database']} character set utf8 collate utf8_general_ci;' >/dev/null"
         when "postgres", "postgresql"
-          "psql -c 'create database #{db_config['database']};' -U #{db_config['username']} >/dev/null"
+          "psql -c 'create database #{db_config['database']};' -U #{db_config['username']} -h localhost >/dev/null"
         end
 
         puts command
@@ -69,9 +69,9 @@ module Globalize
         db_config = config[driver]
         command = case driver
         when "mysql"
-          "mysql -u #{db_config['username']} -e 'drop database #{db_config["database"]};' >/dev/null"
+          "mysql -u #{db_config['username']} --protocol tcp -e 'drop database #{db_config["database"]};' >/dev/null"
         when "postgres", "postgresql"
-          "psql -c 'drop database #{db_config['database']};' -U #{db_config['username']} >/dev/null"
+          "psql -c 'drop database #{db_config['database']};' -U #{db_config['username']} -h localhost >/dev/null"
         end
 
         puts command

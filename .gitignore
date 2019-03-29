@@ -12,3 +12,4 @@ Gemfile*.lock
 .ruby-version
 test/globalize_test.log
 gemfiles/*.lock
+tmp/
