@@ -42,7 +42,9 @@ module Globalize
       end
 
       def _reset_attribute name
-        record.send("#{name}=", record.changed_attributes[name])
+        original_value = record.changed_attributes[name]
+        record.send(:clear_attribute_changes, [name])
+        record.send("#{name}=", original_value)
         record.send(:clear_attribute_changes, [name])
       end
 
