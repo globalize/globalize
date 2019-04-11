@@ -40,19 +40,15 @@ module Globalize
           self.translated_attribute_names << attr_name
         end
 
-        begin
-          if ::ActiveRecord::VERSION::STRING > "5.0" && table_exists? && translation_class.table_exists?
-            self.ignored_columns += translated_attribute_names.map(&:to_s)
-            reset_column_information
-          end
-        rescue ::ActiveRecord::NoDatabaseError
-          warn 'Unable to connect to a database. Globalize skipped ignoring columns of translated attributes.'
+        if ::ActiveRecord::VERSION::STRING > "5.0" && connected? && table_exists? && translation_class.table_exists?
+          self.ignored_columns += translated_attribute_names.map(&:to_s)
+          reset_column_information
         end
       end
 
       def check_columns!(attr_names)
         # If tables do not exist or Rails version is greater than 5, do not warn about conflicting columns
-        return unless ::ActiveRecord::VERSION::STRING < "5.0" && table_exists? && translation_class.table_exists?
+        return unless ::ActiveRecord::VERSION::STRING < "5.0" && connected? && table_exists? && translation_class.table_exists?
         if (overlap = attr_names.map(&:to_s) & column_names).present?
           ActiveSupport::Deprecation.warn(
             ["You have defined one or more translated attributes with names that conflict with column(s) on the model table. ",
@@ -61,8 +57,6 @@ module Globalize
              "Attribute name(s): #{overlap.join(', ')}\n"].join
           )
         end
-      rescue ::ActiveRecord::NoDatabaseError
-        warn 'Unable to connect to a database. Globalize skipped checking attributes with conflicting column names.'
       end
 
       def apply_globalize_options(options)
