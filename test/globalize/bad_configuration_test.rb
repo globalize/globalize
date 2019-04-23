@@ -2,6 +2,12 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class BadConfigurationTest < MiniTest::Spec
+  before do
+    # We need to trigger a connection to AR to ensure the
+    # globalize hooks are called prior to these tests evaluating
+    ActiveRecord::Base.connection
+  end
+
   describe 'finders on data with bad configuration' do
     it 'works with find_by' do
       bad_configuration = BadConfiguration.create(:name => "foo")
