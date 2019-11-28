@@ -38,6 +38,9 @@ module Globalize
           # Add attribute to the list.
           self.translated_attribute_names << attr_name
         end
+
+        self.ignored_columns += translated_attribute_names.map(&:to_s)
+        reset_column_information
       end
 
       def apply_globalize_options(options)
