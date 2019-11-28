@@ -39,8 +39,10 @@ module Globalize
           self.translated_attribute_names << attr_name
         end
 
-        self.ignored_columns += translated_attribute_names.map(&:to_s)
-        reset_column_information
+        if ::ActiveRecord::VERSION::STRING > "5.0"
+          self.ignored_columns += translated_attribute_names.map(&:to_s)
+          reset_column_information
+        end
       end
 
       def apply_globalize_options(options)
