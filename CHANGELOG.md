@@ -1,5 +1,12 @@
 # Globalize Changelog
 
+## 5.3.0 (2019-05-14)
+
+* Prevent 'SystemStackError: stack level too deep' error on attribute reset. [#722](https://github.com/globalize/globalize/pull/722) by [Reinier de Lange](https://github.com/moiristo)
+* Pass the `:limit` option for the FK column. [#721](https://github.com/globalize/globalize/pull/721) by [Denis Demchenko](https://github.com/lancedikson)
+* Add support for Rails 6.0. [#718](https://github.com/globalize/globalize/pull/718) by [Chrıs Seelus](https://github.com/cseelus)
+* FIX: stop registering the attr for Rails 4.2. [#711](https://github.com/globalize/globalize/pull/711) by [Adam Fernung](https://github.com/akfernun)
+
 ## 5.2.0 (2018-11-02)
 
 * Add support for translated attributes to other QueryMethods and Calculations [#707](https://github.com/globalize/globalize/pull/707) by [kreintjes](https://github.com/kreintjes)
