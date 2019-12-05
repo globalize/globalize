@@ -4,6 +4,10 @@ sudo: false
 before_install: gem install bundler
 before_script: bundle exec rake db:create db:migrate
 
+services:
+  - mysql
+  - postgresql
+
 branches:
   only:
   - master
