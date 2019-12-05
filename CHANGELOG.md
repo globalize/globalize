@@ -1,5 +1,10 @@
 # Globalize Changelog
 
+## 5.2.0 (2018-11-02)
+
+*  Fix: wrong number of arguments for ActiveRecord 'attribute' method [#671](https://github.com/globalize/globalize/pull/671) by [Evgeny Danilov](https://github.com/jmelkor)
+* Resolve deprecation warning: attribute is not an attribute known to Active Record. [#629](https://github.com/globalize/globalize/pull/629) by [Michael Rüffer](https://github.com/itschn)
+
 ## 5.1.0 (2018-01-15)
 
 * Replaced `after_` callbacks with `before_` callbacks and set `autosave: true` by default. [#341](https://github.com/globalize/globalize/pull/341) by [Andrew Volozhanin](https://github.com/scarfacedeb)
