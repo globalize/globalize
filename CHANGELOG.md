@@ -2,7 +2,12 @@
 
 ## 5.2.0 (2018-11-02)
 
-*  Fix: wrong number of arguments for ActiveRecord 'attribute' method [#671](https://github.com/globalize/globalize/pull/671) by [Evgeny Danilov](https://github.com/jmelkor)
+* Add support for translated attributes to other QueryMethods and Calculations [#707](https://github.com/globalize/globalize/pull/707) by [kreintjes](https://github.com/kreintjes)
+* Fix `read_attribute` for Rails changes. [#709](https://github.com/globalize/globalize/pull/709) by [ota42y](https://github.com/ota42y) and [nabuchi](https://github.com/nabuchi)
+* Support array as an argument of order. [#675](https://github.com/globalize/globalize/pull/675) by [Maicol Bentancor](https://github.com/MaicolBen)
+* `_reset_attribute` bugfix. [#674](https://github.com/globalize/globalize/pull/674) by [ota42y](https://github.com/ota42y)
+* Add support for Rails 5.2 [#678](https://github.com/globalize/globalize/pull/678) by [kevin-jj](https://github.com/kevin-jj)
+* Fix: wrong number of arguments for ActiveRecord 'attribute' method [#671](https://github.com/globalize/globalize/pull/671) by [Evgeny Danilov](https://github.com/jmelkor)
 * Resolve deprecation warning: attribute is not an attribute known to Active Record. [#629](https://github.com/globalize/globalize/pull/629) by [Michael Rüffer](https://github.com/itschn)
 
 ## 5.1.0 (2018-01-15)
