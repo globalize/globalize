@@ -1,5 +1,22 @@
 # Globalize Changelog
 
+## 5.3.0 (2019-05-14)
+
+* Prevent 'SystemStackError: stack level too deep' error on attribute reset. [#722](https://github.com/globalize/globalize/pull/722) by [Reinier de Lange](https://github.com/moiristo)
+* Pass the `:limit` option for the FK column. [#721](https://github.com/globalize/globalize/pull/721) by [Denis Demchenko](https://github.com/lancedikson)
+* Add support for Rails 6.0. [#718](https://github.com/globalize/globalize/pull/718) by [Chrıs Seelus](https://github.com/cseelus)
+* FIX: stop registering the attr for Rails 4.2. [#711](https://github.com/globalize/globalize/pull/711) by [Adam Fernung](https://github.com/akfernun)
+
+## 5.2.0 (2018-11-02)
+
+* Add support for translated attributes to other QueryMethods and Calculations [#707](https://github.com/globalize/globalize/pull/707) by [kreintjes](https://github.com/kreintjes)
+* Fix `read_attribute` for Rails changes. [#709](https://github.com/globalize/globalize/pull/709) by [ota42y](https://github.com/ota42y) and [nabuchi](https://github.com/nabuchi)
+* Support array as an argument of order. [#675](https://github.com/globalize/globalize/pull/675) by [Maicol Bentancor](https://github.com/MaicolBen)
+* `_reset_attribute` bugfix. [#674](https://github.com/globalize/globalize/pull/674) by [ota42y](https://github.com/ota42y)
+* Add support for Rails 5.2 [#678](https://github.com/globalize/globalize/pull/678) by [kevin-jj](https://github.com/kevin-jj)
+* Fix: wrong number of arguments for ActiveRecord 'attribute' method [#671](https://github.com/globalize/globalize/pull/671) by [Evgeny Danilov](https://github.com/jmelkor)
+* Resolve deprecation warning: attribute is not an attribute known to Active Record. [#629](https://github.com/globalize/globalize/pull/629) by [Michael Rüffer](https://github.com/itschn)
+
 ## 5.1.0 (2018-01-15)
 
 * Replaced `after_` callbacks with `before_` callbacks and set `autosave: true` by default. [#341](https://github.com/globalize/globalize/pull/341) by [Andrew Volozhanin](https://github.com/scarfacedeb)
