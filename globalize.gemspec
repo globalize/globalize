@@ -14,10 +14,10 @@ Gem::Specification.new do |s|
   s.platform     = Gem::Platform::RUBY
   s.require_path = 'lib'
   s.rubyforge_project = '[none]'
-  s.required_ruby_version = '>= 2.0.0'
+  s.required_ruby_version = '>= 2.4.6'
 
-  s.add_dependency 'activerecord', '>= 4.2', '< 5.3'
-  s.add_dependency 'activemodel', '>= 4.2', '< 5.3'
+  s.add_dependency 'activerecord', '>= 4.2', '< 6.1'
+  s.add_dependency 'activemodel', '>= 4.2', '< 6.1'
   s.add_dependency 'request_store', '~> 1.0'
 
   s.add_development_dependency 'appraisal'

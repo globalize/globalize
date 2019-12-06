@@ -79,7 +79,11 @@ module Globalize
 
         def create_translation_table
           connection.create_table(translations_table_name) do |t|
-            t.references table_name.sub(/^#{table_name_prefix}/, '').singularize, :null => false, :index => false, :type => column_type(model.primary_key).to_sym
+            t.references table_name.sub(/^#{table_name_prefix}/, '').singularize,
+                         :null => false,
+                         :index => false,
+                         :type => column_type(model.primary_key).try(:to_sym),
+                         :limit => model.columns.detect { |c| c.name == model.primary_key }.try(:limit)
             t.string :locale, :null => false
             t.timestamps :null => false
           end

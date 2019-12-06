@@ -154,5 +154,12 @@ class DirtyTrackingTest < MiniTest::Spec
       post.title  = nil
       assert_equal ['content'], post.changed
     end
+
+    it 'only resets attributes once when nothing has changed' do
+      post = Post.create(:title => 'title', :content => 'content')
+      post.send(:set_attribute_was, 'content', 'content')
+      post.content = 'content'
+      assert post.save
+    end
   end
 end
