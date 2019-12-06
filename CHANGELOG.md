@@ -1,5 +1,9 @@
 # Globalize Changelog
 
+## Unreleased
+
+* Add `create_source_columns` option for migrations. [#715](https://github.com/globalize/globalize/pull/715) by [IlyasValiullov](https://github.com/IlyasValiullov)
+
 ## 5.3.0 (2019-05-14)
 
 * Prevent 'SystemStackError: stack level too deep' error on attribute reset. [#722](https://github.com/globalize/globalize/pull/722) by [Reinier de Lange](https://github.com/moiristo)
