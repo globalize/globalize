@@ -183,6 +183,16 @@ class MigrationTest < MiniTest::Spec
       assert !Migrated.translation_class.index_exists_on?(:locale)
     end
 
+    it 'create source columns on drops the translations table' do
+      column_before = Migrated.columns.detect { |c| c.name == 'name' }
+
+      Migrated.create_translation_table!({:name => :string}, :remove_source_columns => true)
+      Migrated.drop_translation_table!(:create_source_columns => true)
+
+      column = Migrated.columns.detect { |c| c.name == 'name' }
+      assert_equal column_before.try(:type), column.try(:type)
+    end
+
     it 'cannot be called on non-translated models' do
       assert_raises NoMethodError do
         Blog.drop_translation_table!
