@@ -17,15 +17,15 @@ RAILS_VERSIONS.each do |version|
     end
 
     platforms :jruby do
-      if !ENV['TRAVIS'] || ENV['DB'] == 'sqlite3'
+      if !ENV['CI'] || ENV['DB'] == 'sqlite3'
         gem 'activerecord-jdbcsqlite3-adapter', '~> 1'
       end
 
-      if !ENV['TRAVIS'] || ENV['DB'] == 'mysql'
+      if !ENV['CI'] || ENV['DB'] == 'mysql'
         gem 'activerecord-jdbcmysql-adapter', '~> 1'
       end
 
-      if !ENV['TRAVIS'] || %w(postgres postgresql).include?(ENV['DB'])
+      if !ENV['CI'] || %w(postgres postgresql).include?(ENV['DB'])
         gem 'activerecord-jdbcpostgresql-adapter', '~> 1'
       end
     end
