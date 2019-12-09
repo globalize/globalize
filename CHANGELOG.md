@@ -3,6 +3,7 @@
 ## Unreleased
 
 * Add `create_source_columns` option for migrations. [#715](https://github.com/globalize/globalize/pull/715) by [IlyasValiullov](https://github.com/IlyasValiullov)
+* Autosave is now configurable, but defaults to false. [#736](https://github.com/globalize/globalize/pull/736) by [James Hart](https://github.com/hjhart) 
 
 ## 5.3.0 (2019-05-14)
 
