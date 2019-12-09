@@ -20,7 +20,13 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
         version: ${{ matrix.ruby }}
     - uses: actions/checkout@v1
-    - run: sudo apt-get update && sudo apt-get install libpq-dev postgresql-client libmysqlclient-dev libsqlite3-dev -y
+    - run: sudo apt-get update
+    - run: sudo apt-get install libpq-dev postgresql-client -y
+      if: matrix.database == 'postgresql'
+    - run: sudo apt-get install libmysqlclient-dev -y
+      if: matrix.database == 'mysql'
+    - run: sudo apt-get install libsqlite3-dev -y
+      if: matrix.database == 'sqlite3'
     - id: cache-bundler
       uses: actions/cache@v1
       with:
