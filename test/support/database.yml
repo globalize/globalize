@@ -4,9 +4,10 @@ mysql:
   port: 3306
   database: globalize_test
   username: root
+  password: <%= ENV['MYSQL_PASSWORD'] %>
   encoding: utf8
 
-postgres:
+postgresql:
   adapter: postgresql
   host: localhost
   port: 5432

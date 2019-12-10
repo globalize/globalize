@@ -6,17 +6,17 @@ gem "activemodel", "4.2.10"
 gem "activerecord", "4.2.10"
 
 # Database Configuration
-if !ENV['TRAVIS'] || ENV['DB'] == 'sqlite3'
+if !ENV['CI'] || ENV['DB'] == 'sqlite3'
   gem 'sqlite3', '~> 1.3.6', platforms: [:ruby, :rbx]
 end
 
-if !ENV['TRAVIS'] || ENV['DB'] == 'mysql'
+if !ENV['CI'] || ENV['DB'] == 'mysql'
   group :mysql do
     gem 'mysql2', '0.4.10', platforms: [:ruby, :rbx]
   end
 end
 
-if !ENV['TRAVIS'] || %w(postgres postgresql).include?(ENV['DB'])
+if !ENV['CI'] || %w(postgres postgresql).include?(ENV['DB'])
   group :postgres, :postgresql do
     gem 'pg', '< 1.0', platforms: [:ruby, :rbx]
   end
@@ -28,15 +28,15 @@ platforms :rbx do
 end
 
 platforms :jruby do
-  if !ENV['TRAVIS'] || ENV['DB'] == 'sqlite3'
+  if !ENV['CI'] || ENV['DB'] == 'sqlite3'
     gem 'activerecord-jdbcsqlite3-adapter', '~> 1'
   end
 
-  if !ENV['TRAVIS'] || ENV['DB'] == 'mysql'
+  if !ENV['CI'] || ENV['DB'] == 'mysql'
     gem 'activerecord-jdbcmysql-adapter', '~> 1'
   end
 
-  if !ENV['TRAVIS'] || %w(postgres postgresql).include?(ENV['DB'])
+  if !ENV['CI'] || %w(postgres postgresql).include?(ENV['DB'])
     gem 'activerecord-jdbcpostgresql-adapter', '~> 1'
   end
 end
