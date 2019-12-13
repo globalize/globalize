@@ -318,6 +318,12 @@ post.title # => 'Globalize rocks!'
 post.name  # => 'Globalize'
 ```
 
+You can also enable fallbacks globally for all models:
+
+```ruby
+Globalize.fallbacks_for_empty_translations = true
+```
+
 ## Fallback locales to each other
 
 It is possible to setup locales to fallback to each other.
