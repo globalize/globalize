@@ -1,7 +1,7 @@
 mysql:
   adapter: mysql2
-  host: 0.0.0.0
-  port: 3306
+  host: <%= ENV.fetch('MYSQL_HOST', '0.0.0.0') %>
+  port: <%= ENV.fetch('MYSQL_PORT', 3306) %>
   database: globalize_test
   username: root
   password: <%= ENV['MYSQL_PASSWORD'] %>
