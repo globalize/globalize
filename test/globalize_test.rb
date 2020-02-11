@@ -87,10 +87,10 @@ class GlobalizeTest < MiniTest::Spec
       end
     end
 
-    describe '#update_attributes' do
+    describe '#update' do
       it "saves translations record for locale passed in" do
         post = Post.create(:title => 'Titel', :locale => :de)
-        post.update_attributes(:title => 'title', :locale => :en)
+        post.update(:title => 'title', :locale => :en)
 
         assert_equal 2, post.translations.size
         assert_translated post, :de, :title, 'Titel'
@@ -99,7 +99,7 @@ class GlobalizeTest < MiniTest::Spec
 
       it "saves translations record for current I18n locale if none is passed in" do
         post = with_locale(:de) { Post.create(:title => 'Titel') }
-        with_locale(:en) { post.update_attributes(:title => 'title') }
+        with_locale(:en) { post.update(:title => 'title') }
 
         assert_equal 2, post.translations.size
         assert_translated post, :en, :title, 'title'
@@ -108,7 +108,7 @@ class GlobalizeTest < MiniTest::Spec
 
       it "does not add tralations if no words changed" do
         product = with_locale(:en) { Product.create(:name => 'name') }
-        with_locale(:de) { product.update_attributes(:updated_at => Time.now) }
+        with_locale(:de) { product.update(:updated_at => Time.now) }
 
         assert_equal 1, product.reload.translations.size
       end
@@ -117,7 +117,7 @@ class GlobalizeTest < MiniTest::Spec
     describe '#write_attribute' do
       it "saves translations record for locale passed in" do
         post = Post.create(:title => 'title', :locale => :de)
-        post.update_attributes(:title => 'title', :locale => :en)
+        post.update(:title => 'title', :locale => :en)
 
         post.reload
 
@@ -139,7 +139,7 @@ class GlobalizeTest < MiniTest::Spec
         post = Post.create(:title => 'foo')
         post.title  # make sure its fetched from the DB
 
-        Post.find_by_id(post.id).update_attributes! :title => 'bar'
+        Post.find_by_id(post.id).update! :title => 'bar'
 
         post.reload
 
@@ -155,7 +155,7 @@ class GlobalizeTest < MiniTest::Spec
     describe '#destroy' do
       it "destroy destroys dependent translations" do
         post = Post.create(:title => "title")
-        post.update_attributes(:title => 'Titel', :locale => :de)
+        post.update(:title => 'Titel', :locale => :de)
         assert_equal 2, PostTranslation.count
         post.destroy
         assert_equal 0, PostTranslation.count
@@ -182,10 +182,10 @@ class GlobalizeTest < MiniTest::Spec
     describe '#translated_locales' do
       it "returns locales that have translations" do
         first = Post.create!(:title => 'title', :locale => :en)
-        first.update_attributes(:title => 'Title', :locale => :de)
+        first.update(:title => 'Title', :locale => :de)
 
         second = Post.create!(:title => 'title', :locale => :en)
-        second.update_attributes(:title => 'titre', :locale => :fr)
+        second.update(:title => 'titre', :locale => :fr)
 
         assert_equal [:de, :en, :fr], Post.translated_locales
         assert_equal [:de, :en], first.translated_locales
@@ -220,7 +220,7 @@ class GlobalizeTest < MiniTest::Spec
         post = Post.create(:title => 'title')
         translated_comment = TranslatedComment.create(:post => post, :content => 'content')
 
-        assert translated_comment.update_attributes(:content => 'Inhalt', :locale => :de)
+        assert translated_comment.update(:content => 'Inhalt', :locale => :de)
         assert_translated translated_comment, :en, :content, 'content'
         assert_translated translated_comment, :de, :content, 'Inhalt'
       end

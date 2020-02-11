@@ -6,8 +6,8 @@ class DestroyTest < MiniTest::Spec
     before do
       @posts = [Post.create(:title => 'title'), Post.create(:title => 'title')]
       Globalize.with_locale(:ja) do
-        @posts[0].update_attributes(:title => 'タイトル1')
-        @posts[1].update_attributes(:title => 'タイトル2')
+        @posts[0].update(:title => 'タイトル1')
+        @posts[1].update(:title => 'タイトル2')
       end
     end
 

@@ -11,17 +11,17 @@ class ValidationsTest < MiniTest::Spec
   #   assert Post.create(:title => 'foo', :locale => :de).valid?
   # end
 
-  describe '#update_attributes' do
+  describe '#update' do
     it 'succeeds with valid values' do
       post = Post.create(:title => 'foo')
-      post.update_attributes(:title => 'baz')
+      post.update(:title => 'baz')
       assert post.valid?
       assert_equal 'baz', Post.first.title
     end
 
     it 'fails with invalid values' do
       post = Post.create(:title => 'foo')
-      assert !post.update_attributes(:title => '')
+      assert !post.update(:title => '')
       assert !post.valid?
       assert !post.reload.attributes['title'].nil?
       assert_equal 'foo', post.title
@@ -109,9 +109,9 @@ class ValidationsTest < MiniTest::Spec
 
       # update
       Validatee.create!(:string => 'b')
-      assert validatee.update_attributes(:string => 'a')
-      assert !validatee.update_attributes(:string => 'b')
-      Globalize.with_locale(:de) { assert validatee.update_attributes(:string => 'b') }
+      assert validatee.update(:string => 'a')
+      assert !validatee.update(:string => 'b')
+      Globalize.with_locale(:de) { assert validatee.update(:string => 'b') }
     end
 
     it 'validates uniqueness correctly with nested model' do
@@ -119,8 +119,8 @@ class ValidationsTest < MiniTest::Spec
       Nested::NestedValidatee.class_eval { validates_uniqueness_of :string }
       nested_validatee = Nested::NestedValidatee.create!(:string => 'a')
       Nested::NestedValidatee.create!(:string => 'b')
-      assert nested_validatee.update_attributes(:string => 'a')
-      assert !nested_validatee.update_attributes(:string => 'b')
+      assert nested_validatee.update(:string => 'a')
+      assert !nested_validatee.update(:string => 'b')
     end
 
     it 'accepts :scope option' do

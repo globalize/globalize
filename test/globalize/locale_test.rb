@@ -3,7 +3,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class LocaleTest < MiniTest::Spec
-  
+
   describe Globalize do
     it 'has locale accessors' do
       assert Globalize.respond_to?(:locale)
@@ -96,7 +96,7 @@ class LocaleTest < MiniTest::Spec
         assert_translated Post.first, :en, :title, 'title'
 
         Globalize.locale = :de
-        post.update_attributes(:title => 'Titel')
+        post.update(:title => 'Titel')
 
         assert_translated Post.first, :en, :title, 'title'
         assert_translated Post.first, :de, :title, 'Titel'

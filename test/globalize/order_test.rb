@@ -47,7 +47,7 @@ class OrderTest < MiniTest::Spec
     end
 
     it "should not return products with ID from translations table" do
-      with_locale(:fr) { @first_product.update_attributes(name: 'premier') }
+      with_locale(:fr) { @first_product.update(name: 'premier') }
       premier_product = with_locale(:fr) { Product.order(name: :asc).first }
       assert_equal @first_product.name, premier_product.name, 'products should be the same record as shown by their default name'
       assert_equal @first_product, premier_product, 'returned product records should have the same ID from the products table'
