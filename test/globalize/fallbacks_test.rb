@@ -76,7 +76,7 @@ class FallbacksTest < MiniTest::Spec
       assert_equal 'foo', post.title
 
       I18n.locale = :'en-US'
-      post.update_attributes(:title => 'bar')
+      post.update(:title => 'bar')
 
       I18n.locale = :'de-DE'
       assert_equal 'bar', post.title
@@ -89,7 +89,7 @@ class FallbacksTest < MiniTest::Spec
       I18n.locale = :'de-DE'
       assert_equal 'foo', post.title
 
-      post.update_attributes :title => nil
+      post.update :title => nil
       assert_equal 'foo', post.title
     end
 
@@ -165,7 +165,7 @@ class FallbacksTest < MiniTest::Spec
       I18n.locale = :'de-DE'
       assert_equal 'foo', task.name
 
-      task.update_attributes :name => ''
+      task.update :name => ''
       assert_equal 'foo', task.name
     end
 
@@ -176,7 +176,7 @@ class FallbacksTest < MiniTest::Spec
         params = { title: '' }
 
         I18n.locale = 'de-DE'
-        question.update_attributes(params)
+        question.update(params)
 
         assert_equal question.errors.first, [:title, "can't be blank"]
       end
@@ -193,7 +193,7 @@ class FallbacksTest < MiniTest::Spec
       assert_equal 'foo', child.content
 
       I18n.locale = :'en-US'
-      child.update_attributes(:content => 'bar')
+      child.update(:content => 'bar')
 
       I18n.locale = :'de-DE'
       assert_equal 'bar', child.content
@@ -237,24 +237,24 @@ class FallbacksTest < MiniTest::Spec
       assert_equal translations, user.name_translations
     end
   end
-  
+
   describe 'query with fallbacks' do
     it 'does not result in duplicated records' do
       I18n.fallbacks.clear
       I18n.fallbacks.map :en => [ :de, :fr ]
       I18n.fallbacks.map :fr => [ :en ]
       I18n.locale = :en
-      
+
       product = Product.create(:name => 'foooooooo')
       with_locale(:de) { product.name = 'bar' }
       product.save!
-      
+
       assert_equal 1, Product.with_translations.where(id: product.id).length
       assert_equal 'foooooooo', Product.find(product.id).name
-      
+
       I18n.locale = :de
       assert_equal 'bar', Product.find(product.id).name
-      
+
       I18n.locale = :fr
       assert_equal 'foooooooo', Product.find(product.id).name
     end

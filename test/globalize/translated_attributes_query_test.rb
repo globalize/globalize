@@ -329,9 +329,9 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
         Post.create(:title => 'title'),
         Post.create(:title => 'title') ]
       Globalize.with_locale(:ja) do
-        @posts[0].update_attributes(:title => 'タイトル1')
-        @posts[1].update_attributes(:title => 'タイトル2')
-        @posts[2].update_attributes(:title => 'タイトル3')
+        @posts[0].update(:title => 'タイトル1')
+        @posts[1].update(:title => 'タイトル2')
+        @posts[2].update(:title => 'タイトル3')
       end
     end
 
@@ -401,9 +401,9 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
         Post.create(:id => 2, :title => 'title2'),
         Post.create(:id => 3, :title => 'title3') ]
       Globalize.with_locale(:ja) do
-        @posts[0].update_attributes(:title => 'タイトル1')
-        @posts[1].update_attributes(:title => 'タイトル2')
-        @posts[2].update_attributes(:title => 'タイトル3')
+        @posts[0].update(:title => 'タイトル1')
+        @posts[1].update(:title => 'タイトル2')
+        @posts[2].update(:title => 'タイトル3')
       end
     end
 
@@ -478,8 +478,8 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
 
     it 'returns translations in fallback locales' do
       post = Post.create(:title => 'a title')
-      Globalize.with_locale(:ja) { post.update_attributes :title => 'タイトル' }
-      Globalize.with_locale(:fr) { post.update_attributes :title => 'titre' }
+      Globalize.with_locale(:ja) { post.update :title => 'タイトル' }
+      Globalize.with_locale(:fr) { post.update :title => 'titre' }
 
       # where
       assert_equal post, Post.where(:title => 'タイトル').first

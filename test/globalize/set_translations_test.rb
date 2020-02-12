@@ -7,7 +7,7 @@ class AttributesTest < MiniTest::Spec
   describe '#set_translations' do
     it 'sets multiple translations at once' do
       post = Post.create(:title => 'title', :content => 'content', :locale => :en)
-      post.update_attributes(:title => 'Titel', :content => 'Inhalt', :locale => :de)
+      post.update(:title => 'Titel', :content => 'Inhalt', :locale => :de)
 
       post.set_translations(
         :en => { :title => 'updated title', :content => 'updated content' },
@@ -21,7 +21,7 @@ class AttributesTest < MiniTest::Spec
 
     it 'does not touch existing translations for other locales' do
       post = Post.create(:title => 'title', :content => 'content', :locale => :en)
-      post.update_attributes(:title => 'Titel', :content => 'Inhalt', :locale => :de)
+      post.update(:title => 'Titel', :content => 'Inhalt', :locale => :de)
 
       post.set_translations(:en => { :title => 'updated title', :content => 'updated content' })
       post.reload
@@ -48,7 +48,7 @@ class AttributesTest < MiniTest::Spec
 
     it 'does not touch existing translations for other attributes' do
       post = Post.create(:title => 'title', :content => 'content', :locale => :en)
-      post.update_attributes(:title => 'Titel', :content => 'Inhalt', :locale => :de)
+      post.update(:title => 'Titel', :content => 'Inhalt', :locale => :de)
 
       post.set_translations(
         :en => { :title => "updated title" },
@@ -62,7 +62,7 @@ class AttributesTest < MiniTest::Spec
 
     it 'raises ::NoMethodError on unknown attributes' do
       post = Post.create(:title => 'title', :content => 'content', :locale => :en)
-      post.update_attributes(:title => 'Titel', :content => 'Inhalt', :locale => :de)
+      post.update(:title => 'Titel', :content => 'Inhalt', :locale => :de)
 
       assert_raises(NoMethodError, 'unknown attribute: does_not_exist') do
         post.set_translations(:de => { :does_not_exist => 'should raise' })
