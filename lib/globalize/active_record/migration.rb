@@ -83,7 +83,8 @@ module Globalize
                          :null => false,
                          :index => false,
                          :type => column_type(model.primary_key).try(:to_sym),
-                         :limit => model.columns.detect { |c| c.name == model.primary_key }.try(:limit)
+                         :limit => model.columns.detect { |c| c.name == model.primary_key }.try(:limit),
+                         :foreign_key => true
             t.string :locale, :null => false
             t.timestamps :null => false
           end
