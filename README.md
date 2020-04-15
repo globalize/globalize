@@ -28,7 +28,7 @@ gem install globalize
 When using bundler put this in your Gemfile:
 
 ```ruby
-gem 'globalize', '~> 5.1.0'
+gem 'globalize', '~> 5.3.0'
 ```
 
 Please help us by letting us know what works, and what doesn't, when using pre-release code.
