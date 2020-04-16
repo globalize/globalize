@@ -22,7 +22,7 @@ ActiveRecord::Base.class_eval do
   end
 end
 
-Version.class_eval do
+PaperTrail::Version.class_eval do
 
   before_save do |version|
     version.locale = Globalize.locale.to_s
@@ -32,7 +32,7 @@ Version.class_eval do
     "locale = '#{Globalize.locale.to_s}'"
   end
 
-  scope :for_this_locale, lambda{ { :conditions => locale_conditions_to_sql } }
+  scope :for_this_locale, -> { where(locale_conditions_to_sql) }
 
   def sibling_versions_with_locales
     sibling_versions_without_locales.for_this_locale
