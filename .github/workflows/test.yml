@@ -26,7 +26,7 @@ jobs:
     - run: sudo apt-get update
     - run: sudo apt-get install libpq-dev postgresql-client -y
       if: matrix.database == 'postgresql'
-    - run: sudo apt-get install libmysqlclient-dev -y
+    - run: sudo apt-get install libmysqlclient-dev mysql-client -y
       if: matrix.database == 'mysql'
     - run: sudo apt-get install libsqlite3-dev -y
       if: matrix.database == 'sqlite3'
@@ -59,3 +59,9 @@ jobs:
         ports: ["5432:5432"]
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
+      mysql:
+        image: mysql:5.7
+        ports: ["3306:3306"]
+        options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 5
+        env:
+          MYSQL_ROOT_PASSWORD: root
