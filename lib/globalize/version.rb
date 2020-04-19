@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Globalize
-  Version = '5.3.0'
+  Version = '6.0.0.alpha.1'
 end
