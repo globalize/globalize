@@ -1,6 +1,6 @@
 ![Globalize](http://globalize.github.io/globalize/images/globalize.png)
 
-[![Build Status](https://github.com/norman/friendly_id/workflows/CI/badge.svg)](https://github.com/globalize/globalize/actions) [![Code Climate](https://codeclimate.com/github/globalize/globalize.svg)](https://codeclimate.com/github/globalize/globalize)
+[![Build Status](https://github.com/globalize/globalize/workflows/CI/badge.svg)](https://github.com/globalize/globalize/actions) [![Code Climate](https://codeclimate.com/github/globalize/globalize.svg)](https://codeclimate.com/github/globalize/globalize)
 [![Open Source Helpers](https://www.codetriage.com/globalize/globalize/badges/users.svg)](https://www.codetriage.com/globalize/globalize)
 
 You can chat with us using Gitter:
