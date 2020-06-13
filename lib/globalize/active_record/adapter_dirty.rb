@@ -31,7 +31,7 @@ module Globalize
       def store_old_value name, locale
         dirty[name] ||= {}
         unless dirty[name].key? locale
-          old = fetch(locale, name)
+          old = fetch_attribute(locale, name)
           old = old.dup if old.duplicable?
           dirty[name][locale] = old
         end

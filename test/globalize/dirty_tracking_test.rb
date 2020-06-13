@@ -155,6 +155,16 @@ class DirtyTrackingTest < MiniTest::Spec
       assert_equal ['content'], post.changed
     end
 
+    it 'works without taking into account fallbacks for empty translations' do
+      question = Question.create(:title => 'english title')
+      question.translations.create(locale: :de, title: '')
+
+      I18n.locale = :de
+      question.title = ''
+
+      assert_equal [], question.changed
+    end
+
     it 'only resets attributes once when nothing has changed' do
       post = Post.create(:title => 'title', :content => 'content')
       post.send(:set_attribute_was, 'content', 'content')
