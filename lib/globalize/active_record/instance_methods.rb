@@ -158,7 +158,7 @@ module Globalize
         Globalize.fallbacks(locale)
       end
 
-      def save(*)
+      def save(**)
         result = Globalize.with_locale(translation.locale || I18n.default_locale) do
           without_fallbacks do
             super
