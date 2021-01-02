@@ -157,7 +157,13 @@ class DirtyTrackingTest < MiniTest::Spec
 
     it 'only resets attributes once when nothing has changed' do
       post = Post.create(:title => 'title', :content => 'content')
-      post.send(:set_attribute_was, 'content', 'content')
+
+      unless Globalize.rails_6?
+        # Rails 6.0 and later has removed the attributes_changed_by_setter
+        # hash so setting the key isn't necessary.
+        post.send(:set_attribute_was, 'content', 'content')
+      end
+
       post.content = 'content'
       assert post.save
     end
