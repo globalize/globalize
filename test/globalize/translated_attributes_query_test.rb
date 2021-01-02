@@ -182,7 +182,18 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
     describe 'for translated columns' do
       it 'returns only selected attributes' do
         @rel = Post.send(method, :title)
-        assert_match(/post_translations.title/, @rel.to_sql)
+
+        if Globalize.rails_61?
+          # Rails 6.1 and later quote the translated column name
+          case Globalize::Test::Database.driver
+          when 'mysql'
+            assert_match(/`post_translations`.`title`/, @rel.to_sql)
+          else
+            assert_match(/"post_translations"."title"/, @rel.to_sql)
+          end
+        else
+          assert_match(/post_translations.title/, @rel.to_sql)
+        end
       end
 
       it 'generates a working query' do
@@ -224,11 +235,21 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
       it 'returns only selected attributes' do
         @rel = Post.send(method, :title, :id)
 
-        case Globalize::Test::Database.driver
-        when 'mysql'
-          assert_match(/post_translations.title, `posts`.`id`/, @rel.to_sql)
+        if Globalize.rails_61?
+          # Rails 6.1 and later quote the translated column name
+          case Globalize::Test::Database.driver
+          when 'mysql'
+            assert_match(/`post_translations`.`title`, `posts`.`id`/, @rel.to_sql)
+          else
+            assert_match(/"post_translations"."title", "posts"."id"/, @rel.to_sql)
+          end
         else
-          assert_match(/post_translations.title, "posts"."id"/, @rel.to_sql)
+          case Globalize::Test::Database.driver
+          when 'mysql'
+            assert_match(/post_translations.title, `posts`.`id`/, @rel.to_sql)
+          else
+            assert_match(/post_translations.title, "posts"."id"/, @rel.to_sql)
+          end
         end
       end
 
