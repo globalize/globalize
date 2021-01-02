@@ -41,16 +41,46 @@ module Globalize
         self.dirty = {}
       end
 
-      def _reset_attribute name
-        original_value = record.changed_attributes[name]
-        record.send(:clear_attribute_changes, [name])
-        record.send("#{name}=", original_value)
-        record.send(:clear_attribute_changes, [name])
+      if Globalize.rails_6?
+        def _reset_attribute name
+          record.send(:clear_attribute_changes, [name])
+        end
+      else
+        def _reset_attribute name
+          original_value = record.changed_attributes[name]
+          record.send(:clear_attribute_changes, [name])
+          record.send("#{name}=", original_value)
+          record.send(:clear_attribute_changes, [name])
+        end
       end
 
       def reset
         clear_dirty
         super
+      end
+
+      def changed_attributes(locale)
+        Hash[changes(locale).map { |name, change| [name, change.first] }]
+      end
+
+      def changed
+        stash.keys.flat_map { |locale| changes(locale).keys }.uniq
+      end
+
+      def changes(locale)
+        stash[locale].keys.inject({}) do |hash, name|
+          next hash unless dirty[name].is_a?(Hash)
+          next hash unless dirty[name].key?(locale)
+
+          new_value = stash[locale][name]
+          old_value = dirty[name][locale]
+
+          unless new_value == old_value
+            hash[name] = [old_value, new_value]
+          end
+
+          hash
+        end
       end
 
     end
