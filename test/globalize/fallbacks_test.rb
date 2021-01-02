@@ -178,7 +178,7 @@ class FallbacksTest < MiniTest::Spec
         I18n.locale = 'de-DE'
         question.update(params)
 
-        assert_equal question.errors.first, [:title, "can't be blank"]
+        assert_equal question.errors[:title], ["can't be blank"]
       end
     end
 
