@@ -185,6 +185,20 @@ module Globalize
         changed_attributes.present? || translations.any?(&:changed?)
       end
 
+      if Globalize.rails_6?
+        def changed_attributes
+          super.merge(globalize.changed_attributes(::Globalize.locale))
+        end
+
+        def changes
+          super.merge(globalize.changes(::Globalize.locale))
+        end
+
+        def changed
+          super.concat(globalize.changed).uniq
+        end
+      end
+
       # need to access instance variable directly since changed_attributes
       # is frozen as of Rails 4.2
       def original_changed_attributes
