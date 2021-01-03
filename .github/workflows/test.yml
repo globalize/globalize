@@ -11,7 +11,7 @@ jobs:
       matrix:
         database: [ mysql, postgresql, sqlite3 ]
         gemfile: [ '5.2.1', '5.1.6', '4.2.10' ]
-        ruby: [ '2.6.x', '2.5.x', '2.4.x' ]
+        ruby: [ '2.6', '2.5', '2.4' ]
       fail-fast: false
     runs-on: ubuntu-latest
     name: ${{ matrix.ruby }} ${{ matrix.database }} rails-${{ matrix.gemfile }}
