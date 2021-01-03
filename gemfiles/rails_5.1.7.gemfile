@@ -11,7 +11,7 @@ group :mysql do
 end
 
 group :postgres, :postgresql do
-  gem "pg", "< 1.0", platforms: [:ruby, :rbx]
+  gem "pg", "~> 1.1", platforms: [:ruby, :rbx]
 end
 
 platforms :rbx do

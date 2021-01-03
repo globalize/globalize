@@ -21,6 +21,16 @@ RAILS_VERSIONS.each do |version|
       gem 'sqlite3', '~> 1.3.6', platforms: [:ruby, :rbx]
     end
 
+    if !ENV['CI'] || %w(postgres postgresql).include?(ENV['DB'])
+      group :postgres, :postgresql do
+        if version =~ /^4/
+          gem 'pg', '< 1.0', platforms: [:ruby, :rbx]
+        else
+          gem 'pg', '~> 1.1', platforms: [:ruby, :rbx]
+        end
+      end
+    end
+
     platforms :rbx do
       gem "rubysl", "~> 2.0"
       gem "rubinius-developer_tools"
