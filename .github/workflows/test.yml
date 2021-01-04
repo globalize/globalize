@@ -9,19 +9,13 @@ jobs:
   test:
     strategy:
       matrix:
-        architecture: [ x64 ]
         database: [ mysql, postgresql, sqlite3 ]
         gemfile: [ '5.2.1', '5.1.6', '4.2.10' ]
-        ruby: [ '2.6.x', '2.5.x', '2.4.x' ]
+        ruby: [ '2.6', '2.5', '2.4' ]
       fail-fast: false
     runs-on: ubuntu-latest
     name: ${{ matrix.ruby }} ${{ matrix.database }} rails-${{ matrix.gemfile }}
     steps:
-    - uses: actions/setup-ruby@v1.0.0
-      with:
-        architecture: ${{ matrix.architecture }}
-        ruby-version: ${{ matrix.ruby }}
-        version: ${{ matrix.ruby }}
     - uses: actions/checkout@v1
     - run: sudo apt-get update
     - run: sudo apt-get install libpq-dev postgresql-client -y
@@ -30,13 +24,10 @@ jobs:
       if: matrix.database == 'mysql'
     - run: sudo apt-get install libsqlite3-dev -y
       if: matrix.database == 'sqlite3'
-    - id: cache-bundler
-      uses: actions/cache@v1
+    - uses: ruby/setup-ruby@v1
       with:
-        path: gemfiles/vendor/bundle
-        key: ${{ matrix.ruby }}-gem-${{ hashFiles(format('gemfiles/Gemfile.rails-{0}.rb', matrix.gemfile)) }}
-    - run: gem install bundler
-    - run: bundle install --path vendor/bundle
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
     - run: bundle exec rake db:create db:migrate
     - run: bundle exec rake test
 
