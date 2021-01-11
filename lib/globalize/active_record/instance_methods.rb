@@ -66,7 +66,7 @@ module Globalize
       end
 
       def _read_attribute(attr_name, options = {}, &block)
-        translated_value = read_translated_attribute(attr_name, options, &block)
+        translated_value = read_translated_attribute(attr_name, options)
         translated_value.nil? ? super(attr_name, &block) : translated_value
       end
 
@@ -236,10 +236,7 @@ module Globalize
         return nil unless options[:translated]
         return nil unless translated?(name)
 
-        value = globalize.fetch(options[:locale] || Globalize.locale, name)
-        return nil if value.nil?
-
-        block_given? ? yield(value) : value
+        globalize.fetch(options[:locale] || Globalize.locale, name)
       end
     end
   end
