@@ -19,6 +19,10 @@ env:
   - DB=postgres
   - DB=mysql
 
+services:
+  - postgresql
+  - mysql
+
 notifications:
   webhooks:
     - https://webhooks.gitter.im/e/40dc875af26f64f39090
