@@ -27,7 +27,6 @@ ActiveRecord::Schema.define do
 
   create_table :posts, :force => true do |t|
     t.references :blog
-    t.references :media
   end
 
   create_table :post_translations, :force => true do |t|
@@ -37,7 +36,7 @@ ActiveRecord::Schema.define do
     t.text       :content
     t.boolean    :published
     t.datetime   :published_at
-    t.integer    :media_id
+    t.references :media
   end
 
   create_table :products, :force => true do |t|
