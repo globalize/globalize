@@ -140,6 +140,12 @@ class AttributesTest < MiniTest::Spec
       saved_locales = post.translations.map(&:locale)
       assert saved_locales.include? :it
     end
+
+    it 'translates the reference' do
+      media = Media.create!
+      post = Post.create!(title: 'title', media: media)
+      assert_equal media.id, post.media_id
+    end
   end
 
   describe '#attribute_names' do
