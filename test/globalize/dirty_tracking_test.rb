@@ -168,4 +168,30 @@ class DirtyTrackingTest < MiniTest::Spec
       assert post.save
     end
   end
+
+  describe '#saved_changes' do
+    it 'tracks saved changes in each locale' do
+      post = Post.create!(:title => 'title', :content => 'content')
+      assert_equal({ 'id' => [nil, post.id], 'title' => [nil, 'title'], 'content' => [nil, 'content'] }, post.saved_changes)
+
+      post.title = 'changed title'
+      post.save
+      assert_equal({ 'title' => ['title', 'changed title'] }, post.saved_changes)
+
+      I18n.locale = :de
+      assert_nil post.title
+
+      post.title = 'Titel'
+      post.save
+      assert_equal({ 'title' => [nil, 'Titel'] }, post.saved_changes)
+    end
+
+    it 'clears saved changes after reload' do
+      post = Post.create!(:title => 'title', :content => 'content')
+      assert_equal({ 'id' => [nil, post.id], 'title' => [nil, 'title'], 'content' => [nil, 'content'] }, post.saved_changes)
+
+      post.reload
+      assert_equal({}, post.saved_changes)
+    end
+  end
 end

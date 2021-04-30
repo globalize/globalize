@@ -185,6 +185,18 @@ module Globalize
         changed_attributes.present? || translations.any?(&:changed?)
       end
 
+      if Globalize.rails_5?
+        def saved_changes
+          super.tap do |changes|
+            translation = translation_for(::Globalize.locale, false)
+            if translation
+              translation_changes = translation.saved_changes.select { |name| translated?(name) }
+              changes.merge!(translation_changes) if !translation_changes.empty?
+            end
+          end
+        end
+      end
+
       if Globalize.rails_6?
         def changed_attributes
           super.merge(globalize.changed_attributes(::Globalize.locale))
