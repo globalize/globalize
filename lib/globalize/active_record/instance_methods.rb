@@ -158,20 +158,21 @@ module Globalize
         Globalize.fallbacks(locale)
       end
 
-      if Globalize.rails_61?
-        # Rails 6.1 and later has removed positional arguments which were never used
-        def save(**)
-          result = Globalize.with_locale(translation.locale || I18n.default_locale) do
-            without_fallbacks do
-              super
+      if Globalize.ruby_27?
+        class_eval <<~RUBY, __FILE__, __LINE__ + 1
+          def save(...)
+            result = Globalize.with_locale(translation.locale || I18n.default_locale) do
+              without_fallbacks do
+                super
+              end
             end
-          end
-          if result
-            globalize.clear_dirty
-          end
+            if result
+              globalize.clear_dirty
+            end
 
-          result
-        end
+            result
+          end
+        RUBY
       else
         def save(*)
           result = Globalize.with_locale(translation.locale || I18n.default_locale) do
