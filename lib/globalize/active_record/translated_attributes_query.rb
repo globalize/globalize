@@ -99,7 +99,7 @@ module Globalize
         end
       end
 
-      if ::ActiveRecord::VERSION::STRING < "5.0.0"
+      if Globalize.rails_42?
         def where_values_hash(*args)
           return super unless respond_to?(:translations_table_name)
           equalities = respond_to?(:with_default_scope) ? with_default_scope.where_values : where_values
