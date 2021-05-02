@@ -31,11 +31,6 @@ RAILS_VERSIONS.each do |version|
       end
     end
 
-    platforms :rbx do
-      gem "rubysl", "~> 2.0"
-      gem "rubinius-developer_tools"
-    end
-
     platforms :jruby do
       if !ENV['CI'] || ENV['DB'] == 'sqlite3'
         gem 'activerecord-jdbcsqlite3-adapter', '~> 1'
