@@ -191,7 +191,7 @@ module Globalize
             translation = translation_for(::Globalize.locale, false)
             if translation
               translation_changes = translation.saved_changes.select { |name| translated?(name) }
-              changes.merge!(translation_changes) if !translation_changes.empty?
+              changes.merge!(translation_changes) if translation_changes.any?
             end
           end
         end
