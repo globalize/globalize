@@ -106,7 +106,7 @@ class DirtyTrackingTest < MiniTest::Spec
 
       post.title = 'english title'
 
-      if Globalize.rails_5?
+      if Globalize.rails_51?
         assert_equal ['title', 'content'], post.changed
       else
         assert_equal ['content', 'title'], post.changed
@@ -115,7 +115,7 @@ class DirtyTrackingTest < MiniTest::Spec
       I18n.locale = :de
       post.title  = nil
 
-      if Globalize.rails_5?
+      if Globalize.rails_51?
         assert_equal ['title', 'content'], post.changed
       else
         assert_equal ['content', 'title'], post.changed
@@ -127,7 +127,7 @@ class DirtyTrackingTest < MiniTest::Spec
       assert_equal ['content'], post.changed
 
       post.title = 'english title'
-      if Globalize.rails_5?
+      if Globalize.rails_51?
         assert_equal ['title', 'content'], post.changed
       else
         assert_equal ['content', 'title'], post.changed
@@ -136,7 +136,7 @@ class DirtyTrackingTest < MiniTest::Spec
       I18n.locale = :de
       post.title  = 'title de'
 
-      if Globalize.rails_5?
+      if Globalize.rails_51?
         assert_equal ['title', 'content'], post.changed
       else
         assert_equal ['content', 'title'], post.changed
@@ -144,7 +144,7 @@ class DirtyTrackingTest < MiniTest::Spec
 
       I18n.locale = :en
       post.title  = nil
-      if Globalize.rails_5?
+      if Globalize.rails_51?
         assert_equal ['title', 'content'], post.changed
       else
         assert_equal ['content', 'title'], post.changed
@@ -169,7 +169,7 @@ class DirtyTrackingTest < MiniTest::Spec
     end
   end
 
-  if Globalize.rails_5?
+  if Globalize.rails_51?
     describe '#saved_changes' do
       it 'tracks saved changes in each locale' do
         post = Post.create!(:title => 'title', :content => 'content')

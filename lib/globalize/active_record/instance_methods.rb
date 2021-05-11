@@ -185,7 +185,7 @@ module Globalize
         changed_attributes.present? || translations.any?(&:changed?)
       end
 
-      if Globalize.rails_5?
+      if Globalize.rails_51?
         def saved_changes
           super.tap do |changes|
             translation = translation_for(::Globalize.locale, false)

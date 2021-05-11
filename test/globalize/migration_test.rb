@@ -162,7 +162,7 @@ class MigrationTest < MiniTest::Spec
         assert_translated untranslated_record, :en, :name, 'Untranslated'
         assert_translated untranslated_record, :en, :body, 'Untranslated body'
 
-        if Globalize.rails_5?
+        if Globalize.rails_51?
           assert_nil model.columns.detect { |c| c.name == "body" }
         end
       end
