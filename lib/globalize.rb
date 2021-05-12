@@ -58,7 +58,7 @@ module Globalize
       RequestStore.store
     end
 
-    def rails_5?
+    def rails_51?
       ::ActiveRecord.version >= Gem::Version.new('5.1.0')
     end
 

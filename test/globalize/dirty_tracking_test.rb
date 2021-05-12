@@ -106,7 +106,7 @@ class DirtyTrackingTest < MiniTest::Spec
 
       post.title = 'english title'
 
-      if Globalize.rails_5?
+      if Globalize.rails_51?
         assert_equal ['title', 'content'], post.changed
       else
         assert_equal ['content', 'title'], post.changed
@@ -115,7 +115,7 @@ class DirtyTrackingTest < MiniTest::Spec
       I18n.locale = :de
       post.title  = nil
 
-      if Globalize.rails_5?
+      if Globalize.rails_51?
         assert_equal ['title', 'content'], post.changed
       else
         assert_equal ['content', 'title'], post.changed
@@ -127,7 +127,7 @@ class DirtyTrackingTest < MiniTest::Spec
       assert_equal ['content'], post.changed
 
       post.title = 'english title'
-      if Globalize.rails_5?
+      if Globalize.rails_51?
         assert_equal ['title', 'content'], post.changed
       else
         assert_equal ['content', 'title'], post.changed
@@ -136,7 +136,7 @@ class DirtyTrackingTest < MiniTest::Spec
       I18n.locale = :de
       post.title  = 'title de'
 
-      if Globalize.rails_5?
+      if Globalize.rails_51?
         assert_equal ['title', 'content'], post.changed
       else
         assert_equal ['content', 'title'], post.changed
@@ -144,7 +144,7 @@ class DirtyTrackingTest < MiniTest::Spec
 
       I18n.locale = :en
       post.title  = nil
-      if Globalize.rails_5?
+      if Globalize.rails_51?
         assert_equal ['title', 'content'], post.changed
       else
         assert_equal ['content', 'title'], post.changed
@@ -166,6 +166,34 @@ class DirtyTrackingTest < MiniTest::Spec
 
       post.content = 'content'
       assert post.save
+    end
+  end
+
+  if Globalize.rails_51?
+    describe '#saved_changes' do
+      it 'tracks saved changes in each locale' do
+        post = Post.create!(:title => 'title', :content => 'content')
+        assert_equal({ 'id' => [nil, post.id], 'title' => [nil, 'title'], 'content' => [nil, 'content'] }, post.saved_changes)
+
+        post.title = 'changed title'
+        post.save
+        assert_equal({ 'title' => ['title', 'changed title'] }, post.saved_changes)
+
+        I18n.locale = :de
+        assert_nil post.title
+
+        post.title = 'Titel'
+        post.save
+        assert_equal({ 'title' => [nil, 'Titel'] }, post.saved_changes)
+      end
+
+      it 'clears saved changes after reload' do
+        post = Post.create!(:title => 'title', :content => 'content')
+        assert_equal({ 'id' => [nil, post.id], 'title' => [nil, 'title'], 'content' => [nil, 'content'] }, post.saved_changes)
+
+        post.reload
+        assert_equal({}, post.saved_changes)
+      end
     end
   end
 end
