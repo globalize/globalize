@@ -3,8 +3,8 @@
 source "https://rubygems.org"
 
 gem "sqlite3", "~> 1.4", platforms: [:ruby, :rbx]
-gem "activemodel", "6.1.0"
-gem "activerecord", "6.1.0"
+gem "activemodel", "6.0.3.6"
+gem "activerecord", "6.0.3.6"
 
 group :mysql do
   gem "mysql2", platforms: [:ruby, :rbx]
@@ -12,11 +12,6 @@ end
 
 group :postgres, :postgresql do
   gem "pg", "~> 1.1", platforms: [:ruby, :rbx]
-end
-
-platforms :rbx do
-  gem "rubysl", "~> 2.0"
-  gem "rubinius-developer_tools"
 end
 
 platforms :jruby do

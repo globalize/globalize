@@ -11,6 +11,15 @@ module Globalize
   autoload :ActiveRecord, 'globalize/active_record'
   autoload :Interpolation,   'globalize/interpolation'
 
+  ACTIVE_RECORD_50 = Gem::Version.new('5.0.0')
+  ACTIVE_RECORD_51 = Gem::Version.new('5.1.0')
+  ACTIVE_RECORD_52 = Gem::Version.new('5.2.0')
+  ACTIVE_RECORD_60 = Gem::Version.new('6.0.0')
+  ACTIVE_RECORD_61 = Gem::Version.new('6.1.0')
+
+  CURRENT_RUBY     = Gem::Version.new(RUBY_VERSION)
+  RUBY_VERSION_27  = Gem::Version.new('2.7.0')
+
   class << self
     def locale
       read_locale || I18n.locale
@@ -58,20 +67,32 @@ module Globalize
       RequestStore.store
     end
 
+    def ruby_27?
+      CURRENT_RUBY >= RUBY_VERSION_27
+    end
+
+    def rails_42?
+      ::ActiveRecord.version < ACTIVE_RECORD_50
+    end
+
+    def rails_5?
+      ::ActiveRecord.version >= ACTIVE_RECORD_50
+    end
+
     def rails_51?
-      ::ActiveRecord.version >= Gem::Version.new('5.1.0')
+      ::ActiveRecord.version >= ACTIVE_RECORD_51
     end
 
     def rails_52?
-      ::ActiveRecord.version >= Gem::Version.new('5.2.0')
+      ::ActiveRecord.version >= ACTIVE_RECORD_52
     end
 
     def rails_6?
-      ::ActiveRecord.version >= Gem::Version.new('6.0.0')
+      ::ActiveRecord.version >= ACTIVE_RECORD_60
     end
 
     def rails_61?
-      ::ActiveRecord.version >= Gem::Version.new('6.1.0')
+      ::ActiveRecord.version >= ACTIVE_RECORD_61
     end
 
   protected

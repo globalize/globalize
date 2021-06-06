@@ -15,6 +15,6 @@ end
 
 if !ENV['CI'] || %w(postgres postgresql).include?(ENV['DB'])
   group :postgres, :postgresql do
-    gem 'pg', '< 1.0', platforms: [:ruby, :rbx]
+    gem 'pg', platforms: [:ruby, :rbx]
   end
 end
