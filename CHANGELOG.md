@@ -1,5 +1,10 @@
 # Globalize Changelog
 
+## 6.0.1 (2021-06-23)
+
+* Fix errors with Rails 6.1 and Ruby 3.0 [#778](https://github.com/globalize/globalize/pull/778) by [Andrew White](https://github.com/pixeltrix)
+* Track `saved_changes` for Rails 5.1 and above [#780](https://github.com/globalize/globalize/pull/780) by [Peter Postma](https://github.com/ppostma)
+
 ## 6.0.0 (2021-01-11)
 
 * Add `create_source_columns` option for migrations. [#715](https://github.com/globalize/globalize/pull/715) by [IlyasValiullov](https://github.com/IlyasValiullov)
