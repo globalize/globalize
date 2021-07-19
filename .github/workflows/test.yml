@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     name: ${{ matrix.ruby }} ${{ matrix.database }} rails-${{ matrix.gemfile }}
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - run: sudo apt-get update
     - run: sudo apt-get install libpq-dev postgresql-client -y
       if: matrix.database == 'postgresql'
