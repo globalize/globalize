@@ -36,6 +36,7 @@ ActiveRecord::Schema.define do
     t.text       :content
     t.boolean    :published
     t.datetime   :published_at
+    t.references :media
   end
 
   create_table :products, :force => true do |t|

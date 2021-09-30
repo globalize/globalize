@@ -12,6 +12,11 @@ to add model translations to ActiveRecord models.
 
 In other words, a way to translate actual user-generated content, for example; a single blog post with multiple translations.
 
+## Current state of the gem
+
+Globalize is not very actively maintained. Pull Requests are welcome, especially for compatibility with new versions of Rails, but none of the maintainers actively use Globalize anymore. If you need a more actively maintained model translation gem, we recommend checking out [Mobility](https://github.com/shioyama/mobility), a natural successor of Globalize created by Chris Salzberg (one of Globalize maintainers) and inspired by the ideas discussed around Globalize. For a more up-to-date discussion of the current situation, see [issue #753](https://github.com/globalize/globalize/issues/753).
+
+
 ## Requirements
 
 * ActiveRecord >= 4.2.0 (see below for installation with ActiveRecord 3.x)
