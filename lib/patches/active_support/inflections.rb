@@ -1,5 +1,4 @@
 if ::ActiveSupport.version >= Gem::Version.new("7.0.0")
-  puts ::ActiveSupport.version
   module Globalize
     module Inflections
       def instance_or_fallback(locale)
