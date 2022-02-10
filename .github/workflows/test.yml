@@ -43,8 +43,6 @@ jobs:
     - run: sudo apt-get update
     - run: sudo apt-get install libpq-dev postgresql-client -y
       if: matrix.database == 'postgresql'
-    # - run: sudo apt-get install libmysqlclient-dev mysql-client -y
-    #   if: matrix.database == 'mysql'
     - run: sudo apt-get install libsqlite3-dev -y
       if: matrix.database == 'sqlite3'
     - uses: ruby/setup-ruby@v1
