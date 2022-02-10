@@ -169,6 +169,8 @@ module Globalize
             # Create a hash containing the translated column names and their values.
             translated_attribute_names.inject(fields_to_update={}) do |f, name|
               f.update({name.to_sym => translated_record[name.to_s]})
+              # Remove attributes that will no longer be translated
+              translated_attribute_names.delete(name)
             end
 
             # Now, update the actual model's record with the hash.
