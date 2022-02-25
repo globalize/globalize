@@ -1,5 +1,9 @@
 # Globalize Changelog
 
+## 6.1.0 (2022-02-25)
+
+* Patch ActiveSupport in Rails 7.0.0+ [#792](https://github.com/globalize/globalize/pull/792) by [Daniel Chan](https://github.com/mynameisdaniel) and [Artis Raugulis](https://github.com/artisr)
+
 ## 6.0.1 (2021-06-23)
 
 * Fix errors with Rails 6.1 and Ruby 3.0 [#778](https://github.com/globalize/globalize/pull/778) by [Andrew White](https://github.com/pixeltrix)
