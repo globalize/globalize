@@ -2,7 +2,7 @@ module Globalize
   module AttributeMethods
     module Serialization
       def serialize(attr_name, class_name_or_coder = Object, **options)
-        super(attr_name, class_name_or_coder, options)
+        super(attr_name, class_name_or_coder, **options)
 
         coder = if class_name_or_coder == ::JSON
                   ::ActiveRecord::Coders::JSON
