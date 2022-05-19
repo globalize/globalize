@@ -58,7 +58,7 @@ module Globalize
         when "mysql"
           "mysql -u #{db_config['username']} --password=#{db_config['password']} --protocol tcp -e 'create database #{db_config['database']} character set utf8 collate utf8_general_ci;' >/dev/null"
         when "postgres", "postgresql"
-          "psql -c 'create database #{db_config['database']};' -U #{db_config['username']} -h localhost >/dev/null"
+          "PGPASSWORD=#{db_config['password']} psql -c 'create database #{db_config['database']};' -U #{db_config['username']} -h #{db_config['host']} -p #{db_config['port']} >/dev/null"
         end
 
         puts command
@@ -72,7 +72,7 @@ module Globalize
         when "mysql"
           "mysql -u #{db_config['username']} --password=#{db_config['password']} --protocol tcp -e 'drop database #{db_config["database"]};' >/dev/null"
         when "postgres", "postgresql"
-          "psql -c 'drop database #{db_config['database']};' -U #{db_config['username']} -h localhost >/dev/null"
+          "PGPASSWORD=#{db_config['password']} psql -c 'drop database #{db_config['database']};' -U #{db_config['username']} -h #{db_config['host']} -p #{db_config['port']} >/dev/null"
         end
 
         puts command
