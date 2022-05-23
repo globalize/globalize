@@ -41,14 +41,7 @@ module Globalize
         end
 
         begin
-          # Without a connection tentative, the `connected?` function can responds with a false negative
-          ::ActiveRecord::Base.connection
-        rescue
-          # Ignore connection fail because in docker build hasn't a database connection
-          nil
-        end
-        begin
-          if Globalize.rails_5? && ::ActiveRecord::Base.connected? && table_exists? && translation_class.table_exists?
+          if Globalize.rails_5? && database_connection_possible?
             self.ignored_columns += translated_attribute_names.map(&:to_s)
             reset_column_information
           end
@@ -58,15 +51,8 @@ module Globalize
       end
 
       def check_columns!(attr_names)
-        begin
-          # Without a connection tentative, the `connected?` function can responds with a false negative
-          ::ActiveRecord::Base.connection
-        rescue
-          # Ignore connection fail because in docker build hasn't a database connection
-          nil
-        end
         # If tables do not exist or Rails version is greater than 5, do not warn about conflicting columns
-        return unless Globalize.rails_42? && ::ActiveRecord::Base.connected? && table_exists? && translation_class.table_exists?
+        return unless Globalize.rails_42? && database_connection_possible?
 
         if (overlap = attr_names.map(&:to_s) & column_names).present?
           ActiveSupport::Deprecation.warn(

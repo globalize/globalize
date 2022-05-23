@@ -124,6 +124,20 @@ module Globalize
         define_translations_reader(name)
         define_translations_writer(name)
       end
+
+      def database_connection_possible?
+        begin
+          # Without a connection tentative, the `connected?` function can responds with a false negative
+          ::ActiveRecord::Base.connection
+        rescue
+          # Ignore connection fail because in docker build hasn't a database connection
+          nil
+        end
+
+        ::ActiveRecord::Base.connected? &&
+          table_exists? &&
+          translation_class.table_exists?
+      end
     end
   end
 end
