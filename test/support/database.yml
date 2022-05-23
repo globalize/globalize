@@ -9,11 +9,11 @@ mysql:
 
 postgresql:
   adapter: postgresql
-  host: <%= ENV.fetch('POSTGRESQL_HOST', 'localhost') %>
-  port: <%= ENV.fetch('POSTGRESQL_PORT', 5432) %>
+  host: <%= ENV.fetch("PGHOST", "localhost") %>
+  port: <%= ENV.fetch("PGPORT", 5432) %>
   database: globalize_test
   username: postgres
-  password: <%= ENV['POSTGRESQL_PASSWORD'] %>
+  password: <%= ENV.fetch("PGPASSWORD", "") %>
   encoding: utf8
 
 sqlite3:
