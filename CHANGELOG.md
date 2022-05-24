@@ -1,5 +1,9 @@
 # Globalize Changelog
 
+## 6.2.1 (2022-05-24)
+
+*  Changed serialize method in Rails 6.1.0+ [#798](https://github.com/globalize/globalize/pull/798) by [Alex](https://github.com/oivoodoo)
+
 ## 6.2.0 (2022-05-24)
 
 * Fix asset precompile in docker build workflow [#799](https://github.com/globalize/globalize/pull/799) by [Diefferson Koderer Môro](https://github.com/djpremier)
