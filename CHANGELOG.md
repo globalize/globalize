@@ -1,5 +1,9 @@
 # Globalize Changelog
 
+## 6.2.0 (2022-05-24)
+
+* Fix asset precompile in docker build workflow [#799](https://github.com/globalize/globalize/pull/799) by [Diefferson Koderer Môro](https://github.com/djpremier)
+
 ## 6.1.0 (2022-02-25)
 
 * Patch ActiveSupport in Rails 7.0.0+ [#792](https://github.com/globalize/globalize/pull/792) by [Daniel Chan](https://github.com/mynameisdaniel) and [Artis Raugulis](https://github.com/artisr)
