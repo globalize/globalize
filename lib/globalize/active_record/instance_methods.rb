@@ -21,7 +21,7 @@ module Globalize
 
         # In Rails 5.2 we need to override *_assign_attributes* as it's called earlier
         # in the stack (before *assign_attributes*)
-        # See https://github.com/rails/rails/blob/master/activerecord/lib/active_record/attribute_assignment.rb#L11
+        # See https://github.com/rails/rails/blob/5-2-stable/activerecord/lib/active_record/attribute_assignment.rb#L12
         def _assign_attributes(new_attributes)
           attributes = new_attributes.stringify_keys
           with_given_locale(attributes) { super(attributes.except("locale")) }
