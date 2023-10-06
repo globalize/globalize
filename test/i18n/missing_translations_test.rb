@@ -5,7 +5,7 @@ class TestLogger < String
   def warn(msg) self.concat msg; end
 end
 
-class LogMissingTranslationsTest < MiniTest::Spec
+class LogMissingTranslationsTest < Minitest::Spec
   before(:each) do
     @locale, @key, @options = :en, :foo, {}
     @exception = I18n::MissingTranslationData.new(@locale, @key, @options)

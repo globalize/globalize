@@ -1,6 +1,6 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-class DirtyTrackingTest < MiniTest::Spec
+class DirtyTrackingTest < Minitest::Spec
 
   describe '#changed' do
     it 'includes translated attributes in list of changed attribute keys' do

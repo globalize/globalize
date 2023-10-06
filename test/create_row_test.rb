@@ -18,7 +18,7 @@ module ActiveRecord
   end
 end
 
-class CreateRowTest < MiniTest::Spec
+class CreateRowTest < Minitest::Spec
   before(:each) do
     ActiveSupport::Notifications.subscribe('sql.active_record', ActiveRecord::Updater.new)
     ActiveRecord::Updater.query_count = 0

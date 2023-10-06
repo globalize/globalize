@@ -2,7 +2,7 @@
 
 require File.expand_path('../test_helper', __FILE__)
 
-class GlobalizeTest < MiniTest::Spec
+class GlobalizeTest < Minitest::Spec
 
   describe 'translated record' do
 

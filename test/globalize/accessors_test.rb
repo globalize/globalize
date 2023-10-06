@@ -2,7 +2,7 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
-class AccessorsTest < MiniTest::Spec
+class AccessorsTest < Minitest::Spec
   describe '*_translations reader' do
     it 'is defined for translated attributes' do
       assert User.new.respond_to?(:name_translations)

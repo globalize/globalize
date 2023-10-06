@@ -2,7 +2,7 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
-class TranslationForTest < MiniTest::Spec
+class TranslationForTest < Minitest::Spec
   describe '#translation_for' do
     it 'returns translation for locale passed in as an argument' do
       post = Post.create(:title => 'title', :content => 'content', :locale => :en)

@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.expand_path('../../test_helper', __FILE__)
 
-class JoinsTest < MiniTest::Spec
+class JoinsTest < Minitest::Spec
 
   describe 'pluck on translations table' do
 

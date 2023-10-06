@@ -2,7 +2,7 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
-class DupTest < MiniTest::Spec
+class DupTest < Minitest::Spec
 
   describe 'duped translated model' do
     it 'stores translations of new record' do

@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.expand_path('../../test_helper', __FILE__)
 
-class AttributesTest < MiniTest::Spec
+class AttributesTest < Minitest::Spec
 
   describe 'translated attribute reader' do
     it 'is defined for translated attributes' do
