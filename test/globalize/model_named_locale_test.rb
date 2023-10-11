@@ -2,7 +2,7 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
-class ModelNamedLocaleTest < MiniTest::Spec
+class ModelNamedLocaleTest < Minitest::Spec
   describe 'translated attribute reader on model named "Locale"' do
     it "returns the correct translation" do
       Locale.create :name => "French"

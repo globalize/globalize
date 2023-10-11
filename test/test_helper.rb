@@ -20,7 +20,7 @@ I18n.available_locales = [ :en, :'en-US', :fr, :de, :'de-DE', :he, :nl, :pl ]
 require 'database_cleaner'
 DatabaseCleaner.strategy = :transaction
 
-class MiniTest::Spec
+class Minitest::Spec
   before :each do
     DatabaseCleaner.start
     I18n.locale = I18n.default_locale = :en

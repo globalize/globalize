@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.expand_path('../../test_helper', __FILE__)
 
-class DestroyTest < MiniTest::Spec
+class DestroyTest < Minitest::Spec
   describe '.destroy_all' do
     before do
       @posts = [Post.create(:title => 'title'), Post.create(:title => 'title')]

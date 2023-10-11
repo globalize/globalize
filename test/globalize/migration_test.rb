@@ -1,6 +1,6 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-class MigrationTest < MiniTest::Spec
+class MigrationTest < Minitest::Spec
   include Globalize::ActiveRecord::Exceptions
 
   before(:each) do

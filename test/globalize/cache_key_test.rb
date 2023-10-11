@@ -2,7 +2,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 require 'active_support/testing/time_helpers'
 
-class CacheKeyTest < MiniTest::Spec
+class CacheKeyTest < Minitest::Spec
   include ActiveSupport::Testing::TimeHelpers
 
   describe '#cache_key' do

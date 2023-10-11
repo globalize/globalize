@@ -1,6 +1,6 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-class ValidationsTest < MiniTest::Spec
+class ValidationsTest < Minitest::Spec
   after(:each) do
     Validatee.reset_callbacks(:validate)
   end

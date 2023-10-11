@@ -2,7 +2,7 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
-class AttributesTest < MiniTest::Spec
+class AttributesTest < Minitest::Spec
 
   describe '#set_translations' do
     it 'sets multiple translations at once' do

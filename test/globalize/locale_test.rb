@@ -2,7 +2,7 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
-class LocaleTest < MiniTest::Spec
+class LocaleTest < Minitest::Spec
 
   describe Globalize do
     it 'has locale accessors' do

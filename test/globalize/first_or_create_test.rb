@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.expand_path('../../test_helper', __FILE__)
 
-class FirstOrCreateTest < MiniTest::Spec
+class FirstOrCreateTest < Minitest::Spec
   describe '.first_or_create' do
     it 'returns first record with matching translated attribute if match found' do
       post = Post.create(:title => 'test_title')

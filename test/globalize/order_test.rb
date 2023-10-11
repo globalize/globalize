@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.expand_path('../../test_helper', __FILE__)
 
-class OrderTest < MiniTest::Spec
+class OrderTest < Minitest::Spec
   describe 'order with fallbacks' do
     before(:each) do
       @previous_backend = I18n.backend

@@ -1,6 +1,6 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-class FallbacksTest < MiniTest::Spec
+class FallbacksTest < Minitest::Spec
   before(:each) do
     @previous_backend = I18n.backend
     I18n.pretend_fallbacks

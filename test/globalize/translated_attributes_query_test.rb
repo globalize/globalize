@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.expand_path('../../test_helper', __FILE__)
 
-class TranslatedAttributesQueryTest < MiniTest::Spec
+class TranslatedAttributesQueryTest < Minitest::Spec
   def self.it_supports_translated_conditions(method)
     it 'finds records with matching attribute value in translations table' do
       post = Post.create(:title => 'title 1')

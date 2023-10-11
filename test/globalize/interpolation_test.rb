@@ -2,7 +2,7 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
-class InterpolationTest < MiniTest::Spec
+class InterpolationTest < Minitest::Spec
   describe 'translated attribute reader' do
     it "interpolates arguments into translation" do
       user = User.new(:name => 'John %{surname}')
