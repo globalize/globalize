@@ -85,7 +85,11 @@ module Globalize
             serializer = serializer.object_class
           end
 
-          translation_class.send :serialize, attr_name, serializer
+          if ::ActiveRecord.version >= Gem::Version.new("7.1.0")
+            translation_class.send :serialize, attr_name, type: serializer
+          else
+            translation_class.send :serialize, attr_name, serializer
+          end
         end
       end
 
