@@ -350,4 +350,16 @@ class AttributesTest < Minitest::Spec
       assert_equal 'titolo', artwork.title(:it)
     end
   end
+
+  if Globalize.rails_5?
+    describe '#ignored_columns' do
+      it 'sets ignored_columns when present on the original table' do
+        assert_equal ["name"], InProgress.ignored_columns
+      end
+
+      it 'has empty ignored columns if columns are not present on the source table' do
+        assert_equal [], Post.ignored_columns
+      end
+    end
+  end
 end
