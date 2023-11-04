@@ -3,7 +3,7 @@ module Globalize
     module Serialization
       def serialize(attr_name, class_name_or_coder = Object, **options)
         super(attr_name, class_name_or_coder, **options)
-        if defined? globalize_serialized_attributes
+        if defined? self.globalize_serialized_attributes
           coder = if class_name_or_coder == ::JSON
                     ::ActiveRecord::Coders::JSON
                   elsif %i[load dump].all? { |x| class_name_or_coder.respond_to?(x) }
