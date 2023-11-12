@@ -5,13 +5,13 @@ end
 
 class ArraySerializedAttr < ActiveRecord::Base
   self.table_name = 'serialized_attrs'
-  serialize :meta, Array
+  serialize :meta, :coder => JSON, :type => Array
   translates :meta
 end
 
 class JSONSerializedAttr < ActiveRecord::Base
   self.table_name = 'serialized_attrs'
-  serialize :meta, JSON
+  serialize :meta, :coder => JSON
   translates :meta
 end
 
