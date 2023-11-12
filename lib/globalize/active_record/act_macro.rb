@@ -78,15 +78,7 @@ module Globalize
       end
 
       def enable_serializable_attribute(attr_name)
-        serializer = self.globalize_serialized_attributes[attr_name]
-        if serializer.present?
-          if defined?(::ActiveRecord::Coders::YAMLColumn) &&
-            serializer.is_a?(::ActiveRecord::Coders::YAMLColumn)
-            serializer = serializer.object_class
-          end
-
-          translation_class.send :serialize, attr_name, serializer
-        end
+        translation_class.send :serialize, attr_name, coder: YAML
       end
 
       def setup_translates!(options)

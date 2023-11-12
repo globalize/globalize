@@ -1,7 +1,7 @@
 module Globalize
   module AttributeMethods
     module Serialization
-      def serialize(attr_name, class_name_or_coder = nil, **options)
+      def serialize(attr_name, **options)
         super(attr_name, **options)
 
         coder = if class_name_or_coder == ::JSON
