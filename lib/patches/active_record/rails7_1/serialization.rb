@@ -4,7 +4,7 @@ module Globalize
       def serialize(attr_name, **options)
         super(attr_name, **options)
 
-        coder = if class_name_or_coder == ::JSON
+        coder = if options[:coder] == ::JSON
                   ::ActiveRecord::Coders::JSON
                 else
                   ::ActiveRecord::Coders::YAMLColumn.new(attr_name)
