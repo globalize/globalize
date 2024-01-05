@@ -17,6 +17,7 @@ module Globalize
   ACTIVE_RECORD_52 = Gem::Version.new('5.2.0')
   ACTIVE_RECORD_60 = Gem::Version.new('6.0.0')
   ACTIVE_RECORD_61 = Gem::Version.new('6.1.0')
+  ACTIVE_RECORD_71 = Gem::Version.new('7.1.0')
 
   CURRENT_RUBY     = Gem::Version.new(RUBY_VERSION)
   RUBY_VERSION_27  = Gem::Version.new('2.7.0')
@@ -94,6 +95,10 @@ module Globalize
 
     def rails_61?
       ::ActiveRecord.version >= ACTIVE_RECORD_61
+    end
+
+    def rails_71?
+      ::ActiveRecord.version >= ACTIVE_RECORD_71
     end
 
   protected
