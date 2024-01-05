@@ -2,10 +2,12 @@ module Globalize
   module AttributeMethods
     module Serialization
       def serialize(attr_name, class_name_or_coder = Object, **options)
-        if class_name_or_coder == ::JSON || [:load, :dump].all? { |x| class_name_or_coder.respond_to?(x) }
-          options = options.merge(coder: class_name_or_coder, type: Object)
-        else
-          options = options.merge(coder: default_column_serializer, type: class_name_or_coder)
+        if options[:coder].blank?
+          if class_name_or_coder == ::JSON || [:load, :dump].all? { |x| class_name_or_coder.respond_to?(x) }
+            options = options.merge(coder: class_name_or_coder, type: Object)
+          else
+            options = options.merge(coder: default_column_serializer, type: class_name_or_coder)
+          end
         end
 
         super(attr_name, **options)
