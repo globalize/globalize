@@ -1,7 +1,14 @@
-if ::ActiveRecord.version < Gem::Version.new("5.1.0")
-  require_relative 'rails4/serialization'
-elsif ::ActiveRecord.version < Gem::Version.new("6.1.0")
-  require_relative 'rails5_1/serialization'
-else
-  require_relative 'rails6_1/serialization'
+module Globalize
+  module AttributeMethods
+    module Serialization
+      def serialize(attr_name, *args, **kwargs)
+        super.tap do
+          self.globalize_serialized_attributes = globalize_serialized_attributes.dup
+          self.globalize_serialized_attributes[attr_name] = { args: args, kwargs: kwargs }
+        end
+      end
+    end
+  end
 end
+
+ActiveRecord::AttributeMethods::Serialization::ClassMethods.send(:prepend, Globalize::AttributeMethods::Serialization)

@@ -257,9 +257,9 @@ class AttributesTest < Minitest::Spec
   describe 'serializable attribute' do
     it 'keeps track of serialized attributes between classes' do
       assert_equal UnserializedAttr.globalize_serialized_attributes, {}
-      assert_equal SerializedAttr.globalize_serialized_attributes[:meta].class, ActiveRecord::Coders::YAMLColumn
-      assert_equal ArraySerializedAttr.globalize_serialized_attributes[:meta].class, ActiveRecord::Coders::YAMLColumn
-      assert_equal JSONSerializedAttr.globalize_serialized_attributes[:meta], ActiveRecord::Coders::JSON
+      assert_equal SerializedAttr.globalize_serialized_attributes[:meta], { args: [], kwargs: {} }
+      assert_equal ArraySerializedAttr.globalize_serialized_attributes[:meta], { args: [Array], kwargs: {} }
+      assert_equal JSONSerializedAttr.globalize_serialized_attributes[:meta], { args: [JSON], kwargs: {} }
     end
 
     it 'works with default marshalling, without data' do
