@@ -13,9 +13,6 @@ module Globalize
 
   ACTIVE_RECORD_7 = Gem::Version.new('7.0.0')
 
-  CURRENT_RUBY     = Gem::Version.new(RUBY_VERSION)
-  RUBY_VERSION_27  = Gem::Version.new('2.7.0')
-
   class << self
     def locale
       read_locale || I18n.locale
@@ -61,10 +58,6 @@ module Globalize
     # Thread-safe global storage
     def storage
       RequestStore.store
-    end
-
-    def ruby_27?
-      CURRENT_RUBY >= RUBY_VERSION_27
     end
 
     def rails_7?

@@ -143,23 +143,8 @@ module Globalize
         Globalize.fallbacks(locale)
       end
 
-      if Globalize.ruby_27?
-        class_eval <<~RUBY, __FILE__, __LINE__ + 1
-          def save(...)
-            result = Globalize.with_locale(translation.locale || I18n.default_locale) do
-              without_fallbacks do
-                super
-              end
-            end
-            if result
-              globalize.clear_dirty
-            end
-
-            result
-          end
-        RUBY
-      else
-        def save(*)
+      class_eval <<~RUBY, __FILE__, __LINE__ + 1
+        def save(...)
           result = Globalize.with_locale(translation.locale || I18n.default_locale) do
             without_fallbacks do
               super
@@ -171,7 +156,7 @@ module Globalize
 
           result
         end
-      end
+      RUBY
 
       def column_for_attribute name
         return super if translated_attribute_names.exclude?(name)
