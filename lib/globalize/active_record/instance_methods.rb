@@ -17,24 +17,9 @@ module Globalize
         with_given_locale(attributes) { super(attributes.except("locale"), *options) }
       end
 
-      if Globalize.rails_52?
-
-        # In Rails 5.2 we need to override *_assign_attributes* as it's called earlier
-        # in the stack (before *assign_attributes*)
-        # See https://github.com/rails/rails/blob/5-2-stable/activerecord/lib/active_record/attribute_assignment.rb#L12
-        def _assign_attributes(new_attributes)
-          attributes = new_attributes.stringify_keys
-          with_given_locale(attributes) { super(attributes.except("locale")) }
-        end
-
-      else
-
-        def assign_attributes(new_attributes, *options)
-          super unless new_attributes.respond_to?(:stringify_keys) && new_attributes.present?
-          attributes = new_attributes.stringify_keys
-          with_given_locale(attributes) { super(attributes.except("locale"), *options) }
-        end
-
+      def _assign_attributes(new_attributes)
+        attributes = new_attributes.stringify_keys
+        with_given_locale(attributes) { super(attributes.except("locale")) }
       end
 
       def write_attribute(name, value, *args, &block)
@@ -202,34 +187,29 @@ module Globalize
         changed_attributes.present? || translations.any?(&:changed?)
       end
 
-      if Globalize.rails_51?
-        def saved_changes
-          super.tap do |changes|
-            translation = translation_for(::Globalize.locale, false)
-            if translation
-              translation_changes = translation.saved_changes.select { |name| translated?(name) }
-              changes.merge!(translation_changes) if translation_changes.any?
-            end
+      def saved_changes
+        super.tap do |changes|
+          translation = translation_for(::Globalize.locale, false)
+          if translation
+            translation_changes = translation.saved_changes.select { |name| translated?(name) }
+            changes.merge!(translation_changes) if translation_changes.any?
           end
         end
       end
 
-      if Globalize.rails_6?
-        def changed_attributes
-          super.merge(globalize.changed_attributes(::Globalize.locale))
-        end
-
-        def changes
-          super.merge(globalize.changes(::Globalize.locale))
-        end
-
-        def changed
-          super.concat(globalize.changed).uniq
-        end
+      def changed_attributes
+        super.merge(globalize.changed_attributes(::Globalize.locale))
       end
 
-      # need to access instance variable directly since changed_attributes
-      # is frozen as of Rails 4.2
+      def changes
+        super.merge(globalize.changes(::Globalize.locale))
+      end
+
+      def changed
+        super.concat(globalize.changed).uniq
+      end
+
+      # need to access instance variable directly since changed_attributes is frozen
       def original_changed_attributes
         @changed_attributes
       end
