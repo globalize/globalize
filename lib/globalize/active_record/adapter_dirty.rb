@@ -41,17 +41,8 @@ module Globalize
         self.dirty = {}
       end
 
-      if Globalize.rails_6?
-        def _reset_attribute name
-          record.send(:clear_attribute_changes, [name])
-        end
-      else
-        def _reset_attribute name
-          original_value = record.changed_attributes[name]
-          record.send(:clear_attribute_changes, [name])
-          record.send("#{name}=", original_value)
-          record.send(:clear_attribute_changes, [name])
-        end
+      def _reset_attribute name
+        record.send(:clear_attribute_changes, [name])
       end
 
       def reset

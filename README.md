@@ -19,12 +19,12 @@ Globalize is not very actively maintained. Pull Requests are welcome, especially
 
 ## Requirements
 
-* ActiveRecord >= 4.2.0 (see below for installation with ActiveRecord 3.x)
+* ActiveRecord >= 7.0 (see below for installation with older ActiveRecord)
 * I18n
 
 ## Installation
 
-To install the ActiveRecord 4.2.x compatible version of Globalize with its default setup, just use:
+To install the ActiveRecord 7.x compatible version of Globalize with its default setup, just use:
 
 ```ruby
 gem install globalize
@@ -33,7 +33,7 @@ gem install globalize
 When using bundler put this in your Gemfile:
 
 ```ruby
-gem 'globalize', '~> 5.3.0'
+gem 'globalize', '~> 7.0'
 ```
 
 Please help us by letting us know what works, and what doesn't, when using pre-release code.
@@ -45,21 +45,14 @@ gem 'globalize', git: 'https://github.com/globalize/globalize'
 gem 'activemodel-serializers-xml'
 ```
 
-To use the version of globalize for ActiveRecord 4.0 or 4.1, specify:
+## Older ActiveRecord
+* Use Version 6.3 or lower
+
+ActiveRecord 4.2 to 6.1:
 
 ```ruby
-gem 'globalize', '~> 4.0.3'
+gem 'globalize', '~> 6.3'
 ```
-
-To use the version of globalize for ActiveRecord 3.1 or 3.2, specify:
-
-````ruby
-gem 'globalize', '~> 3.1.0'
-````
-
-(If you are using ActiveRecord 3.0, use version 3.0: `gem 'globalize', '3.0.4'`.)
-
-The [`3-1-stable` branch](https://github.com/globalize/globalize/tree/3-1-stable) of this repository corresponds to the latest ActiveRecord 3 version of globalize. Note that `globalize3` has been deprecated and you are encouraged to update your Gemfile accordingly.
 
 ## Model translations
 
@@ -420,7 +413,7 @@ end
 ## Thread-safety
 
 Globalize uses [request_store](https://github.com/steveklabnik/request_store) gem to clean up thread-global variable after every request.
-RequestStore includes a Railtie that will configure everything properly for Rails 3+ apps.
+RequestStore includes a Railtie that will configure everything properly.
 
 If you're not using Rails, you may need to consult a RequestStore's [README](https://github.com/steveklabnik/request_store#no-rails-no-problem) to configure it.
 
@@ -430,7 +423,7 @@ If you're not using Rails, you may need to consult a RequestStore's [README](htt
 ## Official Globalize extensions
 
 * [globalize-accessors](https://github.com/globalize/globalize-accessors) - generator of accessor methods for models. *(e.g. title_en, title_cz)*
-* [globalize-versioning](https://github.com/globalize/globalize-versioning) - versioning support for using Globalize with [`paper_trail`](https://github.com/airblade/paper_trail). (compatible with Globalize 3.x and 4.x)
+* [globalize-versioning](https://github.com/globalize/globalize-versioning) - versioning support for using Globalize with [`paper_trail`](https://github.com/airblade/paper_trail).
 
 ## Alternative solutions
 
