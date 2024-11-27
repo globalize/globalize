@@ -17,8 +17,8 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.required_ruby_version = '>= 3.0'
 
-  s.add_dependency 'activerecord', '>= 7.0', '< 8.0'
-  s.add_dependency 'activemodel', '>= 7.0', '< 8.0'
+  s.add_dependency 'activerecord', '>= 7.0', '< 8.1'
+  s.add_dependency 'activemodel', '>= 7.0', '< 8.1'
   s.add_dependency 'request_store', '~> 1.0'
 
   s.add_development_dependency 'appraisal'
