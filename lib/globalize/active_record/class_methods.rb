@@ -122,7 +122,12 @@ module Globalize
       def database_connection_possible?
         begin
           # Without a connection tentative, the `connected?` function can responds with a false negative
-          ::ActiveRecord::Base.connection
+          if Globalize.rails_7_2?
+            connection = ::ActiveRecord::Base.lease_connection
+            connection.connect!
+          else
+            ::ActiveRecord::Base.connection
+          end
         rescue
           # Ignore connection fail because in docker build hasn't a database connection
           nil
