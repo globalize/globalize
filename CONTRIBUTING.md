@@ -20,7 +20,7 @@ Have some free time? Help us improve our [code climate score](https://codeclimat
 
 ## Documentation
 
-Globalize needs better documentation. That includes more inline comments explaining clearly what code is doing, as well as reference documentation beyond the [readme](readme.md) -- possibly in the github wiki. Please contact us if you would like to help with documentation.
+Globalize needs better documentation. That includes more inline comments explaining clearly what code is doing, as well as reference documentation beyond the [readme](README.md) -- possibly in the github wiki. Please contact us if you would like to help with documentation.
 
 ## Pull Requests
 
