@@ -44,7 +44,7 @@ module Globalize
             translated_attribute_name_strings = translated_attribute_names.map(&:to_s)
             # Only ignore columns if they exist.  This allows queries to remain as .*
             # instead of using explicit column names
-            unless (column_names & translated_attribute_name_strings).empty?
+            if (column_names & translated_attribute_name_strings).any?
               self.ignored_columns += translated_attribute_names.map(&:to_s)
               reset_column_information
             end
