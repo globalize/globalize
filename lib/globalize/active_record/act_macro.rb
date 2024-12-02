@@ -5,7 +5,6 @@ module Globalize
         options = attr_names.extract_options!
         # Bypass setup_translates! if the initial bootstrapping is done already.
         setup_translates!(options) unless translates?
-        check_columns!(attr_names)
 
         # Add any extra translatable attributes.
         attr_names = attr_names.map(&:to_sym)
@@ -41,29 +40,13 @@ module Globalize
         end
 
         begin
-          if Globalize.rails_5? && database_connection_possible?
+          if database_connection_possible?
             self.ignored_columns += translated_attribute_names.map(&:to_s)
             reset_column_information
           end
         rescue ::ActiveRecord::NoDatabaseError
           warn 'Unable to connect to a database. Globalize skipped ignoring columns of translated attributes.'
         end
-      end
-
-      def check_columns!(attr_names)
-        # If tables do not exist or Rails version is greater than 5, do not warn about conflicting columns
-        return unless Globalize.rails_42? && database_connection_possible?
-
-        if (overlap = attr_names.map(&:to_s) & column_names).present?
-          ActiveSupport::Deprecation.warn(
-            ["You have defined one or more translated attributes with names that conflict with column(s) on the model table. ",
-             "Globalize does not support this configuration anymore, remove or rename column(s) on the model table.\n",
-             "Model name (table name): #{model_name} (#{table_name})\n",
-             "Attribute name(s): #{overlap.join(', ')}\n"].join
-          )
-        end
-      rescue ::ActiveRecord::NoDatabaseError
-        warn 'Unable to connect to a database. Globalize skipped checking attributes with conflicting column names.'
       end
 
       def apply_globalize_options(options)
@@ -79,7 +62,16 @@ module Globalize
 
       def enable_serializable_attribute(attr_name)
         serializer = self.globalize_serialized_attributes[attr_name]
-        if serializer.present?
+        return unless serializer
+
+        if Globalize.rails_7_1?
+          if serializer.is_a?(Array)
+            # this is only needed for ACTIVE_RECORD_71. Rails 7.2 will only accept KW arguments
+            translation_class.send :serialize, attr_name, serializer[0], **serializer[1]
+          else
+            translation_class.send :serialize, attr_name, **serializer
+          end
+        else
           if defined?(::ActiveRecord::Coders::YAMLColumn) &&
             serializer.is_a?(::ActiveRecord::Coders::YAMLColumn)
             serializer = serializer.object_class
