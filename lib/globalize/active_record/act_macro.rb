@@ -41,8 +41,14 @@ module Globalize
 
         begin
           if database_connection_possible?
-            self.ignored_columns += translated_attribute_names.map(&:to_s)
-            reset_column_information
+            translated_attribute_name_strings = translated_attribute_names.map(&:to_s)
+            # Only ignore columns if they exist.  This allows queries to remain as .*
+            # instead of using explicit column names
+            attributes_that_exist = column_names & translated_attribute_name_strings
+            if attributes_that_exist.any?
+              self.ignored_columns += attributes_that_exist
+              reset_column_information
+            end
           end
         rescue ::ActiveRecord::NoDatabaseError
           warn 'Unable to connect to a database. Globalize skipped ignoring columns of translated attributes.'
