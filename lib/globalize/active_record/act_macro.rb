@@ -97,7 +97,7 @@ module Globalize
 
         has_many :translations, :class_name  => translation_class.name,
                                 :foreign_key => options[:foreign_key],
-                                :dependent   => :destroy,
+                                :dependent   => options.fetch(:dependent, :destroy),
                                 :extend      => HasManyExtensions,
                                 :autosave    => options[:autosave],
                                 :inverse_of  => :globalized_model
