@@ -257,9 +257,20 @@ class AttributesTest < Minitest::Spec
   describe 'serializable attribute' do
     it 'keeps track of serialized attributes between classes' do
       assert_equal UnserializedAttr.globalize_serialized_attributes, {}
-      assert_equal SerializedAttr.globalize_serialized_attributes[:meta].class, ActiveRecord::Coders::YAMLColumn
-      assert_equal ArraySerializedAttr.globalize_serialized_attributes[:meta].class, ActiveRecord::Coders::YAMLColumn
-      assert_equal JSONSerializedAttr.globalize_serialized_attributes[:meta], ActiveRecord::Coders::JSON
+
+      if Globalize.rails_7_2?
+        assert_equal SerializedAttr.globalize_serialized_attributes, {:meta=>{}}
+        assert_equal ArraySerializedAttr.globalize_serialized_attributes, {:meta=>{:type=>Array}}
+        assert_equal JSONSerializedAttr.globalize_serialized_attributes, {:meta=>{:coder=>JSON}}
+      elsif Globalize.rails_7_1?
+        assert_equal SerializedAttr.globalize_serialized_attributes, {:meta=>{}}
+        assert_equal ArraySerializedAttr.globalize_serialized_attributes, {:meta=>[Array, {}]}
+        assert_equal JSONSerializedAttr.globalize_serialized_attributes, {:meta=>[JSON, {}]}
+      else
+        assert_equal SerializedAttr.globalize_serialized_attributes[:meta].class, ActiveRecord::Coders::YAMLColumn
+        assert_equal ArraySerializedAttr.globalize_serialized_attributes[:meta].class, ActiveRecord::Coders::YAMLColumn
+        assert_equal JSONSerializedAttr.globalize_serialized_attributes[:meta], ActiveRecord::Coders::JSON
+      end
     end
 
     it 'works with default marshalling, without data' do
@@ -348,6 +359,16 @@ class AttributesTest < Minitest::Spec
       assert_equal 2, artwork.translations.length
       assert_equal 'title', artwork.title
       assert_equal 'titolo', artwork.title(:it)
+    end
+  end
+
+  describe '#ignored_columns' do
+    it 'sets ignored_columns when present on the original table' do
+      assert_equal ["name"], InProgress.ignored_columns
+    end
+
+    it 'has empty ignored columns if columns are not present on the source table' do
+      assert_equal [], Post.ignored_columns
     end
   end
 end
