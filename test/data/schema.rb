@@ -268,4 +268,13 @@ ActiveRecord::Schema.define do
     t.string  :name
     t.string  :locale
   end
+
+  create_table :in_progresses, :force => true do |t|
+    t.string  :name
+  end
+
+  create_table :in_progress_translations, :force => true do |t|
+    t.string  :locale
+    t.string  :name
+  end
 end

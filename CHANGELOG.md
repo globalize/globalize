@@ -2,7 +2,8 @@
 
 ## Unreleased
 
-Allow custom :dependent option for translations association [#821](https://github.com/globalize/globalize/pull/821) by [Bruno Carvalho](https://github.com/brunodccarvalho) 
+* Allow custom :dependent option for translations association [#821](https://github.com/globalize/globalize/pull/821) by [Bruno Carvalho](https://github.com/brunodccarvalho) 
+* Don't specify `ignored_columns` unless necessary [#806](https://github.com/globalize/globalize/pull/806) by [Pat Leamon](https://github.com/stiak)
 
 ## 6.3.0 (2023-10-22)
 

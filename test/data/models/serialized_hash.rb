@@ -1,4 +1,8 @@
 class SerializedHash < ActiveRecord::Base
-  serialize :meta, Hash
+  if Globalize.rails_7_2?
+    serialize :meta, type: Hash
+  else
+    serialize :meta, Hash
+  end
   translates :meta
 end
