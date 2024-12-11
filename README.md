@@ -30,19 +30,16 @@ To install the ActiveRecord 7.x compatible version of Globalize with its default
 gem install globalize
 ```
 
-When using bundler put this in your Gemfile:
+When using Bundler, put this in your Gemfile:
 
 ```ruby
-gem 'globalize', '~> 7.0'
+gem "globalize", "~> 7.0"
 ```
 
-Please help us by letting us know what works, and what doesn't, when using pre-release code.
-
-Put in your Gemfile
+Please help us by letting us know what works, and what doesn't, when using pre-release code. To use a pre-release, put this in your Gemfile:
 
 ```ruby
-gem 'globalize', git: 'https://github.com/globalize/globalize'
-gem 'activemodel-serializers-xml'
+gem "globalize", git: "https://github.com/globalize/globalize", branch: "main"
 ```
 
 ## Older ActiveRecord
@@ -51,7 +48,7 @@ gem 'activemodel-serializers-xml'
 ActiveRecord 4.2 to 6.1:
 
 ```ruby
-gem 'globalize', '~> 6.3'
+gem "globalize", "~> 6.3"
 ```
 
 ## Model translations
@@ -77,7 +74,7 @@ post.title # => גלובאלייז2 שולט!
 You can also set translations with mass-assignment by specifying the locale:
 
 ```ruby
-post.attributes = { title: 'גלובאלייז2 שולט!', locale: :he }
+post.attributes = { title: "גלובאלייז2 שולט!", locale: :he }
 ```
 
 In order to make this work, you'll need to add the appropriate translation tables.
@@ -124,7 +121,7 @@ class CreatePosts < ActiveRecord::Migration
     reversible do |dir|
       dir.up do
         Post.create_translation_table! :title => :string,
-          :text => {:type => :text, :null => false, :default => 'abc'}
+          :text => {:type => :text, :null => false, :default => "abc"}
       end
 
       dir.down do
@@ -287,15 +284,15 @@ end
 
 puts post.translations.inspect
 # => [#<Post::Translation id: 1, post_id: 1, locale: "en", title: "Globalize rocks!", name: "Globalize">,
-      #<Post::Translation id: 2, post_id: 1, locale: "nl", title: '', name: nil>]
+      #<Post::Translation id: 2, post_id: 1, locale: "nl", title: "", name: nil>]
 
 I18n.locale = :en
-post.title # => 'Globalize rocks!'
-post.name  # => 'Globalize'
+post.title # => "Globalize rocks!"
+post.name  # => "Globalize"
 
 I18n.locale = :nl
-post.title # => ''
-post.name  # => 'Globalize'
+post.title # => ""
+post.name  # => "Globalize"
 ```
 
 ```ruby
@@ -305,15 +302,15 @@ end
 
 puts post.translations.inspect
 # => [#<Post::Translation id: 1, post_id: 1, locale: "en", title: "Globalize rocks!", name: "Globalize">,
-      #<Post::Translation id: 2, post_id: 1, locale: "nl", title: '', name: nil>]
+      #<Post::Translation id: 2, post_id: 1, locale: "nl", title: "", name: nil>]
 
 I18n.locale = :en
-post.title # => 'Globalize rocks!'
-post.name  # => 'Globalize'
+post.title # => "Globalize rocks!"
+post.name  # => "Globalize"
 
 I18n.locale = :nl
-post.title # => 'Globalize rocks!'
-post.name  # => 'Globalize'
+post.title # => "Globalize rocks!"
+post.name  # => "Globalize"
 ```
 
 ## Fallback locales to each other
@@ -328,15 +325,15 @@ end
 Globalize.fallbacks = {:en => [:en, :pl], :pl => [:pl, :en]}
 
 I18n.locale = :en
-en_post = Post.create(:title => 'en_title')
+en_post = Post.create(:title => "en_title")
 
 I18n.locale = :pl
-pl_post = Post.create(:title => 'pl_title')
-en_post.title # => 'en_title'
+pl_post = Post.create(:title => "pl_title")
+en_post.title # => "en_title"
 
 I18n.locale = :en
-en_post.title # => 'en_title'
-pl_post.title # => 'pl_title'
+en_post.title # => "en_title"
+pl_post.title # => "pl_title"
 ```
 
 
@@ -347,19 +344,19 @@ the `with_translations` scope. This will only return records that have a
 translations for the passed in locale.
 
 ```ruby
-Post.with_translations('en')
+Post.with_translations("en")
 # => [
   #<Post::Translation id: 1, post_id: 1, locale: "en", title: "Globalize rocks!", name: "Globalize">,
-  #<Post::Translation id: 2, post_id: 1, locale: "nl", title: '', name: nil>
+  #<Post::Translation id: 2, post_id: 1, locale: "nl", title: "", name: nil>
 ]
 
 Post.with_translations(I18n.locale)
 # => [
   #<Post::Translation id: 1, post_id: 1, locale: "en", title: "Globalize rocks!", name: "Globalize">,
-  #<Post::Translation id: 2, post_id: 1, locale: "nl", title: '', name: nil>
+  #<Post::Translation id: 2, post_id: 1, locale: "nl", title: "", name: nil>
 ]
 
-Post.with_translations('de')
+Post.with_translations("de")
 # => []
 ```
 
@@ -394,7 +391,7 @@ post.title
 post.title(:foo => "bar")
 # SomeError: missing interpolation argument :superlative
 
-post.title(:superlative => "rocks")
+post.title(:superlative => 'rocks")
 # #=> "Globalize rocks!"
 ```
 
@@ -406,7 +403,7 @@ One of the possible ways to implement it:
 ```ruby
 # inside translated model
 def cache_key
-  super + '-' + Globalize.locale.to_s
+  [super, Globalize.locale.to_s].join("-")
 end
 ```
 
@@ -415,7 +412,7 @@ end
 Globalize uses [request_store](https://github.com/steveklabnik/request_store) gem to clean up thread-global variable after every request.
 RequestStore includes a Railtie that will configure everything properly.
 
-If you're not using Rails, you may need to consult a RequestStore's [README](https://github.com/steveklabnik/request_store#no-rails-no-problem) to configure it.
+If you're not using Rails, you may need to consult RequestStore's [README](https://github.com/steveklabnik/request_store#no-rails-no-problem) to configure it.
 
 ## Tutorials and articles
 * [Go Global with Rails and I18n](http://www.sitepoint.com/go-global-rails-i18n/) - introductory article about i18n in Rails (Ilya Bodrov)
