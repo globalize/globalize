@@ -2,6 +2,7 @@
 
 ## 7.0.0 (2024-12-20)
 
+* Enable Rubygems Trusted Publishing
 * Fix ActiveRecord load order issues using `ActiveSupport.on_load(:active_record)` [#816](https://github.com/globalize/globalize/pull/816) by [Rune Philosof](https://github.com/runephilosof-abtion)
 * Allow custom `:dependent` option for translations association [#821](https://github.com/globalize/globalize/pull/821) by [Bruno Carvalho](https://github.com/brunodccarvalho)
 * Don't specify `ignored_columns` unless necessary [#806](https://github.com/globalize/globalize/pull/806) by [Pat Leamon](https://github.com/stiak)
