@@ -1,11 +1,17 @@
 # Globalize Changelog
 
+## unreleased
+* Update Changelog; Add Ruby 3.4 to the test matrix
+
 ## 7.0.0 (2024-12-20)
 
 * Enable Rubygems Trusted Publishing
 * Fix ActiveRecord load order issues using `ActiveSupport.on_load(:active_record)` [#816](https://github.com/globalize/globalize/pull/816) by [Rune Philosof](https://github.com/runephilosof-abtion)
 * Allow custom `:dependent` option for translations association [#821](https://github.com/globalize/globalize/pull/821) by [Bruno Carvalho](https://github.com/brunodccarvalho)
 * Don't specify `ignored_columns` unless necessary [#806](https://github.com/globalize/globalize/pull/806) by [Pat Leamon](https://github.com/stiak)
+* Add Rails 8.0 and Ruby 3.3 to the test matrix [#826](https://github.com/globalize/globalize/pull/826) by [Jonas S](https://github.com/rocket-turtle)
+* Support Rails 7.2; remove deprecation warning in rails 7.1 [#825](https://github.com/globalize/globalize/pull/825) by [Jonas S](https://github.com/rocket-turtle)
+* Remove support for outdated Rails (lower than 7.0) and Ruby (lower than 3.0) [#824](https://github.com/globalize/globalize/pull/824) by [Jonas S](https://github.com/rocket-turtle)
 
 ## 6.3.0 (2023-10-22)
 

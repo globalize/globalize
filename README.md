@@ -391,7 +391,7 @@ post.title
 post.title(:foo => "bar")
 # SomeError: missing interpolation argument :superlative
 
-post.title(:superlative => 'rocks")
+post.title(:superlative => "rocks")
 # #=> "Globalize rocks!"
 ```
 
