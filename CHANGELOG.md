@@ -1,7 +1,7 @@
 # Globalize Changelog
 
 ## unreleased
-* Update Changelog; Add Ruby 3.4 to the test matrix
+* Add Ruby 3.4 to the test matrix [#830](https://github.com/globalize/globalize/pull/830) by [Jonas S](https://github.com/rocket-turtle)
 
 ## 7.0.0 (2024-12-20)
 
