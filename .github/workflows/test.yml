@@ -11,7 +11,7 @@ jobs:
       matrix:
         database: [ mysql, postgresql, sqlite3 ]
         gemfile: [ '8.0.0', '7.2.0', '7.1.0', '7.0.1' ]
-        ruby: [ '3.3', '3.2', '3.1', '3.0' ]
+        ruby: [ '3.4', '3.3', '3.2', '3.1', '3.0' ]
         exclude:
           - ruby: '3.0'
             gemfile: '7.2.0'
