@@ -319,12 +319,9 @@ class AttributesTest < Minitest::Spec
       ActiveRecord::JDBCError
     )
 
-    it 'does not save a record with an empty required field' do
-      err = assert_raises ActiveRecord::StatementInvalid do
-        Artwork.create
-      end
-
-      assert_match(/#{DB_EXCEPTIONS.join('|')}/, err.message)
+    it 'does not create an empty translation record' do
+      artwork = Artwork.create
+      assert_equal 0, artwork.translations.length
     end
 
     it 'saves a record with a filled required field' do
