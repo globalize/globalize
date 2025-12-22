@@ -1,6 +1,7 @@
 # Globalize Changelog
 
 ## unreleased
+* Add support for Rails 8.1.x [#838](https://github.com/globalize/globalize/pull/838) by [Jules](https://github.com/jules-w2)
 * Add Ruby 3.4 to the test matrix [#830](https://github.com/globalize/globalize/pull/830) by [Jonas S](https://github.com/rocket-turtle)
 
 ## 7.0.0 (2024-12-20)
