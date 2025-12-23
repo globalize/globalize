@@ -1,21 +1,30 @@
 ![Globalize](http://globalize.github.io/globalize/images/globalize.png)
 
-[![Build Status](https://github.com/globalize/globalize/workflows/CI/badge.svg)](https://github.com/globalize/globalize/actions) [![Code Climate](https://codeclimate.com/github/globalize/globalize.svg)](https://codeclimate.com/github/globalize/globalize)
+[![Build Status](https://github.com/globalize/globalize/workflows/CI/badge.svg)](https://github.com/globalize/globalize/actions)
 [![Open Source Helpers](https://www.codetriage.com/globalize/globalize/badges/users.svg)](https://www.codetriage.com/globalize/globalize)
-
-You can chat with us using Gitter:
-
-[![Gitter chat](https://badges.gitter.im/globalize/globalize.svg)](https://gitter.im/globalize/globalize)
 
 Globalize builds on the [I18n API in Ruby on Rails](http://guides.rubyonrails.org/i18n.html)
 to add model translations to ActiveRecord models.
 
-In other words, a way to translate actual user-generated content, for example; a single blog post with multiple translations.
+In other words: a way to translate actual user-generated content, for example; a single blog post with multiple translations.
 
 ## Current state of the gem
 
-Globalize is not very actively maintained. Pull Requests are welcome, especially for compatibility with new versions of Rails, but none of the maintainers actively use Globalize anymore. If you need a more actively maintained model translation gem, we recommend checking out [Mobility](https://github.com/shioyama/mobility), a natural successor of Globalize created by Chris Salzberg (one of Globalize maintainers) and inspired by the ideas discussed around Globalize. For a more up-to-date discussion of the current situation, see [issue #753](https://github.com/globalize/globalize/issues/753).
+Globalize is seen as relatively feature complete and is not very actively maintained, as none of the current maintainers actively use it. It should still work just fine, and we try to keep it up to date with new Ruby and Rails releases. 
 
+Pull Requests are very welcome, even if you get a delayed response, especially for compatibility with new versions of Rails. 
+
+## Alternative solutions
+
+* [Mobility](https://github.com/shioyama/mobility) - pluggable translation framework supporting many strategies, including translatable columns, translation tables and hstore/jsonb (Chris Salzberg). Mobility is seen by many (including Globalize maintainers) as a natural successor to Globalize.
+* [Traco](https://github.com/barsoom/traco) - use multiple columns in the same model (Barsoom)
+* [hstore_translate](https://github.com/cfabianski/hstore_translate) - use PostgreSQL's hstore datatype to store translations, instead of separate translation tables (Cédric Fabianski)
+* [json_translate](https://github.com/cfabianski/json_translate) - use PostgreSQL's json/jsonb datatype to store translations, instead of separate translation tables (Cédric Fabianski)
+* [Trasto](https://github.com/yabawock/trasto) - store translations directly in the model in a Postgres Hstore column
+
+## Related solutions
+
+* [friendly_id-globalize](https://github.com/norman/friendly_id-globalize) - lets you use Globalize to translate slugs (Norman Clarke)
 
 ## Requirements
 
@@ -24,7 +33,7 @@ Globalize is not very actively maintained. Pull Requests are welcome, especially
 
 ## Installation
 
-To install the ActiveRecord 7.x compatible version of Globalize with its default setup, just use:
+To install the ActiveRecord 7.x and 8.x compatible version of Globalize with its default setup, just use:
 
 ```ruby
 gem install globalize
@@ -421,15 +430,3 @@ If you're not using Rails, you may need to consult RequestStore's [README](https
 
 * [globalize-accessors](https://github.com/globalize/globalize-accessors) - generator of accessor methods for models. *(e.g. title_en, title_cz)*
 * [globalize-versioning](https://github.com/globalize/globalize-versioning) - versioning support for using Globalize with [`paper_trail`](https://github.com/airblade/paper_trail).
-
-## Alternative solutions
-
-* [Traco](https://github.com/barsoom/traco) - use multiple columns in the same model (Barsoom)
-* [Mobility](https://github.com/shioyama/mobility) - pluggable translation framework supporting many strategies, including translatable columns, translation tables and hstore/jsonb (Chris Salzberg)
-* [hstore_translate](https://github.com/cfabianski/hstore_translate) - use PostgreSQL's hstore datatype to store translations, instead of separate translation tables (Cédric Fabianski)
-* [json_translate](https://github.com/cfabianski/json_translate) - use PostgreSQL's json/jsonb datatype to store translations, instead of separate translation tables (Cédric Fabianski)
-* [Trasto](https://github.com/yabawock/trasto) - store translations directly in the model in a Postgres Hstore column
-
-## Related solutions
-
-* [friendly_id-globalize](https://github.com/norman/friendly_id-globalize) - lets you use Globalize to translate slugs (Norman Clarke)
