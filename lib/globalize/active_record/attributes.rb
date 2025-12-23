@@ -11,7 +11,7 @@ module Globalize
       end
 
       def contains?(locale, name)
-        self[locale].has_key?(name.to_s)
+        key?(locale) && self[locale].key?(name.to_s)
       end
 
       def read(locale, name)
