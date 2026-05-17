@@ -1,6 +1,10 @@
 # Globalize Changelog
 
-## unreleased
+## Unreleased
+
+* Coerce locale to symbol in `Attributes#contains?` [#844](https://github.com/globalize/globalize/pull/844) by [Arkadiy Zabazhanov](https://github.com/pyromaniac)
+
+## 7.1.1 (2025-12-24)
 
 * Fix automatic creation of empty stash entries for unassigned locales [#833](https://github.com/globalize/globalize/pull/833) by [Jules](https://github.com/jules-w2)
 
