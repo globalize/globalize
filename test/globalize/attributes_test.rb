@@ -371,4 +371,38 @@ class AttributesTest < Minitest::Spec
       assert_equal [], Post.ignored_columns
     end
   end
+
+  describe Globalize::ActiveRecord::Attributes do
+    let(:stash) { Globalize::ActiveRecord::Attributes.new }
+
+    describe '#contains?' do
+      before { stash.write(:en, 'title', 'foo') }
+
+      it 'returns true for the locale and attribute that were written' do
+        assert_equal true, stash.contains?(:en, 'title')
+      end
+
+      it 'returns false for a locale that was not written' do
+        assert_equal false, stash.contains?(:de, 'title')
+      end
+
+      it 'returns false for an attribute that was not written' do
+        assert_equal false, stash.contains?(:en, 'body')
+      end
+
+      it 'accepts string locales (matches #[]/#read/#write coercion)' do
+        assert_equal true, stash.contains?('en', 'title')
+        assert_equal false, stash.contains?('de', 'title')
+      end
+
+      it 'accepts symbol attribute names' do
+        assert_equal true, stash.contains?(:en, :title)
+      end
+
+      it 'does not create empty stash entries for missing locales' do
+        stash.contains?(:de, 'title')
+        assert_equal false, stash.key?(:de)
+      end
+    end
+  end
 end
