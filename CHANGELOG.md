@@ -3,6 +3,7 @@
 ## Unreleased
 
 * Coerce locale to symbol in `Attributes#contains?` [#844](https://github.com/globalize/globalize/pull/844) by [Arkadiy Zabazhanov](https://github.com/pyromaniac)
+* Prevent creation of empty current translation [#832](https://github.com/globalize/globalize/pull/832) by [Arkadiy Zabazhanov](https://github.com/pyromaniac)
 
 ## 7.1.1 (2025-12-24)
 
