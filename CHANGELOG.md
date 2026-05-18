@@ -1,6 +1,6 @@
 # Globalize Changelog
 
-## Unreleased
+## 7.1.2 (2026-05-18)
 
 * Coerce locale to symbol in `Attributes#contains?` [#844](https://github.com/globalize/globalize/pull/844) by [Arkadiy Zabazhanov](https://github.com/pyromaniac)
 
