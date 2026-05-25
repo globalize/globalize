@@ -179,9 +179,14 @@ class FallbacksTest < Minitest::Spec
         question.update(params)
 
         assert_equal question.errors[:title], ["can't be blank"]
+
+        assert_raises ActiveRecord::RecordInvalid do
+          question.update!(params)
+        end
+
+        question.update!(title: 'Was ist das?')
       end
     end
-
   end
 
   describe 'STI model' do

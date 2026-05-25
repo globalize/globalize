@@ -319,29 +319,36 @@ class AttributesTest < Minitest::Spec
       ActiveRecord::JDBCError
     )
 
+    it 'does not create an empty translation record' do
+      artwork = Artwork.create
+      assert_equal 0, artwork.translations.length
+    end
+
     it 'does not save a record with an empty required field' do
       err = assert_raises ActiveRecord::StatementInvalid do
-        Artwork.create
+        Artwork.create(title: 'foo')
       end
 
       assert_match(/#{DB_EXCEPTIONS.join('|')}/, err.message)
     end
 
-    it 'saves a record with a filled required field' do
+    it 'saves a record with all required fields filled' do
       artwork = Artwork.new
       artwork.title = "foo"
+      artwork.subtitle = "bar"
       artwork.save!
       artwork.reload
 
       assert_equal 1, artwork.translations.length
       assert_equal 'foo', artwork.title
+      assert_equal 'bar', artwork.subtitle
     end
 
     it 'does not save a record with an empty required field using nested attributes' do
       err = assert_raises ActiveRecord::StatementInvalid do
         Artwork.create(:translations_attributes => {
-          "0" => { :locale => 'en', :title => 'title' },
-          "1" => { :locale => 'it' }
+          "0" => { :locale => 'en', :title => 'title', :subtitle => 'sub' },
+          "1" => { :locale => 'it', :subtitle => 'sub' }
         })
       end
 
@@ -350,8 +357,8 @@ class AttributesTest < Minitest::Spec
 
     it 'saves a record with a filled required field using nested attributes' do
       artwork = Artwork.new(:translations_attributes => {
-        "0" => { :locale => 'en', :title => 'title' },
-        "1" => { :locale => 'it', :title => 'titolo' }
+        "0" => { :locale => 'en', :title => 'title', :subtitle => 'sub' },
+        "1" => { :locale => 'it', :title => 'titolo', :subtitle => 'sottotitolo' }
       })
       artwork.save!
       artwork.reload
