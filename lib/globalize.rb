@@ -11,10 +11,6 @@ module Globalize
   autoload :ActiveRecord, 'globalize/active_record'
   autoload :Interpolation,   'globalize/interpolation'
 
-  ACTIVE_RECORD_7 = Gem::Version.new('7.0.0')
-  ACTIVE_RECORD_71 = Gem::Version.new('7.1.0')
-  ACTIVE_RECORD_72 = Gem::Version.new('7.2.0')
-
   class << self
     def locale
       read_locale || I18n.locale
@@ -60,18 +56,6 @@ module Globalize
     # Thread-safe global storage
     def storage
       RequestStore.store
-    end
-
-    def rails_7?
-      ::ActiveRecord.version >= ACTIVE_RECORD_7
-    end
-
-    def rails_7_1?
-      ::ActiveRecord.version >= ACTIVE_RECORD_71
-    end
-
-    def rails_7_2?
-      ::ActiveRecord.version >= ACTIVE_RECORD_72
     end
 
   protected

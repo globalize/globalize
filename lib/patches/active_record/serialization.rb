@@ -5,10 +5,18 @@
 ActiveRecord::Base.class_attribute :globalize_serialized_attributes, instance_writer: false
 ActiveRecord::Base.globalize_serialized_attributes = {}
 
-if ::ActiveRecord.version < Gem::Version.new("7.1.0")
-  require_relative 'rails6_1/serialization'
-elsif ::ActiveRecord.version < Gem::Version.new("7.2.0")
-  require_relative 'rails7_1/serialization'
-else
-  require_relative 'rails7_2/serialization'
+module Globalize
+  module AttributeMethods
+    module Serialization
+      def serialize(attr_name, **options)
+        self.globalize_serialized_attributes = globalize_serialized_attributes.dup
+        self.globalize_serialized_attributes[attr_name] = options
+
+        # https://github.com/rails/rails/blob/7-2-stable/activerecord/lib/active_record/attribute_methods/serialization.rb#L183
+        super(attr_name, **options)
+      end
+    end
+  end
 end
+
+ActiveRecord::AttributeMethods::Serialization::ClassMethods.send(:prepend, Globalize::AttributeMethods::Serialization)
