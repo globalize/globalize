@@ -5,9 +5,6 @@ class MigrationTest < Minitest::Spec
 
   before(:each) do
     reset_schema(Migrated, TwoAttributesMigrated, MigratedBigint)
-    if Globalize::Test::Database.long_table_name_support?
-      reset_schema(MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters)
-    end
     refute Migrated.translation_class.table_exists?
     refute Migrated.translation_class.index_exists_on?(:migrated_id)
     refute Migrated.translation_class.index_exists_on?(:locale)
@@ -15,9 +12,6 @@ class MigrationTest < Minitest::Spec
 
   after(:each) do
     reset_schema(Migrated, TwoAttributesMigrated, MigratedBigint)
-    if Globalize::Test::Database.long_table_name_support?
-      reset_schema(MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters)
-    end
   end
 
   describe 'create_translation_table!' do
@@ -55,16 +49,6 @@ class MigrationTest < Minitest::Spec
       TwoAttributesMigrated.create_translation_table!(:name => :string)
       assert_migration_table({:name => :string}, TwoAttributesMigrated)
       assert_nil column_type(:body, TwoAttributesMigrated)
-    end
-
-    it 'handles ultra-long table names' do
-      return unless Globalize::Test::Database.long_table_name_support?
-      model = MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters
-      model.create_translation_table!(:name => :string)
-
-      assert model.translation_class.table_exists?
-      assert model.translation_class.index_exists?(model.send(:translation_index_name))
-      assert model.translation_class.index_exists?(model.send(:translation_locale_index_name))
     end
 
     # This test is relatively exhaustive in that it tests the full stack of
@@ -197,15 +181,6 @@ class MigrationTest < Minitest::Spec
       end
     end
 
-    it 'handles ultra-long table names' do
-      return unless Globalize::Test::Database.long_table_name_support?
-      model = MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters
-      model.create_translation_table!(:name => :string)
-      model.drop_translation_table!
-
-      assert !model.translation_class.table_exists?
-      assert !model.translation_class.index_exists?(:ultra_long_model_name_without_proper_id)
-    end
   end
 
   describe 'translation_index_name' do

@@ -70,21 +70,7 @@ module Globalize
         serializer = self.globalize_serialized_attributes[attr_name]
         return unless serializer
 
-        if Globalize.rails_7_1?
-          if serializer.is_a?(Array)
-            # this is only needed for ACTIVE_RECORD_71. Rails 7.2 will only accept KW arguments
-            translation_class.send :serialize, attr_name, serializer[0], **serializer[1]
-          else
-            translation_class.send :serialize, attr_name, **serializer
-          end
-        else
-          if defined?(::ActiveRecord::Coders::YAMLColumn) &&
-            serializer.is_a?(::ActiveRecord::Coders::YAMLColumn)
-            serializer = serializer.object_class
-          end
-
-          translation_class.send :serialize, attr_name, serializer
-        end
+        translation_class.send :serialize, attr_name, **serializer
       end
 
       def setup_translates!(options)
