@@ -28,12 +28,12 @@ Pull Requests are very welcome, even if you get a delayed response, especially f
 
 ## Requirements
 
-* ActiveRecord >= 7.0 (see below for installation with older ActiveRecord)
+* ActiveRecord >= 8.0 (see below for installation with older ActiveRecord)
 * I18n
 
 ## Installation
 
-To install the ActiveRecord 7.x and 8.x compatible version of Globalize with its default setup, just use:
+To install the ActiveRecord 8.x compatible version of Globalize with its default setup, just use:
 
 ```ruby
 gem install globalize
@@ -42,7 +42,7 @@ gem install globalize
 When using Bundler, put this in your Gemfile:
 
 ```ruby
-gem "globalize", "~> 7.0"
+gem "globalize", "~> 8.0"
 ```
 
 Please help us by letting us know what works, and what doesn't, when using pre-release code. To use a pre-release, put this in your Gemfile:
@@ -52,7 +52,12 @@ gem "globalize", git: "https://github.com/globalize/globalize", branch: "main"
 ```
 
 ## Older ActiveRecord
-* Use Version 6.3 or lower
+
+ActiveRecord 7.0 to 7.2:
+
+```ruby
+gem "globalize", "~> 7.1.3"
+```
 
 ActiveRecord 4.2 to 6.1:
 

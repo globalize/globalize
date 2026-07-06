@@ -15,8 +15,8 @@ if !ENV['CI'] || ENV['DB'] == 'mysql'
 end
 
 # Test with different ActiveRecord versions
-# $ AR=7.1.5 bundle update; rake db:reset db:migrate test
-# $ AR=7.2.2 bundle update; rake db:reset db:migrate test
+# $ AR="~> 8.0.0" bundle update; rake db:reset db:migrate test
+# $ AR="~> 8.1.0" bundle update; rake db:reset db:migrate test
 if ENV['AR']
   gem 'activerecord', ENV['AR']
 end
