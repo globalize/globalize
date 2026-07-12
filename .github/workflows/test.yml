@@ -49,6 +49,7 @@ jobs:
       DB: ${{ matrix.database }}
       MYSQL_PASSWORD: root
       PGHOST: localhost
+      PGPASSWORD: postgres
       PGPORT: 5432
       PGUSER: postgres
       RAILS_ENV: test
