@@ -58,7 +58,9 @@ jobs:
         image: postgres:14
         ports: ["5432:5432"]
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
+        env:
+          POSTGRES_PASSWORD: postgres
+  
       mysql:
         image: mysql:8.4
         ports: ["3306:3306"]
