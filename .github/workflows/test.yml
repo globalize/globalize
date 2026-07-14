@@ -11,7 +11,7 @@ jobs:
       matrix:
         database: [ mysql, postgresql, sqlite3 ]
         gemfile: [ '8.1.0', '8.0.0', '7.2.0', '7.1.0', '7.0.1' ]
-        ruby: [ '3.4', '3.3', '3.2', '3.1', '3.0' ]
+        ruby: [ '4.0', '3.4', '3.3', '3.2', '3.1', '3.0' ]
         exclude:
           - ruby: '3.0'
             gemfile: '7.2.0'
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     name: ${{ matrix.ruby }} ${{ matrix.database }} rails-${{ matrix.gemfile }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - run: sudo apt-get update
     - run: sudo apt-get install libpq-dev postgresql-client -y
       if: matrix.database == 'postgresql'
@@ -49,16 +49,19 @@ jobs:
       DB: ${{ matrix.database }}
       MYSQL_PASSWORD: root
       PGHOST: localhost
+      PGPASSWORD: postgres
       PGPORT: 5432
       PGUSER: postgres
       RAILS_ENV: test
 
     services:
       postgres:
-        image: postgres:11.5
+        image: postgres:14
         ports: ["5432:5432"]
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
+        env:
+          POSTGRES_PASSWORD: postgres
+  
       mysql:
         image: mysql:8.4
         ports: ["3306:3306"]
