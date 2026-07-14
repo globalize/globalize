@@ -1,5 +1,9 @@
 # Globalize Changelog
 
+## Unreleased
+
+* Avoid constant cache invalidations in translated relations [#842](https://github.com/globalize/globalize/pull/842) by [Eisuke Matsushita](https://github.com/wt-l00)
+
 ## 7.1.3 (2026-05-25)
 
 * Prevent creation of empty current translation [#832](https://github.com/globalize/globalize/pull/832) by [Arkadiy Zabazhanov](https://github.com/pyromaniac)
