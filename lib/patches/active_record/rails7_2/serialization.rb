@@ -1,37 +1,15 @@
 module Globalize
   module AttributeMethods
     module Serialization
-      def serialize(attr_name, coder = nil, **options)
-        if respond_to?(:globalize_serialized_attributes) &&
-           respond_to?(:globalize_serialized_attributes=)
+      def serialize(attr_name, **options)
+        self.globalize_serialized_attributes = globalize_serialized_attributes.dup
+        self.globalize_serialized_attributes[attr_name] = options
 
-          self.globalize_serialized_attributes ||= {}
-
-          self.globalize_serialized_attributes =
-            globalize_serialized_attributes.dup
-
-          serialization_options =
-            coder.is_a?(Class) &&
-            [Array, Hash].include?(coder) ?
-              { type: coder } :
-              { coder: coder }
-
-          self.globalize_serialized_attributes[attr_name] =
-            serialization_options.merge(options)
-        end
-
-        serialization_options =
-          coder.is_a?(Class) &&
-          [Array, Hash].include?(coder) ?
-            { type: coder } :
-            { coder: coder }
-
-        super(attr_name, **serialization_options, **options)
+        # https://github.com/rails/rails/blob/7-2-stable/activerecord/lib/active_record/attribute_methods/serialization.rb#L183
+        super(attr_name, **options)
       end
     end
   end
 end
 
-ActiveRecord::AttributeMethods::Serialization::ClassMethods.prepend(
-  Globalize::AttributeMethods::Serialization
-)
+ActiveRecord::AttributeMethods::Serialization::ClassMethods.send(:prepend, Globalize::AttributeMethods::Serialization)
