@@ -1,5 +1,9 @@
 # Globalize Changelog
 
+## Unreleased
+
+* Fix `NameError: undefined local variable or method 'globalize_serialized_attributes'` when a gem loaded before Globalize (such as `audited`) serializes an attribute from its own `ActiveSupport.on_load(:active_record)` hook [#843](https://github.com/globalize/globalize/pull/843) by [Jatin Rajput](https://github.com/jatin-rajput829)
+
 ## 7.1.3 (2026-05-25)
 
 * Prevent creation of empty current translation [#832](https://github.com/globalize/globalize/pull/832) by [Arkadiy Zabazhanov](https://github.com/pyromaniac)
