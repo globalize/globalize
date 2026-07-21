@@ -1,5 +1,13 @@
 # Globalize Changelog
 
+## 7.1.3 (2026-05-25)
+
+* Prevent creation of empty current translation [#832](https://github.com/globalize/globalize/pull/832) by [Arkadiy Zabazhanov](https://github.com/pyromaniac)
+
+## 7.1.2 (2026-05-18)
+
+* Coerce locale to symbol in `Attributes#contains?` [#844](https://github.com/globalize/globalize/pull/844) by [Arkadiy Zabazhanov](https://github.com/pyromaniac)
+
 ## 7.1.1 (2025-12-24)
 
 * Fix automatic creation of empty stash entries for unassigned locales [#833](https://github.com/globalize/globalize/pull/833) by [Jules](https://github.com/jules-w2)
