@@ -1,19 +1,19 @@
 module Globalize
   module ActiveRecord
-    module TranslatedAttributesQuery
-      class WhereChain < ::ActiveRecord::QueryMethods::WhereChain
-        def not(opts, *rest)
-          if parsed = @scope.clone.parse_translated_conditions(opts)
-            @scope.join_translations.where.not(parsed, *rest)
-          else
-            super
-          end
+    class TranslatedAttributesWhereChain < ::ActiveRecord::QueryMethods::WhereChain
+      def not(opts, *rest)
+        if parsed = @scope.clone.parse_translated_conditions(opts)
+          @scope.join_translations.where.not(parsed, *rest)
+        else
+          super
         end
       end
+    end
 
+    module TranslatedAttributesQuery
       def where(opts = :chain, *rest)
         if opts == :chain
-          WhereChain.new(spawn)
+          TranslatedAttributesWhereChain.new(spawn)
         elsif parsed = parse_translated_conditions(opts)
           join_translations(super(parsed, *rest))
         else
