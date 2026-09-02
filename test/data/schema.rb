@@ -278,4 +278,13 @@ ActiveRecord::Schema.define do
     t.string  :locale
     t.string  :name
   end
+
+  create_table :typed_posts, :force => true do |t|
+  end
+
+  create_table :typed_post_translations, :force => true do |t|
+    t.string     :locale
+    t.references :typed_post
+    t.string     :title
+  end
 end

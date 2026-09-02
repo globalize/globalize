@@ -28,6 +28,14 @@ module Globalize
         )
       end
 
+      def attribute(name, ...)
+        super
+        if translated?(name)
+          type = attribute_types[name.to_s]
+          translation_class.attribute(name, type) if type
+        end
+      end
+
       def translated?(name)
         translated_attribute_names.include?(name.to_sym)
       end
@@ -114,9 +122,21 @@ module Globalize
       end
 
       def define_translations_accessor(name)
-        attribute(name, ::ActiveRecord::Type::Value.new)
+        unless custom_translated_attribute_type?(name)
+          attribute(name, ::ActiveRecord::Type::Value.new)
+        end
         define_translations_reader(name)
         define_translations_writer(name)
+      end
+
+      def custom_translated_attribute_type?(name)
+        begin
+          type = attribute_types[name.to_s]
+        rescue ::ActiveRecord::StatementInvalid, ::ActiveRecord::NoDatabaseError
+          # Unable to infer type for attribute because database table for model is not available
+          return false
+        end
+        type && type.class != ::ActiveRecord::Type::Value
       end
 
       def database_connection_possible?
