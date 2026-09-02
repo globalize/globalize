@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Remove support for Rails versions lower than 8.0 and Ruby versions lower than 3.2
 * Fix `NameError: undefined local variable or method 'globalize_serialized_attributes'` when a gem loaded before Globalize (such as `audited`) serializes an attribute from its own `ActiveSupport.on_load(:active_record)` hook [#843](https://github.com/globalize/globalize/pull/843) by [Jatin Rajput](https://github.com/jatin-rajput829)
 * Fix broken pluralization with Rails 8.1 (wrong, singular table names) [#848](https://github.com/globalize/globalize/pull/848) by [Jonas S](https://github.com/rocket-turtle)
 * Avoid constant cache invalidations in translated relations [#842](https://github.com/globalize/globalize/pull/842) by [Eisuke Matsushita](https://github.com/wt-l00)
