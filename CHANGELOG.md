@@ -3,6 +3,7 @@
 ## Unreleased
 
 * Fix `NameError: undefined local variable or method 'globalize_serialized_attributes'` when a gem loaded before Globalize (such as `audited`) serializes an attribute from its own `ActiveSupport.on_load(:active_record)` hook [#843](https://github.com/globalize/globalize/pull/843) by [Jatin Rajput](https://github.com/jatin-rajput829)
+* Don't load `ActiveRecord::Base` on `require "globalize"` (regression from #843). Rails applied `config.filter_parameters` and other settings before the app's initializers ran, so e.g. `filter_attributes` stayed empty [#851](https://github.com/globalize/globalize/issues/851) by [Jonas S](https://github.com/rocket-turtle)
 * Fix broken pluralization with Rails 8.1 (wrong, singular table names) [#848](https://github.com/globalize/globalize/pull/848) by [Jonas S](https://github.com/rocket-turtle)
 * Avoid constant cache invalidations in translated relations [#842](https://github.com/globalize/globalize/pull/842) by [Eisuke Matsushita](https://github.com/wt-l00)
 
