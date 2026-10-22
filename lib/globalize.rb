@@ -11,10 +11,6 @@ module Globalize
   autoload :ActiveRecord, 'globalize/active_record'
   autoload :Interpolation,   'globalize/interpolation'
 
-  ACTIVE_RECORD_7 = Gem::Version.new('7.0.0')
-  ACTIVE_RECORD_71 = Gem::Version.new('7.1.0')
-  ACTIVE_RECORD_72 = Gem::Version.new('7.2.0')
-
   class << self
     def locale
       read_locale || I18n.locale
@@ -62,18 +58,6 @@ module Globalize
       RequestStore.store
     end
 
-    def rails_7?
-      ::ActiveRecord.version >= ACTIVE_RECORD_7
-    end
-
-    def rails_7_1?
-      ::ActiveRecord.version >= ACTIVE_RECORD_71
-    end
-
-    def rails_7_2?
-      ::ActiveRecord.version >= ACTIVE_RECORD_72
-    end
-
   protected
 
     def read_locale
@@ -101,5 +85,8 @@ module Globalize
 end
 
 ActiveSupport.on_load(:active_record) do
+  ActiveRecord::Base.class_attribute :globalize_serialized_attributes, instance_writer: false
+  ActiveRecord::Base.globalize_serialized_attributes = {}
+
   ActiveRecord::Base.extend(Globalize::ActiveRecord::ActMacro)
 end

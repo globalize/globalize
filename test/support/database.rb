@@ -104,13 +104,6 @@ module Globalize
         postgres?
       end
 
-      # PostgreSQL and MySQL doesn't support table names longer than 63 chars
-      # rails 7.1 enforce limit on table names with all databases
-      # ref: https://github.com/rails/rails/pull/45136
-      def long_table_name_support?
-        sqlite? && Gem::Version.new(::ActiveRecord.gem_version) < Gem::Version.new('7.1.0')
-      end
-
       def cleaning_strategy(strategy, &block)
         DatabaseCleaner.clean
         DatabaseCleaner.strategy = strategy
