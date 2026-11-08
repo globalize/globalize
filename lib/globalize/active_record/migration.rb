@@ -152,12 +152,7 @@ module Globalize
           # Find all of the translated attributes for all records in the model.
           all_translated_attributes = model.all.collect{|m| m.attributes}
           all_translated_attributes.each do |translated_record|
-            # Create a hash containing the translated column names and their values.
-            translated_attribute_names.inject(fields_to_update={}) do |f, name|
-              f.update({name.to_sym => translated_record[name.to_s]})
-              # Remove attributes that will no longer be translated
-              translated_attribute_names.delete(name)
-            end
+            fields_to_update = translated_attribute_names.to_h { |name| [name.to_sym, translated_record[name.to_s]] }
 
             # Now, update the actual model's record with the hash.
             model.where(model.primary_key.to_sym => translated_record[model.primary_key]).update_all(fields_to_update)

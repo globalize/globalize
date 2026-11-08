@@ -4,7 +4,7 @@ class MigrationTest < Minitest::Spec
   include Globalize::ActiveRecord::Exceptions
 
   before(:each) do
-    reset_schema(Migrated, TwoAttributesMigrated, MigratedBigint)
+    reset_schema(Migrated, TwoAttributesMigrated, TwoAttributesRolledBack, MigratedBigint)
     if Globalize::Test::Database.long_table_name_support?
       reset_schema(MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters)
     end
@@ -14,7 +14,7 @@ class MigrationTest < Minitest::Spec
   end
 
   after(:each) do
-    reset_schema(Migrated, TwoAttributesMigrated, MigratedBigint)
+    reset_schema(Migrated, TwoAttributesMigrated, TwoAttributesRolledBack, MigratedBigint)
     if Globalize::Test::Database.long_table_name_support?
       reset_schema(MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters)
     end
@@ -112,10 +112,43 @@ class MigrationTest < Minitest::Spec
         end
         model.reset_column_information
         assert !model.translation_class.table_exists?
-        untranslated.reload
 
-        # Was it restored? (also tests .untranslated_attributes)
-        assert_equal 'Untranslated', untranslated.untranslated_attributes['name']
+        # The model still declares translates, so read the source table directly.
+        restored = model.connection.select_value("SELECT name FROM #{model.table_name} WHERE id = #{untranslated.id}")
+        assert_equal 'Untranslated', restored
+      end
+    end
+
+    it 'rolls back every translated attribute when called with :migrate_data => true' do
+      strategy = Globalize::Test::Database.mysql? ? :truncation : :transaction
+      Globalize::Test::Database.cleaning_strategy(strategy) do
+        model = TwoAttributesRolledBack
+
+        # The model is translated, so write and read the source table directly.
+        model.insert_all!([{ name: 'Name', body: 'Body' }])
+        id = model.unscoped.maximum(:id)
+
+        model.create_translation_table!({ name: :string, body: :text }, { migrate_data: true })
+        model.where(id: id).update_all(name: nil, body: nil)
+
+        model.drop_translation_table! migrate_data: true
+        model.reset_column_information
+
+        source = model.connection.select_rows("SELECT name, body FROM #{model.table_name} WHERE id = #{id}")
+        assert_equal [['Name', 'Body']], source
+        assert_equal [:name, :body], model.translated_attribute_names
+      end
+    end
+
+    it 'can create the translation table again after rolling back with :migrate_data => true' do
+      strategy = Globalize::Test::Database.mysql? ? :truncation : :transaction
+      Globalize::Test::Database.cleaning_strategy(strategy) do
+        Migrated.insert_all!([{ name: 'Name' }])
+        Migrated.create_translation_table!({ name: :string }, { migrate_data: true })
+        Migrated.drop_translation_table! migrate_data: true
+        Migrated.create_translation_table!({ name: :string }, { migrate_data: true })
+
+        assert_migration_table(name: :string)
       end
     end
 
