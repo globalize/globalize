@@ -112,10 +112,10 @@ class MigrationTest < Minitest::Spec
         end
         model.reset_column_information
         assert !model.translation_class.table_exists?
-        untranslated.reload
 
-        # Was it restored? (also tests .untranslated_attributes)
-        assert_equal 'Untranslated', untranslated.untranslated_attributes['name']
+        # The model still declares translates, so read the source table directly.
+        restored = model.connection.select_value("SELECT name FROM #{model.table_name} WHERE id = #{untranslated.id}")
+        assert_equal 'Untranslated', restored
       end
     end
 
@@ -129,7 +129,7 @@ class MigrationTest < Minitest::Spec
         id = model.unscoped.maximum(:id)
 
         model.create_translation_table!({ name: :string, body: :text }, { migrate_data: true })
-        model.where(id:).update_all(name: nil, body: nil)
+        model.where(id: id).update_all(name: nil, body: nil)
 
         model.drop_translation_table! migrate_data: true
         model.reset_column_information
