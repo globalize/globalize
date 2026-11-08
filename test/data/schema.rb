@@ -21,6 +21,12 @@ ActiveRecord::Schema.define do
     t.string   :blah
   end
 
+  create_table :translation_translations, :force => true do |t|
+    t.string     :locale
+    t.references :translation
+    t.string     :value
+  end
+
   create_table :blogs, :force => true do |t|
     t.string   :description
   end

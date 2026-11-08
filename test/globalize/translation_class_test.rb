@@ -44,6 +44,11 @@ class TranslationClassTest < Minitest::Spec
       end
     end
 
+    it "can create a translation class for a model named Translation" do
+      translation = Translation.create!(value: "hello")
+      assert_equal translation, translation.translations.first.globalized_model
+    end
+
     it "can create a translation class for a model with an uppercase table name" do
       UppercaseTableName.create
     end
