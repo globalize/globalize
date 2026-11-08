@@ -6,6 +6,42 @@ gem "sqlite3", "~> 1.4", platforms: [:ruby, :rbx]
 gem "activemodel", "7.0.1"
 gem "activerecord", "7.0.1"
 
+# /home/runner/work/globalize/globalize/vendor/bundle/ruby/3.4.0/gems/concurrent-ruby-1.3.4/lib/concurrent-ruby/concurrent/concern/logging.rb:1: warning: logger was loaded from the standard library, but will no longer be part of the default gems starting from Ruby 3.5.0.
+# You can add logger to your Gemfile or gemspec to silence this warning.
+gem 'logger', '~> 1.6', '>= 1.6.5'
+
+# /home/runner/work/globalize/globalize/vendor/bundle/ruby/3.4.0/gems/activesupport-7.0.1/lib/active_support/notifications/fanout.rb:3: warning: mutex_m was loaded from the standard library, but is not part of the default gems starting from Ruby 3.4.0.
+# You can add mutex_m to your Gemfile or gemspec to silence this warning.
+# rake aborted!
+# LoadError: cannot load such file -- mutex_m (LoadError)
+gem 'mutex_m', '~> 0.3.0'
+
+# /home/runner/work/globalize/globalize/vendor/bundle/ruby/3.4.0/gems/activesupport-7.0.1/lib/active_support/xml_mini.rb:4: warning: base64 was loaded from the standard library, but is not part of the default gems starting from Ruby 3.4.0.
+# You can add base64 to your Gemfile or gemspec to silence this warning.
+# rake aborted!
+# LoadError: cannot load such file -- base64 (LoadError)
+gem 'base64', '~> 0.2.0'
+
+# /home/runner/work/globalize/globalize/vendor/bundle/ruby/3.4.0/gems/activesupport-7.0.1/lib/active_support/xml_mini.rb:5: warning: bigdecimal was loaded from the standard library, but is not part of the default gems starting from Ruby 3.4.0.
+# You can add bigdecimal to your Gemfile or gemspec to silence this warning.
+# rake aborted!
+# LoadError: cannot load such file -- bigdecimal (LoadError)
+gem 'bigdecimal', '~> 3.1', '>= 3.1.9'
+
+# Run bundle exec rake db:create db:migrate
+# rake aborted!
+# NameError: uninitialized constant ActiveSupport::LoggerThreadSafeLevel::Logger
+#
+#     Logger::Severity.constants.each do |severity|
+#
+# More information:
+# https://github.com/ruby-concurrency/concurrent-ruby/issues/1077
+# https://my.diffend.io/gems/concurrent-ruby/1.3.4/1.3.5
+# https://github.com/rails/rails/issues/54260
+# https://github.com/rails/rails/issues/54263
+# https://github.com/rails/rails/commits/7-0-stable/
+gem 'concurrent-ruby', '= 1.3.4'
+
 group :mysql do
   gem "mysql2", platforms: [:ruby, :rbx]
 end

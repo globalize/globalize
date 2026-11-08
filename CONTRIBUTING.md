@@ -4,7 +4,7 @@ Globalize is a community project, and would not be here today if it were not for
 
 ## Bugs
 
-If you find a bug or something is not working as expected, please search through the [github issues](https://github.com/globalize/globalize/issues) and on [stackoverflow](http://stackoverflow.com/questions/tagged/globalize) first. If you cannot find any answers related to your issue, post a new one and we will try to address it as soon as we can. Note that we prioritize Rails 4 issues (`main` branch) over Rails 3 issues (`3-0-stable` branch).
+If you find a bug or something is not working as expected, please search through the [github issues](https://github.com/globalize/globalize/issues) and on [stackoverflow](http://stackoverflow.com/questions/tagged/globalize) first. If you cannot find any answers related to your issue, post a new one and we will try to address it as soon as we can.
 
 If you also have some idea how to fix the bug, then by all means post a pull request (see below).
 
@@ -20,7 +20,7 @@ Have some free time? Help us improve our [code climate score](https://codeclimat
 
 ## Documentation
 
-Globalize needs better documentation. That includes more inline comments explaining clearly what code is doing, as well as reference documentation beyond the [readme](readme.md) -- possibly in the github wiki. Please contact us if you would like to help with documentation.
+Globalize needs better documentation. That includes more inline comments explaining clearly what code is doing, as well as reference documentation beyond the [readme](README.md) -- possibly in the github wiki. Please contact us if you would like to help with documentation.
 
 ## Pull Requests
 
@@ -31,8 +31,6 @@ Have a bug fix, code improvement or proposed feature? Do the following:
 3. Commit your changes: `git commit -am 'Add some new feature'`
 4. Push to the branch: `git push origin my_new_feature`
 5. Submit a pull request.
-
-For pull requests to Rails/ActiveRecord 4 version of Globalize (v3.x), post to the `main` branch. For pull requests to the Rails/ActiveRecord 3.x version of Globalize (3.x), post to the `3-0-stable` branch.
 
 When you submit the pull request, GitHub Actions will run the [test suite](https://github.com/globalize/globalize/actions) against your branch and will highlight any failures. Unless there is a good reason for it, we do not generally accept pull requests that take Globalize from green to red.
 

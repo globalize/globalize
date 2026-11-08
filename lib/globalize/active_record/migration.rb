@@ -89,27 +89,13 @@ module Globalize
           end
         end
 
-        if Globalize.rails_6?
-          def add_translation_fields
-            connection.change_table(translations_table_name) do |t|
-              fields.each do |name, options|
-                if options.is_a? Hash
-                  t.column name, options.delete(:type), **options
-                else
-                  t.column name, options
-                end
-              end
-            end
-          end
-        else
-          def add_translation_fields
-            connection.change_table(translations_table_name) do |t|
-              fields.each do |name, options|
-                if options.is_a? Hash
-                  t.column name, options.delete(:type), options
-                else
-                  t.column name, options
-                end
+        def add_translation_fields
+          connection.change_table(translations_table_name) do |t|
+            fields.each do |name, options|
+              if options.is_a? Hash
+                t.column name, options.delete(:type), **options
+              else
+                t.column name, options
               end
             end
           end

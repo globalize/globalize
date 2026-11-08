@@ -1,6 +1,6 @@
 # Activate the gem you are reporting the issue against.
-gem 'activerecord', '4.2.0'
-gem 'globalize', '5.0.1'
+gem 'activerecord', '7.0.0'
+gem 'globalize', '7.0.0'
 require 'active_record'
 require 'globalize'
 require 'minitest/autorun'

@@ -1,19 +1,19 @@
 module Globalize
   module ActiveRecord
-    module TranslatedAttributesQuery
-      class WhereChain < ::ActiveRecord::QueryMethods::WhereChain
-        def not(opts, *rest)
-          if parsed = @scope.clone.parse_translated_conditions(opts)
-            @scope.join_translations.where.not(parsed, *rest)
-          else
-            super
-          end
+    class TranslatedAttributesWhereChain < ::ActiveRecord::QueryMethods::WhereChain
+      def not(opts, *rest)
+        if parsed = @scope.clone.parse_translated_conditions(opts)
+          @scope.join_translations.where.not(parsed, *rest)
+        else
+          super
         end
       end
+    end
 
+    module TranslatedAttributesQuery
       def where(opts = :chain, *rest)
         if opts == :chain
-          WhereChain.new(spawn)
+          TranslatedAttributesWhereChain.new(spawn)
         elsif parsed = parse_translated_conditions(opts)
           join_translations(super(parsed, *rest))
         else
@@ -96,23 +96,6 @@ module Globalize
           opts = opts.dup
           keys.each { |key| opts[translated_column_name(key)] = opts.delete(key) || opts.delete(key.to_s) }
           opts
-        end
-      end
-
-      if Globalize.rails_42?
-        def where_values_hash(*args)
-          return super unless respond_to?(:translations_table_name)
-          equalities = respond_to?(:with_default_scope) ? with_default_scope.where_values : where_values
-          equalities = equalities.grep(Arel::Nodes::Equality).find_all { |node|
-            node.left.relation.name == translations_table_name
-          }
-
-          binds = Hash[bind_values.find_all(&:first).map { |column, v| [column.name, v] }]
-
-          super.merge(Hash[equalities.map { |where|
-            name = where.left.name
-            [name, binds.fetch(name.to_s) { right = where.right; right.is_a?(Arel::Nodes::Casted) ? right.val : right }]
-          }])
         end
       end
 

@@ -152,7 +152,7 @@ class MigrationTest < Minitest::Spec
 
         untranslated_record.reload
 
-        # We change the unstralated value so we make sure we don't overwrite the translated one when we add new fields
+        # We change the untranslated value so we make sure we don't overwrite the translated one when we add new fields
         model.where(:id => untranslated_record.id).update_all(:name => 'No longer translated')
         untranslated_record.reload
 
@@ -162,9 +162,7 @@ class MigrationTest < Minitest::Spec
         assert_translated untranslated_record, :en, :name, 'Untranslated'
         assert_translated untranslated_record, :en, :body, 'Untranslated body'
 
-        if Globalize.rails_51?
-          assert_nil model.columns.detect { |c| c.name == "body" }
-        end
+        assert_nil model.columns.detect { |c| c.name == "body" }
       end
     end
   end

@@ -248,6 +248,7 @@ ActiveRecord::Schema.define do
     t.string     :locale
     t.references :artwork
     t.string     :title, null: false
+    t.string     :subtitle, null: false
   end
 
   create_table :questions, :force => true do |t|
@@ -267,5 +268,14 @@ ActiveRecord::Schema.define do
     t.integer :bad_configuration_id
     t.string  :name
     t.string  :locale
+  end
+
+  create_table :in_progresses, :force => true do |t|
+    t.string  :name
+  end
+
+  create_table :in_progress_translations, :force => true do |t|
+    t.string  :locale
+    t.string  :name
   end
 end

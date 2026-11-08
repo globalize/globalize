@@ -8,11 +8,7 @@ class JoinsTest < Minitest::Spec
     it "returns translated attribute" do
       Post.create(title: "my title")
 
-      if Globalize.rails_51?
-        assert_equal ["my title"], Post.includes(:translations).pluck("post_translations.title")
-      else
-        assert_equal ["my title"], Post.includes(:translations).pluck(:title)
-      end
+      assert_equal ["my title"], Post.includes(:translations).pluck("post_translations.title")
     end
   end
 end

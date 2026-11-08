@@ -1,8 +1,42 @@
 # Globalize Changelog
 
+## Unreleased
+
+* Fix `NameError: undefined local variable or method 'globalize_serialized_attributes'` when a gem loaded before Globalize (such as `audited`) serializes an attribute from its own `ActiveSupport.on_load(:active_record)` hook [#843](https://github.com/globalize/globalize/pull/843) by [Jatin Rajput](https://github.com/jatin-rajput829)
+* Don't load `ActiveRecord::Base` on `require "globalize"` (regression from #843). Rails applied `config.filter_parameters` and other settings before the app's initializers ran, so e.g. `filter_attributes` stayed empty [#851](https://github.com/globalize/globalize/issues/851) by [Jonas S](https://github.com/rocket-turtle)
+* Fix broken pluralization with Rails 8.1 (wrong, singular table names) [#848](https://github.com/globalize/globalize/pull/848) by [Jonas S](https://github.com/rocket-turtle)
+* Avoid constant cache invalidations in translated relations [#842](https://github.com/globalize/globalize/pull/842) by [Eisuke Matsushita](https://github.com/wt-l00)
+
+## 7.1.3 (2026-05-25)
+
+* Prevent creation of empty current translation [#832](https://github.com/globalize/globalize/pull/832) by [Arkadiy Zabazhanov](https://github.com/pyromaniac)
+
+## 7.1.2 (2026-05-18)
+
+* Coerce locale to symbol in `Attributes#contains?` [#844](https://github.com/globalize/globalize/pull/844) by [Arkadiy Zabazhanov](https://github.com/pyromaniac)
+
+## 7.1.1 (2025-12-24)
+
+* Fix automatic creation of empty stash entries for unassigned locales [#833](https://github.com/globalize/globalize/pull/833) by [Jules](https://github.com/jules-w2)
+
+## 7.1.0 (2025-12-23)
+
+* Add support for Rails 8.1.x [#838](https://github.com/globalize/globalize/pull/838) by [Jules](https://github.com/jules-w2)
+* Add Ruby 3.4 to the test matrix [#830](https://github.com/globalize/globalize/pull/830) by [Jonas S](https://github.com/rocket-turtle)
+
+## 7.0.0 (2024-12-20)
+
+* Enable Rubygems Trusted Publishing
+* Fix ActiveRecord load order issues using `ActiveSupport.on_load(:active_record)` [#816](https://github.com/globalize/globalize/pull/816) by [Rune Philosof](https://github.com/runephilosof-abtion)
+* Allow custom `:dependent` option for translations association [#821](https://github.com/globalize/globalize/pull/821) by [Bruno Carvalho](https://github.com/brunodccarvalho)
+* Don't specify `ignored_columns` unless necessary [#806](https://github.com/globalize/globalize/pull/806) by [Pat Leamon](https://github.com/stiak)
+* Add Rails 8.0 and Ruby 3.3 to the test matrix [#826](https://github.com/globalize/globalize/pull/826) by [Jonas S](https://github.com/rocket-turtle)
+* Support Rails 7.2; remove deprecation warning in rails 7.1 [#825](https://github.com/globalize/globalize/pull/825) by [Jonas S](https://github.com/rocket-turtle)
+* Remove support for outdated Rails (lower than 7.0) and Ruby (lower than 3.0) [#824](https://github.com/globalize/globalize/pull/824) by [Jonas S](https://github.com/rocket-turtle)
+
 ## 6.3.0 (2023-10-22)
 
-* Support ruby 3.2 rails 7.1 (#810)(https://github.com/globalize/globalize/pull/810) by [Shinichi Maeshima](https://github.com/willnet)
+* Support ruby 3.2 rails 7.1 [#810](https://github.com/globalize/globalize/pull/810) by [Shinichi Maeshima](https://github.com/willnet)
 
 ## 6.2.1 (2022-05-24)
 

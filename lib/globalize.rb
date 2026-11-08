@@ -1,7 +1,6 @@
 require 'request_store'
 require 'active_record'
 require 'patches/active_record/xml_attribute_serializer'
-require 'patches/active_record/query_method'
 require 'patches/active_record/relation'
 require 'patches/active_record/serialization'
 require 'patches/active_record/uniqueness_validator'
@@ -12,14 +11,9 @@ module Globalize
   autoload :ActiveRecord, 'globalize/active_record'
   autoload :Interpolation,   'globalize/interpolation'
 
-  ACTIVE_RECORD_50 = Gem::Version.new('5.0.0')
-  ACTIVE_RECORD_51 = Gem::Version.new('5.1.0')
-  ACTIVE_RECORD_52 = Gem::Version.new('5.2.0')
-  ACTIVE_RECORD_60 = Gem::Version.new('6.0.0')
-  ACTIVE_RECORD_61 = Gem::Version.new('6.1.0')
-
-  CURRENT_RUBY     = Gem::Version.new(RUBY_VERSION)
-  RUBY_VERSION_27  = Gem::Version.new('2.7.0')
+  ACTIVE_RECORD_7 = Gem::Version.new('7.0.0')
+  ACTIVE_RECORD_71 = Gem::Version.new('7.1.0')
+  ACTIVE_RECORD_72 = Gem::Version.new('7.2.0')
 
   class << self
     def locale
@@ -68,32 +62,16 @@ module Globalize
       RequestStore.store
     end
 
-    def ruby_27?
-      CURRENT_RUBY >= RUBY_VERSION_27
+    def rails_7?
+      ::ActiveRecord.version >= ACTIVE_RECORD_7
     end
 
-    def rails_42?
-      ::ActiveRecord.version < ACTIVE_RECORD_50
+    def rails_7_1?
+      ::ActiveRecord.version >= ACTIVE_RECORD_71
     end
 
-    def rails_5?
-      ::ActiveRecord.version >= ACTIVE_RECORD_50
-    end
-
-    def rails_51?
-      ::ActiveRecord.version >= ACTIVE_RECORD_51
-    end
-
-    def rails_52?
-      ::ActiveRecord.version >= ACTIVE_RECORD_52
-    end
-
-    def rails_6?
-      ::ActiveRecord.version >= ACTIVE_RECORD_60
-    end
-
-    def rails_61?
-      ::ActiveRecord.version >= ACTIVE_RECORD_61
+    def rails_7_2?
+      ::ActiveRecord.version >= ACTIVE_RECORD_72
     end
 
   protected
@@ -122,7 +100,9 @@ module Globalize
   end
 end
 
-ActiveRecord::Base.class_attribute :globalize_serialized_attributes, instance_writer: false
-ActiveRecord::Base.globalize_serialized_attributes = {}
+ActiveSupport.on_load(:active_record) do
+  ActiveRecord::Base.class_attribute :globalize_serialized_attributes, instance_writer: false
+  ActiveRecord::Base.globalize_serialized_attributes = {}
 
-ActiveRecord::Base.extend(Globalize::ActiveRecord::ActMacro)
+  ActiveRecord::Base.extend(Globalize::ActiveRecord::ActMacro)
+end
