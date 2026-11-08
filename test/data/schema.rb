@@ -248,6 +248,7 @@ ActiveRecord::Schema.define do
     t.string     :locale
     t.references :artwork
     t.string     :title, null: false
+    t.string     :subtitle, null: false
   end
 
   create_table :questions, :force => true do |t|

@@ -11,6 +11,7 @@ module Globalize
       end
 
       def contains?(locale, name)
+        locale = locale.to_sym
         key?(locale) && self[locale].key?(name.to_s)
       end
 
