@@ -66,9 +66,6 @@ module Globalize
           move_data_to_model_table if options[:migrate_data]
           drop_translations_index
           drop_translation_table
-
-          translated_attribute_names.clear
-
           clear_schema_cache!
         end
 
@@ -158,7 +155,6 @@ module Globalize
             # Create a hash containing the translated column names and their values.
             translated_attribute_names.inject(fields_to_update={}) do |f, name|
               f.update({name.to_sym => translated_record[name.to_s]})
-              # Remove attributes that will no longer be translated
             end
 
             # Now, update the actual model's record with the hash.
