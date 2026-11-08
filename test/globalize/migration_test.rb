@@ -140,6 +140,18 @@ class MigrationTest < Minitest::Spec
       end
     end
 
+    it 'can create the translation table again after rolling back with :migrate_data => true' do
+      strategy = Globalize::Test::Database.mysql? ? :truncation : :transaction
+      Globalize::Test::Database.cleaning_strategy(strategy) do
+        Migrated.insert_all!([{ name: 'Name' }])
+        Migrated.create_translation_table!({ name: :string }, { migrate_data: true })
+        Migrated.drop_translation_table! migrate_data: true
+        Migrated.create_translation_table!({ name: :string }, { migrate_data: true })
+
+        assert_migration_table(name: :string)
+      end
+    end
+
     it 'creates a proper types for FK ids' do
       MigratedBigint.create_translation_table!(:name => :text)
       assert_migration_table({}, MigratedBigint)
