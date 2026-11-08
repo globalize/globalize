@@ -2,6 +2,10 @@ module Globalize
   module AttributeMethods
     module Serialization
       def serialize(attr_name, **options)
+        # another gem's on_load hook may call serialize before ours defined the
+        # attribute (#843). Such a model can't be translated yet anyway.
+        return super unless respond_to?(:globalize_serialized_attributes)
+
         self.globalize_serialized_attributes = globalize_serialized_attributes.dup
         self.globalize_serialized_attributes[attr_name] = options
 

@@ -101,5 +101,8 @@ module Globalize
 end
 
 ActiveSupport.on_load(:active_record) do
+  ActiveRecord::Base.class_attribute :globalize_serialized_attributes, instance_writer: false
+  ActiveRecord::Base.globalize_serialized_attributes = {}
+
   ActiveRecord::Base.extend(Globalize::ActiveRecord::ActMacro)
 end
