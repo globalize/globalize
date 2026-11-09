@@ -104,6 +104,12 @@ ActiveRecord::Schema.define do
     t.string :name
     t.string :locale
   end
+
+  create_table :two_attributes_rolled_backs, :force => true do |t|
+    t.string :name
+    t.text   :body
+  end
+
   create_table :two_attributes_untranslateds, :force => true do |t|
     t.string :name
     t.string :body
@@ -248,6 +254,7 @@ ActiveRecord::Schema.define do
     t.string     :locale
     t.references :artwork
     t.string     :title, null: false
+    t.string     :subtitle, null: false
   end
 
   create_table :questions, :force => true do |t|

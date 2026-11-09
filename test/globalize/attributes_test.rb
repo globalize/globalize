@@ -319,29 +319,36 @@ class AttributesTest < Minitest::Spec
       ActiveRecord::JDBCError
     )
 
+    it 'does not create an empty translation record' do
+      artwork = Artwork.create
+      assert_equal 0, artwork.translations.length
+    end
+
     it 'does not save a record with an empty required field' do
       err = assert_raises ActiveRecord::StatementInvalid do
-        Artwork.create
+        Artwork.create(title: 'foo')
       end
 
       assert_match(/#{DB_EXCEPTIONS.join('|')}/, err.message)
     end
 
-    it 'saves a record with a filled required field' do
+    it 'saves a record with all required fields filled' do
       artwork = Artwork.new
       artwork.title = "foo"
+      artwork.subtitle = "bar"
       artwork.save!
       artwork.reload
 
       assert_equal 1, artwork.translations.length
       assert_equal 'foo', artwork.title
+      assert_equal 'bar', artwork.subtitle
     end
 
     it 'does not save a record with an empty required field using nested attributes' do
       err = assert_raises ActiveRecord::StatementInvalid do
         Artwork.create(:translations_attributes => {
-          "0" => { :locale => 'en', :title => 'title' },
-          "1" => { :locale => 'it' }
+          "0" => { :locale => 'en', :title => 'title', :subtitle => 'sub' },
+          "1" => { :locale => 'it', :subtitle => 'sub' }
         })
       end
 
@@ -350,8 +357,8 @@ class AttributesTest < Minitest::Spec
 
     it 'saves a record with a filled required field using nested attributes' do
       artwork = Artwork.new(:translations_attributes => {
-        "0" => { :locale => 'en', :title => 'title' },
-        "1" => { :locale => 'it', :title => 'titolo' }
+        "0" => { :locale => 'en', :title => 'title', :subtitle => 'sub' },
+        "1" => { :locale => 'it', :title => 'titolo', :subtitle => 'sottotitolo' }
       })
       artwork.save!
       artwork.reload
@@ -369,6 +376,40 @@ class AttributesTest < Minitest::Spec
 
     it 'has empty ignored columns if columns are not present on the source table' do
       assert_equal [], Post.ignored_columns
+    end
+  end
+
+  describe Globalize::ActiveRecord::Attributes do
+    let(:stash) { Globalize::ActiveRecord::Attributes.new }
+
+    describe '#contains?' do
+      before { stash.write(:en, 'title', 'foo') }
+
+      it 'returns true for the locale and attribute that were written' do
+        assert_equal true, stash.contains?(:en, 'title')
+      end
+
+      it 'returns false for a locale that was not written' do
+        assert_equal false, stash.contains?(:de, 'title')
+      end
+
+      it 'returns false for an attribute that was not written' do
+        assert_equal false, stash.contains?(:en, 'body')
+      end
+
+      it 'accepts string locales (matches #[]/#read/#write coercion)' do
+        assert_equal true, stash.contains?('en', 'title')
+        assert_equal false, stash.contains?('de', 'title')
+      end
+
+      it 'accepts symbol attribute names' do
+        assert_equal true, stash.contains?(:en, :title)
+      end
+
+      it 'does not create empty stash entries for missing locales' do
+        stash.contains?(:de, 'title')
+        assert_equal false, stash.key?(:de)
+      end
     end
   end
 end

@@ -143,8 +143,8 @@ module Globalize
         begin
           # Without a connection tentative, the `connected?` function can responds with a false negative
           if Globalize.rails_7_2?
-            connection = ::ActiveRecord::Base.lease_connection
-            connection.connect!
+            # Release the connection right after the block. Otherwise it can leak forever
+            ::ActiveRecord::Base.with_connection(&:connect!)
           else
             ::ActiveRecord::Base.connection
           end

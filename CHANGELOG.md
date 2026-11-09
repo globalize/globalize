@@ -1,5 +1,22 @@
 # Globalize Changelog
 
+## Unreleased
+
+* Fix `NameError: undefined local variable or method 'globalize_serialized_attributes'` when a gem loaded before Globalize (such as `audited`) serializes an attribute from its own `ActiveSupport.on_load(:active_record)` hook [#843](https://github.com/globalize/globalize/pull/843) by [Jatin Rajput](https://github.com/jatin-rajput829)
+* Don't load `ActiveRecord::Base` on `require "globalize"` (regression from #843). Rails applied `config.filter_parameters` and other settings before the app's initializers ran, so e.g. `filter_attributes` stayed empty [#851](https://github.com/globalize/globalize/issues/851) by [Jonas S](https://github.com/rocket-turtle)
+* Fix `drop_translation_table!` with `migrate_data: true` failing for models with more than one translated attribute [#834](https://github.com/globalize/globalize/pull/834), [#854](https://github.com/globalize/globalize/pull/854) by [Jan Klimke](https://github.com/jklimke)
+* Fix broken pluralization with Rails 8.1 (wrong, singular table names) [#848](https://github.com/globalize/globalize/pull/848) by [Jonas S](https://github.com/rocket-turtle)
+* Avoid constant cache invalidations in translated relations [#842](https://github.com/globalize/globalize/pull/842) by [Eisuke Matsushita](https://github.com/wt-l00)
+* Release the database connection checked out while defining translated models on Rails 7.2+, which otherwise stayed leased to the defining thread [#853](https://github.com/globalize/globalize/pull/853) by [alexandre184](https://github.com/alexandre184)
+
+## 7.1.3 (2026-05-25)
+
+* Prevent creation of empty current translation [#832](https://github.com/globalize/globalize/pull/832) by [Arkadiy Zabazhanov](https://github.com/pyromaniac)
+
+## 7.1.2 (2026-05-18)
+
+* Coerce locale to symbol in `Attributes#contains?` [#844](https://github.com/globalize/globalize/pull/844) by [Arkadiy Zabazhanov](https://github.com/pyromaniac)
+
 ## 7.1.1 (2025-12-24)
 
 * Fix automatic creation of empty stash entries for unassigned locales [#833](https://github.com/globalize/globalize/pull/833) by [Jules](https://github.com/jules-w2)

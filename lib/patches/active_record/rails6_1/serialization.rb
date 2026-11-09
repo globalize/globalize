@@ -4,6 +4,10 @@ module Globalize
       def serialize(attr_name, class_name_or_coder = Object, **options)
         super(attr_name, class_name_or_coder, **options)
 
+        # another gem's on_load hook may call serialize before ours defined the
+        # attribute (#843). Such a model can't be translated yet anyway.
+        return unless respond_to?(:globalize_serialized_attributes)
+
         coder = if class_name_or_coder == ::JSON
                   ::ActiveRecord::Coders::JSON
                 elsif [:load, :dump].all? { |x| class_name_or_coder.respond_to?(x) }
