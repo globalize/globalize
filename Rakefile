@@ -12,7 +12,7 @@ desc "Run all tests."
 Rake::TestTask.new(:test) do |t|
   t.libs << "lib"
   t.pattern = "test/**/*_test.rb"
-  t.verbose = true
+  t.verbose = false
 end
 
 desc "Generate documentation."
