@@ -31,6 +31,8 @@ module Globalize
           # Detect and apply serialization.
           enable_serializable_attribute(attr_name)
 
+          warn_encrypted_translated_attribute(attr_name) if encrypted_attributes&.include?(attr_name)
+
           # Create accessors for the attribute.
           define_translated_attr_accessor(attr_name)
           define_translations_accessor(attr_name)
