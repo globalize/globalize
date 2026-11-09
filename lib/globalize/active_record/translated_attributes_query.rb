@@ -15,7 +15,7 @@ module Globalize
         if opts == :chain
           TranslatedAttributesWhereChain.new(spawn)
         elsif parsed = parse_translated_conditions(opts)
-          join_translations(super(parsed, *rest))
+          join_translations.where(parsed, *rest)
         else
           super
         end
@@ -23,7 +23,7 @@ module Globalize
 
       def having(opts, *rest)
         if parsed = parse_translated_conditions(opts)
-          join_translations(super(parsed, *rest))
+          join_translations.having(parsed, *rest)
         else
           super
         end
@@ -94,12 +94,7 @@ module Globalize
       def parse_translated_conditions(opts)
         if opts.is_a?(Hash) && respond_to?(:translated_attribute_names) && (keys = opts.symbolize_keys.keys & translated_attribute_names).present?
           opts = opts.dup
-          keys.each do |key|
-            value = opts.delete(key) || opts.delete(key.to_s)
-            type = type_for_attribute(key.to_s)
-            value = type.cast(value) if type
-            opts[translated_column_name(key)] = value
-          end
+          keys.each { |key| opts[translated_column_name(key)] = opts.delete(key) || opts.delete(key.to_s) }
           opts
         end
       end

@@ -292,5 +292,7 @@ ActiveRecord::Schema.define do
     t.string     :locale
     t.references :typed_post
     t.string     :title
+    t.string     :rating
+    t.string     :code
   end
 end

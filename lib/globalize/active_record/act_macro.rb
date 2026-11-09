@@ -30,9 +30,7 @@ module Globalize
         attr_names.each do |attr_name|
           # Detect and apply serialization.
           enable_serializable_attribute(attr_name)
-
-          # Propagate custom attribute types to the translation class.
-          propagate_attribute_type(attr_name)
+          enable_attribute_type(attr_name)
 
           # Create accessors for the attribute.
           define_translated_attr_accessor(attr_name)
@@ -69,22 +67,6 @@ module Globalize
         self.fallbacks_for_empty_translations = options[:fallbacks_for_empty_translations]
       end
 
-      def propagate_attribute_type(attr_name)
-        # Don't override types for serialized attributes
-        return if globalize_serialized_attributes.key?(attr_name)
-
-        begin
-          type = attribute_types[attr_name.to_s]
-        rescue ::ActiveRecord::StatementInvalid, ::ActiveRecord::NoDatabaseError
-          # Unable to infer type for attribute because database table for model is not available
-          return
-        end
-
-        if type && type.class != ::ActiveRecord::Type::Value
-          translation_class.attribute(attr_name, type)
-        end
-      end
-
       def enable_serializable_attribute(attr_name)
         serializer = self.globalize_serialized_attributes[attr_name]
         return unless serializer
@@ -104,6 +86,11 @@ module Globalize
 
           translation_class.send :serialize, attr_name, serializer
         end
+      end
+
+      def enable_attribute_type(attr_name)
+        type, options = globalize_attribute_types[attr_name]
+        translation_class.attribute(attr_name, type, **options) if type
       end
 
       def setup_translates!(options)

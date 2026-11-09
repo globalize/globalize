@@ -58,11 +58,49 @@ class ActiveModelAttributesTest < Minitest::Spec
     end
   end
 
-  describe "type casting in queries" do
-    it "casts query values using the custom attribute type" do
-      TypedPost.create!(title: "hello")
-      assert_equal 1, TypedPost.where(title: "  hello  ").count
+  [TypedPost, ReverseTypedPost].each do |model|
+    describe "#{model.name} with symbol and serializing types" do
+      it "reads persisted values with the declared type" do
+        post = model.create!(rating: "3", code: "secret")
+        post = model.find(post.id)
+
+        assert_equal 3, post.rating
+        assert_equal "secret", post.code
+        stored = model.connection.select_value("SELECT code FROM typed_post_translations WHERE id = #{post.translations.first.id}")
+        assert_equal "terces", stored
+      end
+
+      it "casts each locale" do
+        post = model.create!(title: " hello ")
+        I18n.with_locale(:de) { post.update!(title: " hallo ") }
+        post.reload
+
+        assert_equal "hello", post.title
+        assert_equal "hallo", post.title(:de)
+      end
     end
+
+    describe "#{model.name} queries" do
+      it "serializes query values with the declared type" do
+        post = model.create!(code: "secret")
+
+        assert_equal [post], model.where(code: "secret").to_a
+        assert_equal [post], model.where.not(code: "other").to_a
+      end
+
+      it "finds records with arrays and ranges" do
+        matching = model.create!(title: "a", rating: 2)
+        model.create!(title: "c", rating: 5)
+
+        assert_equal [matching], model.where(title: %w[a b]).to_a
+        assert_equal [matching], model.where(rating: 1..3).to_a
+      end
+    end
+  end
+
+  it "keeps the column type for translated attributes without a declared type" do
+    assert_kind_of ActiveModel::Type::Boolean, Post.translation_class.type_for_attribute(:published)
+    assert_equal true, Post.create!(title: "title", published: "1").reload.published
   end
 
   describe "when translates is called before attribute" do

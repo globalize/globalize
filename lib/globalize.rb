@@ -3,6 +3,7 @@ require 'active_record'
 require 'patches/active_record/xml_attribute_serializer'
 require 'patches/active_record/relation'
 require 'patches/active_record/serialization'
+require 'patches/active_record/attributes'
 require 'patches/active_record/uniqueness_validator'
 require 'patches/active_record/persistence'
 require 'patches/active_support/inflections'
@@ -103,6 +104,9 @@ end
 ActiveSupport.on_load(:active_record) do
   ActiveRecord::Base.class_attribute :globalize_serialized_attributes, instance_writer: false
   ActiveRecord::Base.globalize_serialized_attributes = {}
+  ActiveRecord::Base.class_attribute :globalize_attribute_types, instance_writer: false
+  ActiveRecord::Base.globalize_attribute_types = {}
 
   ActiveRecord::Base.extend(Globalize::ActiveRecord::ActMacro)
+  ActiveRecord::Base.singleton_class.prepend(Globalize::Attributes)
 end
