@@ -51,7 +51,7 @@ module Globalize
           end
 
           klass.belongs_to :globalized_model,
-            class_name: self.name,
+            class_name: "::#{name.delete_prefix("::")}",
             foreign_key: translation_options[:foreign_key],
             inverse_of: :translations,
             touch: translation_options.fetch(:touch, false)
