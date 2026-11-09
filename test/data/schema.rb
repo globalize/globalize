@@ -95,6 +95,10 @@ ActiveRecord::Schema.define do
     end
   end
 
+  create_table :migrated_jsons, :force => true do |t|
+    t.json :settings
+  end
+
   create_table :two_attributes_migrateds, :force => true do |t|
     t.string :name
     t.string :untranslated
