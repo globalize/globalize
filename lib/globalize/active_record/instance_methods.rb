@@ -26,6 +26,7 @@ module Globalize
         return super(name, value, *args, &block) unless translated?(name)
 
         options = {:locale => Globalize.locale}.merge(args.first || {})
+        value = self.class.type_for_attribute(name.to_s).cast(value)
 
         globalize.write(options[:locale], name, value)
       end

@@ -15,7 +15,7 @@ module Globalize
         if opts == :chain
           TranslatedAttributesWhereChain.new(spawn)
         elsif parsed = parse_translated_conditions(opts)
-          join_translations(super(parsed, *rest))
+          join_translations.where(parsed, *rest)
         else
           super
         end
@@ -23,7 +23,7 @@ module Globalize
 
       def having(opts, *rest)
         if parsed = parse_translated_conditions(opts)
-          join_translations(super(parsed, *rest))
+          join_translations.having(parsed, *rest)
         else
           super
         end

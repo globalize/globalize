@@ -30,6 +30,7 @@ module Globalize
         attr_names.each do |attr_name|
           # Detect and apply serialization.
           enable_serializable_attribute(attr_name)
+          enable_attribute_type(attr_name)
 
           warn_encrypted_translated_attribute(attr_name) if encrypted_attributes&.include?(attr_name)
 
@@ -87,6 +88,11 @@ module Globalize
 
           translation_class.send :serialize, attr_name, serializer
         end
+      end
+
+      def enable_attribute_type(attr_name)
+        type, options = globalize_attribute_types[attr_name]
+        translation_class.attribute(attr_name, type, **options) if type
       end
 
       def setup_translates!(options)

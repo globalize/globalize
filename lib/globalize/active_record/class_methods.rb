@@ -127,7 +127,7 @@ module Globalize
       end
 
       def define_translations_accessor(name)
-        attribute(name, ::ActiveRecord::Type::Value.new)
+        attribute(name, ::ActiveRecord::Type::Value.new) unless globalize_attribute_types.key?(name)
         define_translations_reader(name)
         define_translations_writer(name)
       end
