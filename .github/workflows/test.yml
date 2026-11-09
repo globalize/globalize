@@ -5,6 +5,10 @@ on:
     branches:
       - 'main'
   pull_request:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   test:
     strategy:
@@ -28,11 +32,6 @@ jobs:
     name: ${{ matrix.ruby }} ${{ matrix.database }} rails-${{ matrix.gemfile }}
     steps:
     - uses: actions/checkout@v7
-    - run: sudo apt-get update
-    - run: sudo apt-get install libpq-dev postgresql-client -y
-      if: matrix.database == 'postgresql'
-    - run: sudo apt-get install libsqlite3-dev -y
-      if: matrix.database == 'sqlite3'
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
@@ -54,17 +53,18 @@ jobs:
       PGUSER: postgres
       RAILS_ENV: test
 
+    # A service with an empty image isn't started, so each job only starts the database it tests.
     services:
       postgres:
-        image: postgres:14
+        image: ${{ matrix.database == 'postgresql' && 'postgres:14' || '' }}
         ports: ["5432:5432"]
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        options: --health-cmd pg_isready --health-interval 1s --health-timeout 5s --health-retries 30
         env:
           POSTGRES_PASSWORD: postgres
-  
+
       mysql:
-        image: mysql:8.4
+        image: ${{ matrix.database == 'mysql' && 'mysql:8.4' || '' }}
         ports: ["3306:3306"]
-        options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 5
+        options: --health-cmd "mysqladmin ping" --health-interval 1s --health-timeout 5s --health-retries 60
         env:
           MYSQL_ROOT_PASSWORD: root
