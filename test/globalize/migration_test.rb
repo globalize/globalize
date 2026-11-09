@@ -4,7 +4,7 @@ class MigrationTest < Minitest::Spec
   include Globalize::ActiveRecord::Exceptions
 
   before(:each) do
-    reset_schema(Migrated, TwoAttributesMigrated, TwoAttributesRolledBack, MigratedBigint)
+    reset_schema(Migrated, TwoAttributesMigrated, TwoAttributesRolledBack, MigratedBigint, MigratedJson)
     if Globalize::Test::Database.long_table_name_support?
       reset_schema(MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters)
     end
@@ -14,7 +14,7 @@ class MigrationTest < Minitest::Spec
   end
 
   after(:each) do
-    reset_schema(Migrated, TwoAttributesMigrated, TwoAttributesRolledBack, MigratedBigint)
+    reset_schema(Migrated, TwoAttributesMigrated, TwoAttributesRolledBack, MigratedBigint, MigratedJson)
     if Globalize::Test::Database.long_table_name_support?
       reset_schema(MigratedWithMegaUltraSuperLongModelNameWithMoreThenSixtyCharacters)
     end
@@ -137,6 +137,27 @@ class MigrationTest < Minitest::Spec
         source = model.connection.select_rows("SELECT name, body FROM #{model.table_name} WHERE id = #{id}")
         assert_equal [['Name', 'Body']], source
         assert_equal [:name, :body], model.translated_attribute_names
+      end
+    end
+
+    it 'keeps JSON values when migrating data in both directions' do
+      strategy = Globalize::Test::Database.mysql? ? :truncation : :transaction
+      Globalize::Test::Database.cleaning_strategy(strategy) do
+        model = MigratedJson
+        connection = model.connection
+
+        # The model is translated, so write and read the source table directly.
+        connection.execute(%(INSERT INTO #{model.table_name} (settings) VALUES ('["a","b"]')))
+        id = model.unscoped.maximum(:id)
+
+        model.create_translation_table!({ settings: :json }, { migrate_data: true })
+        assert_equal ["a", "b"], model.find(id).settings
+
+        model.drop_translation_table! migrate_data: true
+        model.reset_column_information
+
+        source = connection.select_value("SELECT settings FROM #{model.table_name} WHERE id = #{id}")
+        assert_equal ["a", "b"], JSON.parse(source)
       end
     end
 

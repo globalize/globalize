@@ -9,6 +9,7 @@
 * Avoid constant cache invalidations in translated relations [#842](https://github.com/globalize/globalize/pull/842) by [Eisuke Matsushita](https://github.com/wt-l00)
 * Release the database connection checked out while defining translated models on Rails 7.2+, which otherwise stayed leased to the defining thread [#853](https://github.com/globalize/globalize/pull/853) by [alexandre184](https://github.com/alexandre184)
 * Warn when `encrypts` is used on a translated attribute, which doesn't encrypt its translations [#856](https://github.com/globalize/globalize/pull/856) by [Philip Arndt](https://github.com/parndt)
+* Keep JSON and other typed values intact when `create_translation_table!` or `drop_translation_table!` moves data with `migrate_data: true` [#795](https://github.com/globalize/globalize/issues/795) by [Philip Arndt](https://github.com/parndt)
 * Use the types declared with `attribute` for translated attributes, whether declared before or after `translates` [#611](https://github.com/globalize/globalize/issues/611), [#841](https://github.com/globalize/globalize/pull/841) by [Ryan Brown](https://github.com/rb1193)
 
 ## 7.1.3 (2026-05-25)
