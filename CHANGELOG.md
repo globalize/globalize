@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* Remove support for Rails versions lower than 8.0 and Ruby versions lower than 3.2
+* Remove support for Rails versions lower than 8.0 and Ruby versions lower than 3.2 [#849](https://github.com/globalize/globalize/pull/849) by [Jonas S](https://github.com/rocket-turtle)
 * Fix `NameError: undefined local variable or method 'globalize_serialized_attributes'` when a gem loaded before Globalize (such as `audited`) serializes an attribute from its own `ActiveSupport.on_load(:active_record)` hook [#843](https://github.com/globalize/globalize/pull/843) by [Jatin Rajput](https://github.com/jatin-rajput829)
 * Don't load `ActiveRecord::Base` on `require "globalize"` (regression from #843). Rails applied `config.filter_parameters` and other settings before the app's initializers ran, so e.g. `filter_attributes` stayed empty [#851](https://github.com/globalize/globalize/issues/851) by [Jonas S](https://github.com/rocket-turtle)
 * Fix `drop_translation_table!` with `migrate_data: true` failing for models with more than one translated attribute [#834](https://github.com/globalize/globalize/pull/834), [#854](https://github.com/globalize/globalize/pull/854) by [Jan Klimke](https://github.com/jklimke)
