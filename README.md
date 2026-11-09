@@ -252,7 +252,7 @@ If you like your translated model to update if a translation changes, use the `t
 
 Translated values are stored on the translation model, so `encrypts` on the
 parent model doesn't encrypt them. Declare encryption on the translation class
-as well:
+instead:
 
 ```ruby
 class Post < ActiveRecord::Base
