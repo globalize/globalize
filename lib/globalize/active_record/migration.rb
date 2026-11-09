@@ -139,23 +139,36 @@ module Globalize
         end
 
         def move_data_to_translation_table
+          source = untranslated_model
           model.find_each do |record|
             translation = record.translation_for(I18n.locale) || record.translations.build(:locale => I18n.locale)
             fields.each do |attribute_name, attribute_type|
-              translation[attribute_name] = record.read_attribute(attribute_name, {:translated => false})
+              value = record.read_attribute_before_type_cast(attribute_name)
+              translation[attribute_name] = source.type_for_attribute(attribute_name).deserialize(value)
             end
             translation.save!
           end
         end
 
         def move_data_to_model_table
+          target = untranslated_model
           # Find all of the translated attributes for all records in the model.
           all_translated_attributes = model.all.collect{|m| m.attributes}
           all_translated_attributes.each do |translated_record|
             fields_to_update = translated_attribute_names.to_h { |name| [name.to_sym, translated_record[name.to_s]] }
 
             # Now, update the actual model's record with the hash.
-            model.where(model.primary_key.to_sym => translated_record[model.primary_key]).update_all(fields_to_update)
+            target.where(model.primary_key.to_sym => translated_record[model.primary_key]).update_all(fields_to_update)
+          end
+        end
+
+        # `translates` replaces the model's types for its translated attributes,
+        # so this model reads and writes its table with the columns' own types.
+        def untranslated_model
+          table_name = model.table_name
+          Class.new(model.base_class.superclass) do
+            self.table_name = table_name
+            self.inheritance_column = nil
           end
         end
 

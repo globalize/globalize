@@ -67,7 +67,20 @@ module Globalize
         "#{translation_class.table_name}.#{name}"
       end
 
+      def encrypts(*names, **options)
+        super
+        names.each { |name| warn_encrypted_translated_attribute(name) if translated?(name) }
+      end
+
       private
+
+      # Translated values are read from and written to the translation class,
+      # so encrypting the attribute on this model doesn't encrypt them.
+      def warn_encrypted_translated_attribute(name)
+        warn "Globalize: `encrypts :#{name}` on #{self.name} doesn't encrypt its translations, " \
+             "which are stored in #{translations_table_name}. " \
+             "Use `translation_class.encrypts :#{name}` instead."
+      end
 
       # Override the default relation method in order to return a subclass
       # of ActiveRecord::Relation with custom finder and calculation methods
