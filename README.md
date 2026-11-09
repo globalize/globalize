@@ -250,6 +250,22 @@ If you like your translated model to update if a translation changes, use the `t
   translates :name, touch: true
 ```
 
+Translated values are stored on the translation model, so `encrypts` on the
+parent model doesn't encrypt them. Declare encryption on the translation class
+as well:
+
+```ruby
+class Post < ActiveRecord::Base
+  translates :title
+  translation_class.encrypts :title
+end
+```
+
+If translations were already saved unencrypted, set
+`config.active_record.encryption.support_unencrypted_data = true` while you
+encrypt the existing rows, as described in the
+[Rails guide](https://guides.rails.org/active_record_encryption.html#support-for-unencrypted-data).
+
 ## Known Issues
 
 If you're getting the `ActiveRecord::StatementInvalid: PG::NotNullViolation: ERROR: null value in column "column_name" violates not-null constraint` error, the only known way to deal with it as of now is to remove not-null constraint for the globalized columns:
