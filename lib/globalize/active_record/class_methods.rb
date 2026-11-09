@@ -28,6 +28,12 @@ module Globalize
         )
       end
 
+      if Globalize.rails_7_1?
+        def query_constraints(*)
+          super.tap { validate_translations_foreign_key(translation_options[:foreign_key]) }
+        end
+      end
+
       def translated?(name)
         name.respond_to?(:to_sym) && translated_attribute_names.include?(name.to_sym)
       end

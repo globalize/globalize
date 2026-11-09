@@ -266,6 +266,23 @@ If translations were already saved unencrypted, set
 encrypt the existing rows, as described in the
 [Rails guide](https://guides.rails.org/active_record_encryption.html#support-for-unencrypted-data).
 
+A model with `query_constraints` needs a foreign key column on its translations
+for each of those columns, given in the same order, because Rails joins its
+associations on all of them. This needs Rails 7.2 or later.
+`create_translation_table!` only creates a single foreign key, so create the
+table yourself:
+
+```ruby
+class Category < ActiveRecord::Base
+  query_constraints :store_id, :id
+  translates :name, foreign_key: [:store_id, :category_id]
+end
+```
+
+As with Rails' other associations, changing a query constraint column such as
+`store_id` only updates the translations saved along with that change, so
+update the foreign keys of the others yourself.
+
 ## Known Issues
 
 If you're getting the `ActiveRecord::StatementInvalid: PG::NotNullViolation: ERROR: null value in column "column_name" violates not-null constraint` error, the only known way to deal with it as of now is to remove not-null constraint for the globalized columns:

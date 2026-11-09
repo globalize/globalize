@@ -57,8 +57,15 @@ module Globalize
 
       def foreign_key_values(in_database: false)
         reflection = record.class.reflect_on_association(:translations)
+        foreign_key = Array(reflection.foreign_key)
+        primary_key = Array(reflection.active_record_primary_key)
+        # Checked here as query constraints can come after `translates`, or never.
+        unless foreign_key.size == primary_key.size
+          raise ArgumentError, "#{record.class.name} needs query constraints with a column for each " \
+            "of its translations' foreign key columns (#{foreign_key.join(", ")})."
+        end
 
-        Array(reflection.foreign_key).zip(Array(reflection.active_record_primary_key)).to_h do |column, key|
+        foreign_key.zip(primary_key).to_h do |column, key|
           # These read the column, where `[]` reads "id" as the whole primary key.
           [column, in_database ? record.attribute_in_database(key) : record._read_attribute(key)]
         end
