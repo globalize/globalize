@@ -6,7 +6,7 @@ module Globalize
         if klass.translates? && klass.translated?(attribute)
           finder_class = klass.translation_class
           relation = build_relation(finder_class, attribute, value).where(locale: Globalize.locale)
-          relation = relation.where.not(klass.reflect_on_association(:translations).foreign_key => record.send(:id)) if record.persisted?
+          relation = relation.where.not(record.globalize.foreign_key_values(in_database: true)) if record.persisted?
 
 
           translated_scopes = Array(options[:scope]) & klass.translated_attribute_names

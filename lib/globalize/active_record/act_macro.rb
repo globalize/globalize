@@ -58,9 +58,30 @@ module Globalize
         end
       end
 
+      def validate_translations_foreign_key(foreign_key)
+        query_constraints = respond_to?(:has_query_constraints?) && has_query_constraints? ? query_constraints_list : []
+        mismatched = query_constraints.any? && Array(foreign_key).size != query_constraints.size
+
+        if (foreign_key.is_a?(Array) || mismatched) && !Globalize.rails_7_2?
+          reason = if mismatched
+            "has query constraints (#{query_constraints.join(", ")}), so its translations need a composite foreign key"
+          else
+            "translates through a composite foreign key"
+          end
+          raise ArgumentError, "#{name} #{reason}, which needs Rails 7.2 or later."
+        end
+        return unless mismatched
+
+        example = query_constraints.map { |column| column == "id" ? class_name.foreign_key : column }
+        raise ArgumentError, "#{name} has query constraints (#{query_constraints.join(", ")}), " \
+          "so its translations need a foreign key column for each of them, in the same order, " \
+          "for example `translates ..., foreign_key: #{example.map(&:to_sym).inspect}`."
+      end
+
       def apply_globalize_options(options)
         options[:table_name] ||= "#{table_name.singularize}_translations"
         options[:foreign_key] ||= class_name.foreign_key
+        validate_translations_foreign_key(options[:foreign_key])
         options[:autosave] ||= false
 
         class_attribute :translated_attribute_names, :translation_options, :fallbacks_for_empty_translations
