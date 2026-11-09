@@ -9,7 +9,6 @@ module Globalize
         self.globalize_serialized_attributes = globalize_serialized_attributes.dup
         self.globalize_serialized_attributes[attr_name] = options
 
-        # https://github.com/rails/rails/blob/8-0-stable/activerecord/lib/active_record/attribute_methods/serialization.rb#L183
         super(attr_name, **options)
       end
     end

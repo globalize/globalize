@@ -56,7 +56,7 @@ gem "globalize", git: "https://github.com/globalize/globalize", branch: "main"
 ActiveRecord 7.0 to 7.2:
 
 ```ruby
-gem "globalize", "~> 7.1.3"
+gem "globalize", "~> 7.1"
 ```
 
 ActiveRecord 4.2 to 6.1:
