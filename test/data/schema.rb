@@ -82,6 +82,17 @@ ActiveRecord::Schema.define do
     t.text       :content
   end
 
+  create_table :store_items, :force => true, :id => false do |t|
+    t.integer :store_id
+    t.integer :id
+  end
+
+  create_table :store_item_translations, :force => true do |t|
+    t.integer :store_item_id
+    t.string :locale
+    t.string :name
+  end
+
   create_table :migrateds, :force => true do |t|
     t.string :name
     t.string :untranslated

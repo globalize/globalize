@@ -29,7 +29,7 @@ module Globalize
       end
 
       def translated?(name)
-        translated_attribute_names.include?(name.to_sym)
+        name.respond_to?(:to_sym) && translated_attribute_names.include?(name.to_sym)
       end
 
       def required_attributes

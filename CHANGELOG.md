@@ -12,6 +12,7 @@
 * Warn when `encrypts` is used on a translated attribute, which doesn't encrypt its translations [#856](https://github.com/globalize/globalize/pull/856) by [Philip Arndt](https://github.com/parndt)
 * Keep JSON and other typed values intact when `create_translation_table!` or `drop_translation_table!` moves data with `migrate_data: true` [#795](https://github.com/globalize/globalize/issues/795) by [Philip Arndt](https://github.com/parndt)
 * Use the types declared with `attribute` for translated attributes, whether declared before or after `translates` [#611](https://github.com/globalize/globalize/issues/611), [#841](https://github.com/globalize/globalize/pull/841) by [Ryan Brown](https://github.com/rb1193)
+* Write the foreign key of translations for models with a composite primary key, and validate their uniqueness against other records [#859](https://github.com/globalize/globalize/pull/859) by [Philip Arndt](https://github.com/parndt)
 
 ## 7.1.3 (2026-05-25)
 
